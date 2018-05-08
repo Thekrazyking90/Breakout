@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Breakout</string>
+    <string name="title_activity_welcome">Breakout</string>
+    <string name="benvenuto">BENVENUTO!</string>
+    <string name="accedi">Accedi</string>
+    <string name="mappeoffline">Mappe Offline</string>
 </resources>
