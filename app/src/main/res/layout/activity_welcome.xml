@@ -25,7 +25,7 @@
         android:text="@string/accedi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Accedi"
+        android:id="@+id/accedi"
         android:layout_marginTop="50dp"
         />
 
@@ -33,7 +33,7 @@
         android:text="@string/mappeoffline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Mappeoffline"
+        android:id="@+id/mappeoffline"
         android:layout_marginTop="25dp"
         />
 
