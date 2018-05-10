@@ -40,7 +40,6 @@ public class Login extends AppCompatActivity {
         mRegistra.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // System.out.println("CHECK "+Login.this+"   "+ Registra.class);
                 startActivity(new Intent(Login.this, Registra.class));
                     }
         });
@@ -50,6 +49,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //attemptLogin();
+                // Inserire il check delle credenziali, se true, apro navigation1
                 startActivity(new Intent(Login.this, Navigation1.class));
             }
         });

@@ -30,14 +30,16 @@
             android:label="@string/title_activity_login"></activity>
 
         <activity
-            android:name=".Registra"
+            android:name=".view.Registra"
             android:label="@string/registra1"></activity>
         <activity
-            android:name=".Navigation1"
-            android:label="">
+            android:name=".view.Navigation1"
+            android:label="Mappa"
+
+            >
         </activity>
         <activity
-            android:name=".Recupera"
+            android:name=".view.Recupera"
             android:label="@string/recuperapw1">
         </activity>
 

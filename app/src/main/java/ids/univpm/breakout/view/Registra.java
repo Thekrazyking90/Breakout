@@ -22,23 +22,25 @@ import ids.univpm.breakout.validation.FormControl;
 
 class Registra extends AppCompatActivity {
 
-    public TextView Email;
-    public EditText email_txt;
-    public TextView textView2;
-    public EditText pass_txt1;
-    public TextView textView3;
-    public EditText pass_txt2;
-    public TextView textView4;
-    public EditText name_txt;
-    public TextView textView5;
-    public EditText surname_txt;
+    private TextView Username;
+    private EditText Email;
+    private EditText Password;
+    private EditText PassCheck;
+    private EditText Nome;
+    private EditText Cognome;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.registra);
-        Email = (TextView) findViewById(R.id.Email);
+        Email = findViewById(R.id.email_txt);
+        Username=findViewById(R.id.username_txt);
+        Password=findViewById(R.id.pass_txt1);
+        PassCheck=findViewById(R.id.pass_txt2);
+        Nome= findViewById(R.id.name_txt);
+        Cognome= findViewById(R.id.surname_txt);
+
 
     }
     // VEDERE FILE INFORMATIONSHANDLER
