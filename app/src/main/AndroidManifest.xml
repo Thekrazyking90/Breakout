@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Welcome"
+            android:name=".view.Welcome"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
+            android:name=".view.Login"
             android:label="@string/title_activity_login"></activity>
 
         <activity
