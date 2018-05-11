@@ -1,4 +1,4 @@
-package ids.univpm.breakout.validation;
+package ids.univpm.breakout.view.validation;
 
 /**
  * Classe che contiene tutti i pattern per compiere un controllo RegEx sui campi inseriti nelle varie form dell'utente
