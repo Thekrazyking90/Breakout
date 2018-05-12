@@ -25,6 +25,7 @@ public class Login extends AppCompatActivity {
     public TextView mRegistra;
     public TextView mRecuperaPw;
     public Button mSignInButton;
+    public TextView mErroreDati;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class Login extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password);
         mSignInButton = (Button) findViewById(R.id.signin_button);
         mRecuperaPw=(TextView) findViewById(R.id.recuperapw);
+        final TextView mErroreDati = (TextView) findViewById(R.id.errore_dati);
 
         mRegistra.setOnClickListener(new OnClickListener() {
             @Override
@@ -51,6 +53,12 @@ public class Login extends AppCompatActivity {
                 //attemptLogin();
                 // Inserire il check delle credenziali, se true, apro navigation1
                 startActivity(new Intent(Login.this, Navigation1.class));
+
+                //se false
+                //mErroreDati.setVisibility(View.VISIBLE);
+                // Scritta "I dati inseriti sono errati"
+
+
             }
         });
 

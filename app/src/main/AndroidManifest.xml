@@ -34,13 +34,15 @@
             android:label="@string/registra1"></activity>
         <activity
             android:name=".view.Navigation1"
-            android:label="Mappa"
-
-            >
+            android:label="Mappa"            >
         </activity>
         <activity
             android:name=".view.Recupera"
             android:label="@string/recuperapw1">
+        </activity>
+        <activity
+            android:name=".view.SelPiano"
+            android:label="@string/sel_piano">
         </activity>
 
     </application>

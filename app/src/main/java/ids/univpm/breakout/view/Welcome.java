@@ -20,14 +20,26 @@ public class Welcome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        bottoneMappe = (Button) findViewById(R.id.mappeoffline);//find button by Id
+        bottoneMappe = (Button) findViewById(R.id.mappeoffline);
+
+        //Premendo mappe offline, faccio un check: se non è connesso al server, appare il toast
+        // oppure se è connesso al server MA non si è mai autenticato quindi non ha le mappe
+
         bottoneMappe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //inserire check x connessione al server, se non è connesso --> toast
                 Toast.makeText(getApplicationContext(), "Accedi per scaricare le mappe", Toast.LENGTH_LONG).show();
+
+                //Se si era gia connesso in precedenza, allora passo a navigation 1, ma in modalità offline
+                // startActivity(new Intent(Login.this, Navigation1.class));
+
             }
         });
-        bottoneAccedi = (Button) findViewById(R.id.accedi);//find button by Id
+
+        bottoneAccedi = (Button) findViewById(R.id.accedi);
+        //Premendo accedi, passo alla schermata di login
         bottoneAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
