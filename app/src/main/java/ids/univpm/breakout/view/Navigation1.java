@@ -31,7 +31,7 @@ class Navigation1 extends AppCompatActivity {
         /*
         per vedere le icone x connesso, commentare la riga precente e mettere le seguenti righe:
 
-        setContentView(R.layout.navigation2);
+        setContentView(R.layout.connection_bar);
         non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
         non_connesso= findViewById(R.id.non_connesso);
         connesso_txt=(TextView) findViewById(R.id.connesso_txt);

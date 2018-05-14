@@ -5,64 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.SelPiano">
-
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="485dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:scrollbars="horizontal">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/q145_color"
-                android:padding="5dp"
-                android:text="Q145"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                tools:clickable="true" />
-
-            <Button
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="30dp"
-                android:background="@drawable/q150_color"
-                android:padding="5dp"
-                android:text="Q150"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                tools:clickable="true" />
-
-            <Button
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="30dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/q155_color"
-                android:padding="5dp"
-                android:text="Q155"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                tools:clickable="true" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="wrap_content"

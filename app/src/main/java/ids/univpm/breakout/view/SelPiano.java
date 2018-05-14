@@ -18,7 +18,7 @@ class SelPiano extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation2);
+        setContentView(R.layout.navigation2bis);
 
         non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
         non_connesso= findViewById(R.id.non_connesso);
