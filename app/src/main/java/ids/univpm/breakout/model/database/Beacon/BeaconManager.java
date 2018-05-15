@@ -18,12 +18,13 @@ public class BeaconManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
+        public void save(long id, long pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(BeaconStrings.FIELD_ID, id);
             cv.put(BeaconStrings.FIELD_ID_PDI, pdi);
             cv.put(BeaconStrings.FIELD_COORD_X, coordx);
             cv.put(BeaconStrings.FIELD_COORD_Y, coordy);

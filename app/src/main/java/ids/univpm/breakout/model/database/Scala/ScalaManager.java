@@ -18,12 +18,13 @@ public class ScalaManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long node1, long node2, long beacon, float length)
+        public void save(long id, long node1, long node2, long beacon, float length)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(ScalaStrings.FIELD_ID, id);
             cv.put(ScalaStrings.FIELD_ID_NODE1, node1);
             cv.put(ScalaStrings.FIELD_ID_NODE2, node2);
             cv.put(ScalaStrings.FIELD_ID_BEACON, beacon);

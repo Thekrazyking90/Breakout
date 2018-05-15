@@ -18,12 +18,13 @@ public class MappaManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long piano, String img, String name)
+        public void save(long id, long piano, String img, String name)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(MappaStrings.FIELD_ID, id);
             cv.put(MappaStrings.FIELD_IMG, img);
             cv.put(MappaStrings.FIELD_NAME, name);
             cv.put(MappaStrings.FIELD_ID_PIANO, piano);

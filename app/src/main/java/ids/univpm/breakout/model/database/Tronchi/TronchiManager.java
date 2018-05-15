@@ -18,12 +18,13 @@ public class TronchiManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long node1, long node2, long beacon, long map, float length)
+        public void save(long id, long node1, long node2, long beacon, long map, float length)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(TronchiStrings.FIELD_ID, id);
             cv.put(TronchiStrings.FIELD_ID_NODE1, node1);
             cv.put(TronchiStrings.FIELD_ID_NODE2, node2);
             cv.put(TronchiStrings.FIELD_ID_MAPPA, map);

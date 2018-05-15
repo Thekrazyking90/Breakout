@@ -33,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);";
 
         String q2="CREATE TABLE "+ TronchiStrings.TBL_NAME+
-                " (" + TronchiStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + TronchiStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 TronchiStrings.FIELD_ID_MAPPA + " INTEGER," +
                 TronchiStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
                 TronchiStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 "FOREIGN KEY(" + TronchiStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q3="CREATE TABLE "+ ScalaStrings.TBL_NAME+
-                " (" + ScalaStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + ScalaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 ScalaStrings.FIELD_ID_NODE1 + " INTEGER," +
                 ScalaStrings.FIELD_ID_NODE2 +" INTEGER," +
                 ScalaStrings.FIELD_LENGTH +" REAL NOT NULL," +
@@ -55,11 +55,11 @@ public class DBHelper extends SQLiteOpenHelper{
                 "FOREIGN KEY(" + ScalaStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE SET NULL );";
 
         String q4="CREATE TABLE "+ PianoStrings.TBL_NAME+
-                " (" + PianoStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + PianoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 PianoStrings.FIELD_ALTITUDE + " TEXT NOT NULL );";
 
         String q5="CREATE TABLE "+ PDIStrings.TBL_NAME+
-                " (" + PDIStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + PDIStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 PDIStrings.FIELD_TYPE + " TEXT NOT NULL," +
                 PDIStrings.FIELD_DESCRIPTION +" TEXT NOT NULL," +
                 PDIStrings.FIELD_COORD_Y +" REAL NOT NULL," +
@@ -68,23 +68,23 @@ public class DBHelper extends SQLiteOpenHelper{
                 PDIStrings.FIELD_LENGTH +" REAL );";
 
         String q6="CREATE TABLE "+ NodiStrings.TBL_NAME+
-                " (" + NodiStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                NodiStrings.FIELD_ID_MAPPA + " INTEGER," +
+                " (" + NodiStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                NodiStrings.FIELD_ID_PIANO + " INTEGER," +
                 NodiStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
                 NodiStrings.FIELD_COORD_Y +" REAL NOT NULL," +
                 NodiStrings.FIELD_COORD_X +" REAL NOT NULL," +
                 NodiStrings.FIELD_WIDTH +" REAL NOT NULL, " +
-                "FOREIGN KEY(" + NodiStrings.FIELD_ID_MAPPA + ") REFERENCES Mappa ( "+ MappaStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+                "FOREIGN KEY(" + NodiStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q7="CREATE TABLE "+ MappaStrings.TBL_NAME+
-                " (" + MappaStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + MappaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 MappaStrings.FIELD_ID_PIANO + " INTEGER," +
                 MappaStrings.FIELD_NAME +" TEXT NOT NULL," +
                 MappaStrings.FIELD_IMG +" TEXT NOT NULL," +
                 "FOREIGN KEY(" + MappaStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
-                " (" + BeaconStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + BeaconStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
                 BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
