@@ -10,7 +10,6 @@
     <include layout="@layout/connection_bar"/>
 
 
-
     <ScrollView
         android:id="@+id/scrollfin"
         android:layout_width="match_parent"

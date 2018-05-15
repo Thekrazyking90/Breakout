@@ -18,4 +18,12 @@
     <string name="sel_piano">Selezione piano</string>
 
 
+    <string-array name="lista_pdi">
+        <item> AulaMagna Q150</item>
+        <item> AulaMagna Q145</item>
+        <item> Biblioteca</item>
+
+    </string-array>
+
+
 </resources>

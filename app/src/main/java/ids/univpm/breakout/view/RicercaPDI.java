@@ -6,17 +6,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import ids.univpm.breakout.R;
 
 class RicercaPDI extends AppCompatActivity {
 
-    public TextView non_connesso_txt;
     public ImageView non_connesso;
-    public TextView connesso_txt;
     public ImageView connesso;
+    public TextView connection_status;
+    ArrayAdapter<String> adapter;
+    private Menu menu;
+
 
     // inserire check per la connessione al server --> sotto icona rossa oppure verde x connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
@@ -25,23 +34,27 @@ class RicercaPDI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ricerca_pdi);
+        ListView lv=(ListView) findViewById(R.id.lista_pdi);
+        ArrayList<String> listaPdi = new ArrayList<>();
+        listaPdi.addAll(Arrays.asList(getResources().getStringArray(R.array.lista_pdi)));
 
-        /*
-        non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
-        non_connesso= findViewById(R.id.non_connesso);
-        connesso_txt=(TextView) findViewById(R.id.connesso_txt);
-        connesso= findViewById(R.id.connesso);
+        adapter=new ArrayAdapter<String>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdi);
+        lv.setAdapter(adapter);
 
-        //Check connessione
+        //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
-        //non_connesso.setVisibility(View.VISIBLE);
-        //non_connesso_txt.setVisibility(View.VISIBLE);
+        connection_status=(TextView) findViewById(R.id.connection_status);
+        non_connesso= findViewById(R.id.non_connesso);
+        non_connesso.setVisibility(View.VISIBLE);
 
         // se connesso: connected: simbolo verde
-        connesso.setVisibility(View.VISIBLE);
-        connesso_txt.setVisibility(View.VISIBLE); */
+        connesso= findViewById(R.id.connesso);
+        //connesso.setVisibility(View.VISIBLE);
+        //non_connesso.setVisibility(View.INVISIBLE);
+        //connection_status.setText("Connected");
 
     }
+
 
 
     @Override
@@ -49,7 +62,30 @@ class RicercaPDI extends AppCompatActivity {
     {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.navigation_menu,menu);
+        //Hide options for PDI
+        MenuItem pdi_menu= menu.findItem(R.id.pdi);
+        pdi_menu.setVisible(false);
+        //Se non loggato, cambia titolo in login nel menu(!)
+
+        MenuItem item = menu.findItem(R.id.ricerca);
+        SearchView searchView= (SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                adapter.getFilter().filter(newText);
+
+                return false;
+            }
+        });
+
         return true;
+        //return super.onCreateOptionsMenu(menu);
     }
 
 
@@ -66,16 +102,14 @@ class RicercaPDI extends AppCompatActivity {
 
                 break;
 
-            //far scomparire PDI dal menu tre puntini
+            case R.id.log_status:
 
-            case R.id.Logout:
+                //Inserire codice per LogOut se deve fare logout
+                Intent returnBtn = new Intent(getApplicationContext(), Welcome.class);
 
-                //Inserire codice per LogOut
+                startActivity(returnBtn);
                 break;
 
-            case R.id.ricerca:
-                // menu vuoto per ora
-                //   break;
         }
         return false;
         //return super.onOptionsItemSelected(item);

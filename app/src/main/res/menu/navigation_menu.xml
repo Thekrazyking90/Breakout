@@ -7,12 +7,13 @@
         android:title="Selezione Piano"/>
     <item
         android:id="@+id/pdi"
-        android:title="Punti di Interesse"/>
+        android:title="Punti di Interesse"
+        android:visible="true"/>
     <!-- <item
         android:id="@+id/Pref"
         android:title="Preferenze"/> -->
     <item
-        android:id="@+id/Logout"
+        android:id="@+id/log_status"
         android:title="Logout"/>
 
     <item android:id="@+id/ricerca" android:title="@string/ricerca"

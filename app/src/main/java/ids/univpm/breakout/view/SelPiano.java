@@ -10,30 +10,26 @@ import ids.univpm.breakout.R;
 
 class SelPiano extends AppCompatActivity {
 
-    public TextView non_connesso_txt;
     public ImageView non_connesso;
-    public TextView connesso_txt;
     public ImageView connesso;
+    public TextView connection_status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sel_piano);
 
-        non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
-        non_connesso= findViewById(R.id.non_connesso);
-        connesso_txt=(TextView) findViewById(R.id.connesso_txt);
-        connesso= findViewById(R.id.connesso);
-
-        //Check connessione
+        //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
+        connection_status=(TextView) findViewById(R.id.connection_status);
+        non_connesso= findViewById(R.id.non_connesso);
         non_connesso.setVisibility(View.VISIBLE);
-        non_connesso_txt.setVisibility(View.VISIBLE);
 
         // se connesso: connected: simbolo verde
+        connesso= findViewById(R.id.connesso);
         //connesso.setVisibility(View.VISIBLE);
-        //connesso_txt.setVisibility(View.VISIBLE);
-
+        //non_connesso.setVisibility(View.INVISIBLE);
+        //connection_status.setText("Connected");
 
 
     }

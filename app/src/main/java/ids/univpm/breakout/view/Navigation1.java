@@ -3,6 +3,7 @@ package ids.univpm.breakout.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,10 +15,8 @@ import ids.univpm.breakout.R;
 
 class Navigation1 extends AppCompatActivity {
 
-
-    public TextView non_connesso_txt;
+    public TextView connection_status;
     public ImageView non_connesso;
-    public TextView connesso_txt;
     public ImageView connesso;
 
     // inserire check per la connessione al server --> sotto icona rossa oppure verde x connesso
@@ -28,34 +27,48 @@ class Navigation1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation1);
 
-        /*
-        per vedere le icone x connesso, commentare la riga precente e mettere le seguenti righe:
-
-        setContentView(R.layout.connection_bar);
-        non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
-        non_connesso= findViewById(R.id.non_connesso);
-        connesso_txt=(TextView) findViewById(R.id.connesso_txt);
-        connesso= findViewById(R.id.connesso);
-
-        //Check connessione
+        //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
-        //non_connesso.setVisibility(View.VISIBLE);
-        //non_connesso_txt.setVisibility(View.VISIBLE);
+        connection_status=(TextView) findViewById(R.id.connection_status);
+        non_connesso= findViewById(R.id.non_connesso);
+        non_connesso.setVisibility(View.VISIBLE);
 
         // se connesso: connected: simbolo verde
-        connesso.setVisibility(View.VISIBLE);
-        connesso_txt.setVisibility(View.VISIBLE); */
+        connesso= findViewById(R.id.connesso);
+        //connesso.setVisibility(View.VISIBLE);
+        //non_connesso.setVisibility(View.INVISIBLE);
+        //connection_status.setText("Connected");
 
     }
+
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.navigation_menu,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_menu, menu);
+        //Se non loggato, cambia titolo in login nel menu(!)
+
+        MenuItem item = menu.findItem(R.id.ricerca);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                startActivity(new Intent(Navigation1.this, RicercaPDI.class));
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
         return true;
     }
+
 
 
     @Override
@@ -75,14 +88,15 @@ class Navigation1 extends AppCompatActivity {
                 startActivity(new Intent(Navigation1.this, RicercaPDI.class));
                 break;
 
-            case R.id.Logout:
 
-                //Inserire codice per LogOut
+            case R.id.log_status:
+
+                //Inserire codice per LogOut se deve fare logout
+                Intent returnBtn = new Intent(getApplicationContext(), Welcome.class);
+
+                startActivity(returnBtn);
                 break;
 
-            case R.id.ricerca:
-               // menu vuoto per ora
-                //   break;
         }
         return false;
         //return super.onOptionsItemSelected(item);
