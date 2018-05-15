@@ -45,6 +45,11 @@
             android:label="@string/sel_piano">
         </activity>
 
+        <activity
+            android:name=".view.Ricerca"
+            android:label="@string/ricerca">
+        </activity>
+
     </application>
 
 

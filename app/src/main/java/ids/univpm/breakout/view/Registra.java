@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import ids.univpm.breakout.R;
-import ids.univpm.breakout.validation.FormControl;
+import ids.univpm.breakout.view.validation.FormControl;
 
 class Registra extends AppCompatActivity {
 

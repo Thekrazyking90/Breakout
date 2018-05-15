@@ -6,18 +6,18 @@
         android:id="@+id/SelPiano"
         android:title="Selezione Piano"/>
     <item
-        android:id="@+id/Impostazioni"
-        android:title="Impostazioni"/>
-    <item
+        android:id="@+id/pdi"
+        android:title="Punti di Interesse"/>
+    <!-- <item
         android:id="@+id/Pref"
-        android:title="Preferenze"/>
+        android:title="Preferenze"/> -->
     <item
         android:id="@+id/Logout"
         android:title="Logout"/>
 
     <item android:id="@+id/ricerca" android:title="@string/ricerca"
         android:orderInCategory="500" android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="collapseActionView|always"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
 </menu>

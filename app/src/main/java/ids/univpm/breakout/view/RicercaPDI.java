@@ -6,14 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import ids.univpm.breakout.R;
 
-class Navigation1 extends AppCompatActivity {
-
+class RicercaPDI extends AppCompatActivity {
 
     public TextView non_connesso_txt;
     public ImageView non_connesso;
@@ -26,12 +24,9 @@ class Navigation1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation1);
+        setContentView(R.layout.ricerca_pdi);
 
         /*
-        per vedere le icone x connesso, commentare la riga precente e mettere le seguenti righe:
-
-        setContentView(R.layout.connection_bar);
         non_connesso_txt=(TextView) findViewById(R.id.non_connesso_txt);
         non_connesso= findViewById(R.id.non_connesso);
         connesso_txt=(TextView) findViewById(R.id.connesso_txt);
@@ -67,13 +62,11 @@ class Navigation1 extends AppCompatActivity {
             case R.id.SelPiano:
 
                 //Apertura nuova activity per scelta del piano
-                startActivity(new Intent(Navigation1.this, SelPiano.class));
+                startActivity(new Intent(RicercaPDI.this, SelPiano.class));
 
                 break;
 
-            case R.id.pdi:
-                startActivity(new Intent(Navigation1.this, RicercaPDI.class));
-                break;
+            //far scomparire PDI dal menu tre puntini
 
             case R.id.Logout:
 
@@ -81,11 +74,13 @@ class Navigation1 extends AppCompatActivity {
                 break;
 
             case R.id.ricerca:
-               // menu vuoto per ora
+                // menu vuoto per ora
                 //   break;
         }
         return false;
         //return super.onOptionsItemSelected(item);
     }
-}
 
+
+
+}
