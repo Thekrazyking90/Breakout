@@ -18,12 +18,13 @@ public class PianoManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(String alt)
+        public void save(long id, String alt)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(PianoStrings.FIELD_ID, id);
             cv.put(PianoStrings.FIELD_ALTITUDE, alt);
             try
             {

@@ -18,13 +18,14 @@ public class NodiManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long map, float coordx, float coordy, String code, float width)
+        public void save(long id, long piano, float coordx, float coordy, String code, float width)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
-            cv.put(NodiStrings.FIELD_ID_MAPPA, map);
+            cv.put(NodiStrings.FIELD_ID, id);
+            cv.put(NodiStrings.FIELD_ID_PIANO, piano);
             cv.put(NodiStrings.FIELD_COORD_X, coordx);
             cv.put(NodiStrings.FIELD_COORD_Y, coordy);
             cv.put(NodiStrings.FIELD_CODE, code);

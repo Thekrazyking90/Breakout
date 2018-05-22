@@ -18,12 +18,13 @@ public class PDIManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(float coordx, float coordy, String descr, String type, float width, float length)
+        public void save(long id, float coordx, float coordy, String descr, String type, float width, float length)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
+            cv.put(PDIStrings.FIELD_ID, id);
             cv.put(PDIStrings.FIELD_COORD_X, coordx);
             cv.put(PDIStrings.FIELD_COORD_Y, coordy);
             cv.put(PDIStrings.FIELD_TYPE, type);
