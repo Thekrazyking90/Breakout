@@ -27,7 +27,7 @@ public class Scala {
                 other = (Nodo) f;
             }
         }
-        return other;
+    return other;
     }
 
     public ArrayList<Nodo> getNodi() {

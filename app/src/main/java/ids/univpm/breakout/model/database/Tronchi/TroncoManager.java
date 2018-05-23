@@ -1,4 +1,4 @@
-package ids.univpm.breakout.model.database.Scala;
+package ids.univpm.breakout.model.database.Tronchi;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,12 +8,12 @@ import android.database.sqlite.SQLiteException;
 
 import ids.univpm.breakout.model.database.DBHelper;
 
-public class ScalaManager {
+public class TroncoManager {
 
 
         private DBHelper dbHelper;
 
-        public ScalaManager(Context ctx)
+        public TroncoManager(Context ctx)
         {
             dbHelper =new DBHelper(ctx);
         }
@@ -24,14 +24,14 @@ public class ScalaManager {
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
-            cv.put(ScalaStrings.FIELD_ID, id);
-            cv.put(ScalaStrings.FIELD_ID_NODE1, node1);
-            cv.put(ScalaStrings.FIELD_ID_NODE2, node2);
-            cv.put(ScalaStrings.FIELD_ID_BEACON, beacon);
-            cv.put(ScalaStrings.FIELD_LENGTH, length);
+            cv.put(TroncoStrings.FIELD_ID, id);
+            cv.put(TroncoStrings.FIELD_ID_NODE1, node1);
+            cv.put(TroncoStrings.FIELD_ID_NODE2, node2);
+            cv.put(TroncoStrings.FIELD_ID_BEACON, beacon);
+            cv.put(TroncoStrings.FIELD_LENGTH, length);
             try
             {
-                db.insert(ScalaStrings.TBL_NAME, null,cv);
+                db.insert(TroncoStrings.TBL_NAME, null,cv);
             }
             catch (SQLiteException sqle)
             {
@@ -44,7 +44,7 @@ public class ScalaManager {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(ScalaStrings.TBL_NAME, ScalaStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(TroncoStrings.TBL_NAME, TroncoStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
                     return true;
                 return false;
             }
@@ -61,7 +61,7 @@ public class ScalaManager {
             try
             {
                 SQLiteDatabase db= dbHelper.getReadableDatabase();
-                crs=db.query(ScalaStrings.TBL_NAME, null, null, null, null, null, null, null);
+                crs=db.query(TroncoStrings.TBL_NAME, null, null, null, null, null, null, null);
             }
             catch(SQLiteException sqle)
             {

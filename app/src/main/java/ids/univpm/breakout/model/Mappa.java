@@ -3,7 +3,7 @@ package ids.univpm.breakout.model;
 public class Mappa {
     private long ID_mappa;
     private long ID_piano;
-    private Grafo grafo;
+//    private Grafo grafo;
     private String nome;
     private String urlImmagine;
 

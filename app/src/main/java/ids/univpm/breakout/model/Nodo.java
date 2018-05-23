@@ -13,8 +13,8 @@ public class Nodo {
     private float larghezza;
     private float coord_X;
     private float coord_Y;
-    private ArrayList<Scala> tronchi_stella; // tra i tronchi vanno messe ache le scale
-    private long ID_piano;
+    private ArrayList<Scala> tronchi_stella; // tra i tronchi vanno messe anche le scale e i collegamenti
+    private long ID_mappa;
 
     public Nodo() {
     }
@@ -27,12 +27,12 @@ public class Nodo {
         this.tronchi_stella = tronchi_stella;
     }
 
-    public long getID_piano() {
-        return ID_piano;
+    public long getID_mappa() {
+        return ID_mappa;
     }
 
-    public void setID_piano(long ID_piano) {
-        this.ID_piano = ID_piano;
+    public void setID_mappa(long ID_mappa) {
+        this.ID_mappa = ID_mappa;
     }
 
     public float getLarghezza() {
