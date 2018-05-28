@@ -6,10 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import ids.univpm.breakout.model.database.Beacon.BeaconStrings;
 import ids.univpm.breakout.model.database.Mappa.MappaStrings;
-import ids.univpm.breakout.model.database.Modifiche.ModificheStrings;
-import ids.univpm.breakout.model.database.Nodi.NodoStrings;
+import ids.univpm.breakout.model.database.Nodi.NodiStrings;
+import ids.univpm.breakout.model.database.PDI.PDIStrings;
 import ids.univpm.breakout.model.database.Piano.PianoStrings;
-import ids.univpm.breakout.model.database.Tronchi.TroncoStrings;
+import ids.univpm.breakout.model.database.Scala.ScalaStrings;
+import ids.univpm.breakout.model.database.Tronchi.TronchiStrings;
 import ids.univpm.breakout.model.database.Utente.UtenteStrings;
 
 public class DBHelper extends SQLiteOpenHelper{
@@ -31,38 +32,49 @@ public class DBHelper extends SQLiteOpenHelper{
                 UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
                 UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);";
 
-        String q2="CREATE TABLE "+ TroncoStrings.TBL_NAME+
-                " (" + TroncoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
-                TroncoStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
-                TroncoStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
-                TroncoStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
-                TroncoStrings.FIELD_LENGTH +" REAL NOT NULL, " +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_NODE1 + ") REFERENCES Nodi ( "+ NodoStrings.FIELD_ID +" ) ON DELETE CASCADE," +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_NODE2 + ") REFERENCES Nodi ( "+ NodoStrings.FIELD_ID +" ) ON DELETE CASCADE," +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+        String q2="CREATE TABLE "+ TronchiStrings.TBL_NAME+
+                " (" + TronchiStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                TronchiStrings.FIELD_ID_MAPPA + " INTEGER," +
+                TronchiStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
+                TronchiStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
+                TronchiStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
+                TronchiStrings.FIELD_LENGTH +" REAL NOT NULL, " +
+                "FOREIGN KEY(" + TronchiStrings.FIELD_ID_MAPPA + ") REFERENCES Mappa ( "+ MappaStrings.FIELD_ID +" ) ON DELETE CASCADE," +
+                "FOREIGN KEY(" + TronchiStrings.FIELD_ID_NODE1 + ") REFERENCES Nodi ( "+ NodiStrings.FIELD_ID +" ) ON DELETE CASCADE," +
+                "FOREIGN KEY(" + TronchiStrings.FIELD_ID_NODE2 + ") REFERENCES Nodi ( "+ NodiStrings.FIELD_ID +" ) ON DELETE CASCADE," +
+                "FOREIGN KEY(" + TronchiStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
-        String q3="CREATE TABLE "+ ModificheStrings.TBL_NAME+
-                " (" + ModificheStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
-                ModificheStrings.FIELD_DATE +" NUMERIC NOT NULL," +
-                ModificheStrings.FIELD_ID_OGG_MOD +" INTEGER NOT NULL," +
-                ModificheStrings.FIELD_TBL +" TEXT NOT NULL," +
-                ModificheStrings.FIELD_TYPE +" TEXT NOT NULL);";
+        String q3="CREATE TABLE "+ ScalaStrings.TBL_NAME+
+                " (" + ScalaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                ScalaStrings.FIELD_ID_NODE1 + " INTEGER," +
+                ScalaStrings.FIELD_ID_NODE2 +" INTEGER," +
+                ScalaStrings.FIELD_LENGTH +" REAL NOT NULL," +
+                ScalaStrings.FIELD_ID_BEACON +" INTEGER," +
+                "FOREIGN KEY(" + ScalaStrings.FIELD_ID_NODE1 + ") REFERENCES Nodi ( "+ NodiStrings.FIELD_ID +" ) ON DELETE CASCADE," +
+                "FOREIGN KEY(" + ScalaStrings.FIELD_ID_NODE2 + ") REFERENCES Nodi ( "+ NodiStrings.FIELD_ID +" ) ON DELETE CASCADE," +
+                "FOREIGN KEY(" + ScalaStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE SET NULL );";
 
         String q4="CREATE TABLE "+ PianoStrings.TBL_NAME+
                 " (" + PianoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 PianoStrings.FIELD_ALTITUDE + " TEXT NOT NULL );";
 
-        String q6="CREATE TABLE "+ NodoStrings.TBL_NAME+
-                " (" + NodoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
-                NodoStrings.FIELD_ID_MAPPA + " INTEGER," +
-                NodoStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
-                NodoStrings.FIELD_COORD_Y +" REAL NOT NULL," +
-                NodoStrings.FIELD_COORD_X +" REAL NOT NULL," +
-                NodoStrings.FIELD_WIDTH +" REAL NOT NULL, " +
-                NodoStrings.FIELD_LENGTH +" REAL, " +
-                NodoStrings.FIELD_IS_PDI +" NUMERIC NOT NULL DEFAULT 0, " +
-                NodoStrings.FIELD_TYPE +" TEXT, " +
-                "FOREIGN KEY(" + NodoStrings.FIELD_ID_MAPPA + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+        String q5="CREATE TABLE "+ PDIStrings.TBL_NAME+
+                " (" + PDIStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                PDIStrings.FIELD_TYPE + " TEXT NOT NULL," +
+                PDIStrings.FIELD_DESCRIPTION +" TEXT NOT NULL," +
+                PDIStrings.FIELD_COORD_Y +" REAL NOT NULL," +
+                PDIStrings.FIELD_COORD_X +" REAL NOT NULL," +
+                PDIStrings.FIELD_WIDTH +" REAL, " +
+                PDIStrings.FIELD_LENGTH +" REAL );";
+
+        String q6="CREATE TABLE "+ NodiStrings.TBL_NAME+
+                " (" + NodiStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                NodiStrings.FIELD_ID_PIANO + " INTEGER," +
+                NodiStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
+                NodiStrings.FIELD_COORD_Y +" REAL NOT NULL," +
+                NodiStrings.FIELD_COORD_X +" REAL NOT NULL," +
+                NodiStrings.FIELD_WIDTH +" REAL NOT NULL, " +
+                "FOREIGN KEY(" + NodiStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q7="CREATE TABLE "+ MappaStrings.TBL_NAME+
                 " (" + MappaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
@@ -80,11 +92,12 @@ public class DBHelper extends SQLiteOpenHelper{
                 BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_LOS +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_RISK +" REAL NOT NULL, " +
-                "FOREIGN KEY(" + BeaconStrings.FIELD_ID_PDI + ") REFERENCES Nodo ( "+ NodoStrings.FIELD_ID +" ) ON DELETE SET NULL);";
+                "FOREIGN KEY(" + BeaconStrings.FIELD_ID_PDI + ") REFERENCES PDI ( "+ PDIStrings.FIELD_ID +" ) ON DELETE SET NULL);";
         db.execSQL(q1);
         db.execSQL(q2);
         db.execSQL(q3);
         db.execSQL(q4);
+        db.execSQL(q5);
         db.execSQL(q6);
         db.execSQL(q7);
         db.execSQL(q8);
@@ -93,6 +106,15 @@ public class DBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + UtenteStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + TronchiStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + ScalaStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + PianoStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + PDIStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + NodiStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + MappaStrings.TBL_NAME );
+        db.execSQL("DROP TABLE IF EXISTS " + BeaconStrings.TBL_NAME );
+        onCreate(db);
 
     }
 }
