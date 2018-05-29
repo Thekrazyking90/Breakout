@@ -34,7 +34,7 @@ class SelPiano extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sel_piano);
-        listaMappe = Controller.getMappe();
+        listaMappe = Controller.getMappe(SelPiano.this);
 
 
         //Check connessione: di default disconnesso
