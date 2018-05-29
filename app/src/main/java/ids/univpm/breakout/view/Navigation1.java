@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.controller.Controller;
 
 class Navigation1 extends AppCompatActivity {
 
@@ -27,18 +28,25 @@ class Navigation1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation1);
 
-        //Check connessione: di default disconnesso
-        //se non connesso: Server connection: disconnected, simbolo X
         connection_status=(TextView) findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
-        non_connesso.setVisibility(View.VISIBLE);
+        connesso= findViewById(R.id.connesso);;
 
-        // se connesso: connected: simbolo verde
-        connesso= findViewById(R.id.connesso);
-        //connesso.setVisibility(View.VISIBLE);
-        //non_connesso.setVisibility(View.INVISIBLE);
-        //connection_status.setText("Connected");
+        if(Controller.checkConnection()) {
+            non_connesso.setVisibility(View.INVISIBLE);
+            connesso.setVisibility(View.VISIBLE);
+            connection_status.setText("Connected");
+        }else{
+            connesso.setVisibility(View.INVISIBLE);
+            non_connesso.setVisibility(View.VISIBLE);
+            connection_status.setText("Disconnected");
+        }
 
+        if(getIntent() != null){
+            //get id mappa from intent
+        }else{
+
+        }
     }
 
 

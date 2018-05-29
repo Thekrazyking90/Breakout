@@ -8,7 +8,7 @@ public class Utente {
     private String nome;
     private String cognome;
     private String ultima_posizione;
-    private boolean is_online;
+    private boolean is_logged;
 
     public Utente() {
     }
@@ -69,11 +69,11 @@ public class Utente {
         this.ultima_posizione = ultima_posizione;
     }
 
-    public boolean isIs_online() {
-        return is_online;
+    public boolean isIs_logged() {
+        return is_logged;
     }
 
-    public void setIs_online(boolean is_online) {
-        this.is_online = is_online;
+    public void setIs_logged(boolean is_logged) {
+        this.is_logged = is_logged;
     }
 }

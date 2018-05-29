@@ -18,7 +18,7 @@ public class UtenteManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(String email, String name, String password, String surname, String username)
+        public void save(String email, String name, String password, String surname, String username, boolean is_logged)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -29,6 +29,7 @@ public class UtenteManager {
             cv.put(UtenteStrings.FIELD_PSW, password);
             cv.put(UtenteStrings.FIELD_SURNAME, surname);
             cv.put(UtenteStrings.FIELD_USER, username);
+            cv.put(UtenteStrings.FIELD_IS_LOGGED, is_logged);
             try
             {
                 db.insert(UtenteStrings.TBL_NAME, null,cv);

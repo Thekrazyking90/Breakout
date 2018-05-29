@@ -15,54 +15,97 @@
     android:layout_alignParentTop="true"
     android:scrollbars="horizontal"
     android:layout_height="485dp"
-    android:layout_width="match_parent"    >
-
+    android:layout_width="match_parent"
+    android:layout_marginEnd="15dp"
+    android:layout_marginStart="15dp">
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttons_layout"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/q145_color"
-            android:padding="5dp"
-            android:text="Q145"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            tools:clickable="true" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp">
 
-        <Button
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:background="@drawable/q150_color"
-            android:padding="5dp"
-            android:text="Q150"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            tools:clickable="true" />
+            <ImageButton
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/bottone_mappa"
+                android:contentDescription="Q145"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/q145_color"
+                tools:focusable="true" />
 
-        <Button
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/q155_color"
-            android:padding="5dp"
-            android:text="Q155"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            tools:clickable="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Q145"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                tools:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/bottone_mappa"
+                android:contentDescription="Q150"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/q150_color"
+                tools:focusable="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Q150"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                tools:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/bottone_mappa"
+                android:contentDescription="Q155"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/q155_color"
+                tools:focusable="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Q155"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                tools:focusable="true" />
+        </FrameLayout>
 
     </LinearLayout>
 
 </HorizontalScrollView>
+
 
 </RelativeLayout>

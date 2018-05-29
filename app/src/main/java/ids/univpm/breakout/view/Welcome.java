@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.controller.Controller;
 
 public class Welcome extends AppCompatActivity {
 
@@ -28,22 +29,24 @@ public class Welcome extends AppCompatActivity {
         bottoneMappe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //inserire check x connessione al server, se non è connesso --> toast
-                Toast.makeText(getApplicationContext(), "Accedi per scaricare le mappe", Toast.LENGTH_LONG).show();
-
-                //Se si era gia connesso in precedenza, allora passo a navigation 1, ma in modalità offline
-                // startActivity(new Intent(Login.this, Navigation1.class));
-
+                if(Controller.checkMappe()){
+                    startActivity(new Intent(Welcome.this, SelPiano.class));
+                }else {
+                    Toast.makeText(getApplicationContext(), "Accedi per scaricare le mappe", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        bottoneAccedi = (Button) findViewById(R.id.accedi);
+        bottoneAccedi = findViewById(R.id.accedi);
         //Premendo accedi, passo alla schermata di login
         bottoneAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Welcome.this, Login.class));
+                if(Controller.checkLog()){
+                    startActivity(new Intent(Welcome.this, Navigation1.class));
+                }else{
+                    startActivity(new Intent(Welcome.this, Login.class));
+                }
             }
         });
     }
