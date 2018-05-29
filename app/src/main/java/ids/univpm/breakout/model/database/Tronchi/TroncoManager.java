@@ -24,14 +24,14 @@ public class TroncoManager {
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
-            cv.put(TronchiStrings.FIELD_ID, id);
-            cv.put(TronchiStrings.FIELD_ID_NODE1, node1);
-            cv.put(TronchiStrings.FIELD_ID_NODE2, node2);
-            cv.put(TronchiStrings.FIELD_ID_BEACON, beacon);
-            cv.put(TronchiStrings.FIELD_LENGTH, length);
+            cv.put(TroncoStrings.FIELD_ID, id);
+            cv.put(TroncoStrings.FIELD_ID_NODE1, node1);
+            cv.put(TroncoStrings.FIELD_ID_NODE2, node2);
+            cv.put(TroncoStrings.FIELD_ID_BEACON, beacon);
+            cv.put(TroncoStrings.FIELD_LENGTH, length);
             try
             {
-                db.insert(TronchiStrings.TBL_NAME, null,cv);
+                db.insert(TroncoStrings.TBL_NAME, null,cv);
             }
             catch (SQLiteException sqle)
             {
@@ -44,7 +44,7 @@ public class TroncoManager {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(TronchiStrings.TBL_NAME, TronchiStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(TroncoStrings.TBL_NAME, TroncoStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
                     return true;
                 return false;
             }
@@ -61,7 +61,7 @@ public class TroncoManager {
             try
             {
                 SQLiteDatabase db= dbHelper.getReadableDatabase();
-                crs=db.query(TronchiStrings.TBL_NAME, null, null, null, null, null, null, null);
+                crs=db.query(TroncoStrings.TBL_NAME, null, null, null, null, null, null, null);
             }
             catch(SQLiteException sqle)
             {
