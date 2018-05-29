@@ -52,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 " (" + PianoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 PianoStrings.FIELD_ALTITUDE + " TEXT NOT NULL );";
 
-        String q5="CREATE TABLE "+ NodoStrings.TBL_NAME+
+        String q6="CREATE TABLE "+ NodoStrings.TBL_NAME+
                 " (" + NodoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 NodoStrings.FIELD_ID_MAPPA + " INTEGER," +
                 NodoStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
@@ -64,14 +64,14 @@ public class DBHelper extends SQLiteOpenHelper{
                 NodoStrings.FIELD_TYPE +" TEXT, " +
                 "FOREIGN KEY(" + NodoStrings.FIELD_ID_MAPPA + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
-        String q6="CREATE TABLE "+ MappaStrings.TBL_NAME+
+        String q7="CREATE TABLE "+ MappaStrings.TBL_NAME+
                 " (" + MappaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 MappaStrings.FIELD_ID_PIANO + " INTEGER," +
                 MappaStrings.FIELD_NAME +" TEXT NOT NULL," +
                 MappaStrings.FIELD_IMG +" TEXT NOT NULL," +
                 "FOREIGN KEY(" + MappaStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
-        String q7="CREATE TABLE "+ BeaconStrings.TBL_NAME+
+        String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
                 " (" + BeaconStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
                 BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
@@ -85,24 +85,14 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(q2);
         db.execSQL(q3);
         db.execSQL(q4);
-        db.execSQL(q5);
         db.execSQL(q6);
         db.execSQL(q7);
+        db.execSQL(q8);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS " + UtenteStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + TroncoStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + ModificheStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + PianoStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + NodoStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + MappaStrings.TBL_NAME );
-        db.execSQL("DROP TABLE IF EXISTS " + BeaconStrings.TBL_NAME );
-        onCreate(db);
-
     }
-
 }
