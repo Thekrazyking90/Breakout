@@ -20,7 +20,7 @@ import java.util.HashMap;
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.view.validation.FormControl;
 
-class Registra extends AppCompatActivity {
+public class Registra extends AppCompatActivity {
 
     private TextView Username;
     private EditText Email;

@@ -1,6 +1,7 @@
 package ids.univpm.breakout.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -12,9 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.controller.Controller;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 public class Login extends AppCompatActivity {
 
@@ -22,22 +24,22 @@ public class Login extends AppCompatActivity {
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
-    public TextView mRegistra;
-    public TextView mRecuperaPw;
-    public Button mSignInButton;
-    public TextView mErroreDati;
+    private TextView mRegistra;
+    private TextView mRecuperaPw;
+    private Button mSignInButton;
+    private TextView mErroreDati;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mRegistra=(TextView) findViewById(R.id.registra);
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mSignInButton = (Button) findViewById(R.id.signin_button);
-        mRecuperaPw=(TextView) findViewById(R.id.recuperapw);
-        final TextView mErroreDati = (TextView) findViewById(R.id.errore_dati);
+        mRegistra= findViewById(R.id.registra);
+        mUsernameView =  findViewById(R.id.username);
+        mPasswordView =  findViewById(R.id.password);
+        mSignInButton =  findViewById(R.id.signin_button);
+        mRecuperaPw= findViewById(R.id.recuperapw);
+        final TextView mErroreDati = findViewById(R.id.errore_dati);
 
         mRegistra.setOnClickListener(new OnClickListener() {
             @Override
@@ -46,19 +48,21 @@ public class Login extends AppCompatActivity {
                     }
         });
 
-
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //attemptLogin();
-                // Inserire il check delle credenziali, se true, apro navigation1
-                startActivity(new Intent(Login.this, Navigation1.class));
+                String user = mUsernameView.getText().toString();
+                String pass = mPasswordView.getText().toString();
+                if(Controller.autenticazioneUtente(user, pass)){
+                    Controller.aggiornamentoMappe();
+                    long idbeacon = Controller.getPosizione(user);
 
-                //se false
-                //mErroreDati.setVisibility(View.VISIBLE);
-                // Scritta "I dati inseriti sono errati"
-
-
+                    Intent intent = new Intent(Login.this, Navigation1.class);
+                    intent.putExtra("posizione_utente", idbeacon);
+                    startActivity(intent);
+                }else{
+                    mErroreDati.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -70,6 +74,5 @@ public class Login extends AppCompatActivity {
         });
 
     }
-
 }
 

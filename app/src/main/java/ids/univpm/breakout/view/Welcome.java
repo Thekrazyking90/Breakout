@@ -13,8 +13,8 @@ import ids.univpm.breakout.controller.Controller;
 
 public class Welcome extends AppCompatActivity {
 
-    public Button bottoneMappe;
-    public Button bottoneAccedi;
+    private Button bottoneMappe;
+    private Button bottoneAccedi;
 
     @Override
 

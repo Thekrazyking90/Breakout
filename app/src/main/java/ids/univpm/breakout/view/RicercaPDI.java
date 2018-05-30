@@ -17,41 +17,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.controller.Controller;
 
-class RicercaPDI extends AppCompatActivity {
+public class RicercaPDI extends AppCompatActivity {
 
-    public ImageView non_connesso;
-    public ImageView connesso;
-    public TextView connection_status;
-    ArrayAdapter<String> adapter;
-    private Menu menu;
-
-
-    // inserire check per la connessione al server --> sotto icona rossa oppure verde x connesso
-    // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
+    private ImageView non_connesso;
+    private ImageView connesso;
+    private TextView connection_status;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ricerca_pdi);
-        ListView lv=(ListView) findViewById(R.id.lista_pdi);
+
+        ListView lv= findViewById(R.id.lista_pdi);
         ArrayList<String> listaPdi = new ArrayList<>();
+        //TODO prendo i pdi dal db e li metto nella list view
         listaPdi.addAll(Arrays.asList(getResources().getStringArray(R.array.lista_pdi)));
 
-        adapter=new ArrayAdapter<String>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdi);
+        adapter=new ArrayAdapter<>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdi);
         lv.setAdapter(adapter);
 
         //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
-        connection_status=(TextView) findViewById(R.id.connection_status);
+        connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
-        non_connesso.setVisibility(View.VISIBLE);
-
-        // se connesso: connected: simbolo verde
         connesso= findViewById(R.id.connesso);
-        //connesso.setVisibility(View.VISIBLE);
-        //non_connesso.setVisibility(View.INVISIBLE);
-        //connection_status.setText("Connected");
+
+        if(Controller.checkConnection()) {
+            non_connesso.setVisibility(View.INVISIBLE);
+            connesso.setVisibility(View.VISIBLE);
+            connection_status.setText("Connected");
+        }else{
+            connesso.setVisibility(View.INVISIBLE);
+            non_connesso.setVisibility(View.VISIBLE);
+            connection_status.setText("Disconnected");
+        }
 
     }
 

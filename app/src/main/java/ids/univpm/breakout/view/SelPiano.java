@@ -21,7 +21,7 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.model.Mappa;
 
-class SelPiano extends AppCompatActivity {
+public class SelPiano extends AppCompatActivity {
 
     private ImageView non_connesso;
     private ImageView connesso;
@@ -34,15 +34,12 @@ class SelPiano extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sel_piano);
-        listaMappe = Controller.getMappe(SelPiano.this);
-
 
         //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
         connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
-        layout = findViewById(R.id.buttons_layout);
 
         if(Controller.checkConnection()) {
             non_connesso.setVisibility(View.INVISIBLE);
@@ -54,51 +51,55 @@ class SelPiano extends AppCompatActivity {
             connection_status.setText("Disconnected");
         }
 
-        for (Mappa i: listaMappe){
-            FrameLayout frame =new FrameLayout(this);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-            );
-            layoutParams.setMargins(5,5,5,5);
-            frame.setLayoutParams(layoutParams);
+        listaMappe = Controller.getMappe(getApplicationContext());
+        layout = findViewById(R.id.buttons_layout);
+        if(!listaMappe.isEmpty()){
+            for (Mappa i: listaMappe){
+                FrameLayout frame =new FrameLayout(this);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                );
+                layoutParams.setMargins(5,5,5,5);
+                frame.setLayoutParams(layoutParams);
 
-            ImageButton btn = new ImageButton(this);
-            ViewGroup.LayoutParams btnParams = new ViewGroup.LayoutParams(
-                    320,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            );
-            btn.setLayoutParams(btnParams);
-            btn.setBackground(Drawable.createFromPath("@drawable/bottone_mappa"));
-            btn.setPadding(10,10,10,10);
-            btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            btn.setImageDrawable(Drawable.createFromPath(i.getUrlImmagine()));
-            btn.setFocusable(true);
+                ImageButton btn = new ImageButton(this);
+                ViewGroup.LayoutParams btnParams = new ViewGroup.LayoutParams(
+                        320,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                );
+                btn.setLayoutParams(btnParams);
+                btn.setBackground(Drawable.createFromPath("@drawable/bottone_mappa"));
+                btn.setPadding(10,10,10,10);
+                btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn.setImageDrawable(Drawable.createFromPath(i.getUrlImmagine()));
+                btn.setFocusable(true);
 
-            TextView nome = new TextView(this);
-            ViewGroup.LayoutParams nomeParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            nome.setGravity(Gravity.CENTER);
-            nome.setLayoutParams(nomeParams);
-            nome.setText(i.getNome());
-            nome.setTextSize(50);
-            nome.setTypeface(Typeface.DEFAULT_BOLD);
+                TextView nome = new TextView(this);
+                ViewGroup.LayoutParams nomeParams = new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                nome.setGravity(Gravity.CENTER);
+                nome.setLayoutParams(nomeParams);
+                nome.setText(i.getNome());
+                nome.setTextSize(50);
+                nome.setTypeface(Typeface.DEFAULT_BOLD);
 
-            final long idmap = i.getID_mappa();
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(SelPiano.this, Navigation1.class);
-                    intent.putExtra("id_mappa", idmap);
+                final long idmap = i.getID_mappa();
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SelPiano.this, Navigation1.class);
+                        intent.putExtra("id_mappa", idmap);
                         startActivity(intent);
-                }
-            });
-            frame.addView(btn);
-            frame.addView(nome);
+                    }
+                });
+                frame.addView(btn);
+                frame.addView(nome);
 
-            layout.addView(frame);
+                layout.addView(frame);
+            }
         }
 
 

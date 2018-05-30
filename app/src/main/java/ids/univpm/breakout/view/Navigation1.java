@@ -14,11 +14,11 @@ import android.widget.TextView;
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 
-class Navigation1 extends AppCompatActivity {
+public class Navigation1 extends AppCompatActivity {
 
-    public TextView connection_status;
-    public ImageView non_connesso;
-    public ImageView connesso;
+    private TextView connection_status;
+    private ImageView non_connesso;
+    private ImageView connesso;
 
     // inserire check per la connessione al server --> sotto icona rossa oppure verde x connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
@@ -41,7 +41,7 @@ class Navigation1 extends AppCompatActivity {
             non_connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Disconnected");
         }
-
+//TODO caricamento mappa
         if(getIntent() != null){
             //get id mappa from intent
         }else{

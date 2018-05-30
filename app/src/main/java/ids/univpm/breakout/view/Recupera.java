@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import ids.univpm.breakout.R;
 
-class Recupera extends AppCompatActivity{
+public class Recupera extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

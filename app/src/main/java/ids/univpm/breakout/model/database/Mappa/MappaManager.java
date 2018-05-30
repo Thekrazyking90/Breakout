@@ -95,7 +95,7 @@ public class MappaManager {
             return mappa;
         }
 
-    public ArrayList<Mappa> getMappe() {
+    public ArrayList<Mappa> findAll() {
         ArrayList<Mappa> listaMappe = new ArrayList<>();
         Cursor crs = query();
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
