@@ -18,6 +18,8 @@ import java.util.Arrays;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
+import ids.univpm.breakout.model.Nodo;
+import ids.univpm.breakout.model.Pdi;
 
 public class RicercaPDI extends AppCompatActivity {
 
@@ -32,11 +34,15 @@ public class RicercaPDI extends AppCompatActivity {
         setContentView(R.layout.ricerca_pdi);
 
         ListView lv= findViewById(R.id.lista_pdi);
-        ArrayList<String> listaPdi = new ArrayList<>();
-        //TODO prendo i pdi dal db e li metto nella list view
-        listaPdi.addAll(Arrays.asList(getResources().getStringArray(R.array.lista_pdi)));
+        ArrayList<Pdi> listaPdi;
+        listaPdi = Controller.getPDIs(RicercaPDI.this);
 
-        adapter=new ArrayAdapter<>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdi);
+        ArrayList<String> listaPdiStrings= new ArrayList<>();
+        for(Pdi i : listaPdi){
+            listaPdiStrings.add(i.getTipo());
+        }
+
+        adapter=new ArrayAdapter<>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdiStrings);
         lv.setAdapter(adapter);
 
         //Check connessione: di default disconnesso
@@ -45,7 +51,7 @@ public class RicercaPDI extends AppCompatActivity {
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
 
-        if(Controller.checkConnection()) {
+        if(Controller.checkConnection(RicercaPDI.this)) {
             non_connesso.setVisibility(View.INVISIBLE);
             connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Connected");

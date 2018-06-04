@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.DBHelper;
+import ids.univpm.breakout.model.database.Utente.UtenteStrings;
 
 public class BeaconManager {
 
@@ -74,4 +76,27 @@ public class BeaconManager {
         }
 
 
+    public static Long[] getBeaconsByPdi_Long(long id_pdi, DBHelper dbHlpr) {
+        Cursor crs=null;
+        String[] args = new String[] {Long.toString(id_pdi)};
+        try
+        {
+            SQLiteDatabase db= dbHlpr.getReadableDatabase();
+            crs=db.query(BeaconStrings.TBL_NAME, null, BeaconStrings.FIELD_ID_PDI + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        Long[] listaBeacon = null;
+        int i = 0;
+
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+            listaBeacon[i] = crs.getLong(crs.getColumnIndex(BeaconStrings.FIELD_ID));
+            i++;
+        }
+
+        return listaBeacon;
+    }
 }

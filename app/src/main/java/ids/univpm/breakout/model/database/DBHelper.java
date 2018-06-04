@@ -24,15 +24,17 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String q1="CREATE TABLE "+UtenteStrings.TBL_NAME+
-                " (" + UtenteStrings.FIELD_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " (" + UtenteStrings.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 UtenteStrings.FIELD_USER + " TEXT NOT NULL UNIQUE," +
                 UtenteStrings.FIELD_PSW+" TEXT NOT NULL," +
                 UtenteStrings.FIELD_EMAIL+" TEXT NOT NULL UNIQUE," +
                 UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
+                UtenteStrings.FIELD_LAST_POSITION+" INTEGER," +
+                UtenteStrings.FIELD_IS_LOGGED+" INTEGER NOT NULL DEFAULT 0," +
                 UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);";
 
         String q2="CREATE TABLE "+ TroncoStrings.TBL_NAME+
-                " (" + TroncoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + TroncoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 TroncoStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
                 TroncoStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
                 TroncoStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
@@ -42,18 +44,18 @@ public class DBHelper extends SQLiteOpenHelper{
                 "FOREIGN KEY(" + TroncoStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q3="CREATE TABLE "+ ModificheStrings.TBL_NAME+
-                " (" + ModificheStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + ModificheStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 ModificheStrings.FIELD_DATE +" NUMERIC NOT NULL," +
                 ModificheStrings.FIELD_ID_OGG_MOD +" INTEGER NOT NULL," +
                 ModificheStrings.FIELD_TBL +" TEXT NOT NULL," +
                 ModificheStrings.FIELD_TYPE +" TEXT NOT NULL);";
 
         String q4="CREATE TABLE "+ PianoStrings.TBL_NAME+
-                " (" + PianoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + PianoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 PianoStrings.FIELD_ALTITUDE + " TEXT NOT NULL );";
 
         String q6="CREATE TABLE "+ NodoStrings.TBL_NAME+
-                " (" + NodoStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + NodoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 NodoStrings.FIELD_ID_MAPPA + " INTEGER," +
                 NodoStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
                 NodoStrings.FIELD_COORD_Y +" REAL NOT NULL," +
@@ -65,14 +67,14 @@ public class DBHelper extends SQLiteOpenHelper{
                 "FOREIGN KEY(" + NodoStrings.FIELD_ID_MAPPA + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q7="CREATE TABLE "+ MappaStrings.TBL_NAME+
-                " (" + MappaStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + MappaStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 MappaStrings.FIELD_ID_PIANO + " INTEGER," +
                 MappaStrings.FIELD_NAME +" TEXT NOT NULL," +
                 MappaStrings.FIELD_IMG +" TEXT NOT NULL," +
                 "FOREIGN KEY(" + MappaStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
-                " (" + BeaconStrings.FIELD_ID + "INTEGER PRIMARY KEY," +
+                " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
                 BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
@@ -81,6 +83,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 BeaconStrings.FIELD_LOS +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_RISK +" REAL NOT NULL, " +
                 "FOREIGN KEY(" + BeaconStrings.FIELD_ID_PDI + ") REFERENCES Nodo ( "+ NodoStrings.FIELD_ID +" ) ON DELETE SET NULL);";
+
         db.execSQL(q1);
         db.execSQL(q2);
         db.execSQL(q3);

@@ -14,9 +14,18 @@ public class Nodo {
     private float coord_X;
     private float coord_Y;
     private ArrayList<Scala> tronchi_stella; // tra i tronchi vanno messe anche le scale e i collegamenti
+    private Long[] tronchi_stella_long;
     private long ID_mappa;
 
     public Nodo() {
+    }
+
+    public Long[] getTronchi_stella_long() {
+        return tronchi_stella_long;
+    }
+
+    public void setTronchi_stella_long(Long[] tronchi_stella_long) {
+        this.tronchi_stella_long = tronchi_stella_long;
     }
 
     public ArrayList<Scala> getTronchi_stella() {

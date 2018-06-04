@@ -1,6 +1,9 @@
 package ids.univpm.breakout.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -28,11 +31,11 @@ public class Navigation1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation1);
 
-        connection_status=(TextView) findViewById(R.id.connection_status);
+        connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
-        connesso= findViewById(R.id.connesso);;
+        connesso= findViewById(R.id.connesso);
 
-        if(Controller.checkConnection()) {
+        if(Controller.checkConnection(Navigation1.this)) {
             non_connesso.setVisibility(View.INVISIBLE);
             connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Connected");

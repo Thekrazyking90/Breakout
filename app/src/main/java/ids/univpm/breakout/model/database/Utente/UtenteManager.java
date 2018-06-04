@@ -6,7 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import java.util.ArrayList;
+
+import ids.univpm.breakout.model.Mappa;
+import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.DBHelper;
+import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
 public class UtenteManager {
 
@@ -18,7 +23,7 @@ public class UtenteManager {
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(String email, String name, String password, String surname, String username, boolean is_logged)
+        public void save(Long last_position, String email, String name, String password, String surname, String username, int is_logged)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -30,6 +35,7 @@ public class UtenteManager {
             cv.put(UtenteStrings.FIELD_SURNAME, surname);
             cv.put(UtenteStrings.FIELD_USER, username);
             cv.put(UtenteStrings.FIELD_IS_LOGGED, is_logged);
+            cv.put(UtenteStrings.FIELD_LAST_POSITION, last_position);
             try
             {
                 db.insert(UtenteStrings.TBL_NAME, null,cv);
@@ -70,6 +76,70 @@ public class UtenteManager {
             }
             return crs;
         }
+
+    public ArrayList<Utente> findAll() {
+        ArrayList<Utente> listaUtenti = new ArrayList<>();
+        Cursor crs = query();
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+            Utente utente = findByID(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
+            listaUtenti.add(utente);
+        }
+        return listaUtenti;
+    }
+
+    public Utente findByUser (String user){
+        Cursor crs=null;
+        Utente utente = new Utente();
+        String[] args = new String[] {user};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(UtenteStrings.TBL_NAME, null, UtenteStrings.FIELD_USER + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        utente.setID_utente(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
+        utente.setNome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_NAME)));
+        utente.setCognome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_SURNAME)));
+        utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
+        utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
+        utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
+        utente.setUltima_posizione(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
+
+        return utente;
+    }
+
+    public Utente findByID (long id){
+        Cursor crs=null;
+        Utente utente = new Utente();
+        String[] args = new String[] {Long.toString(id)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(UtenteStrings.TBL_NAME, null, "id_utente = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        utente.setID_utente(id);
+        utente.setNome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_NAME)));
+        utente.setCognome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_SURNAME)));
+        utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
+        utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
+        utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
+        utente.setUltima_posizione(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
+
+        return utente;
+    }
 
 
 }

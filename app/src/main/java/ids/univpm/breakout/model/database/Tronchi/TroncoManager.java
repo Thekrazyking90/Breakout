@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import ids.univpm.breakout.model.database.Beacon.BeaconStrings;
 import ids.univpm.breakout.model.database.DBHelper;
 
 public class TroncoManager {
@@ -71,4 +72,27 @@ public class TroncoManager {
         }
 
 
+    public static Long[] getArcsByNode_Long(long id_nodo, DBHelper dbHlpr) {
+        Cursor crs=null;
+        String[] args = new String[] {Long.toString(id_nodo), Long.toString(id_nodo)};
+        try
+        {
+            SQLiteDatabase db= dbHlpr.getReadableDatabase();
+            crs=db.query(TroncoStrings.TBL_NAME, null, TroncoStrings.FIELD_ID_NODE1 + " = ? OR " + TroncoStrings.FIELD_ID_NODE2 + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        Long[] listaTronchi = null;
+        int i = 0;
+
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+            listaTronchi[i] = crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID));
+            i++;
+        }
+
+        return listaTronchi;
+    }
 }

@@ -29,7 +29,7 @@ public class Welcome extends AppCompatActivity {
         bottoneMappe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Controller.checkMappe()){
+                if(Controller.checkMappe(Welcome.this)){
                     startActivity(new Intent(Welcome.this, SelPiano.class));
                 }else {
                     Toast.makeText(getApplicationContext(), "Accedi per scaricare le mappe", Toast.LENGTH_LONG).show();
@@ -42,7 +42,7 @@ public class Welcome extends AppCompatActivity {
         bottoneAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Controller.checkLog()){
+                if(Controller.checkLog(Welcome.this)==1){
                     startActivity(new Intent(Welcome.this, Navigation1.class));
                 }else{
                     startActivity(new Intent(Welcome.this, Login.class));

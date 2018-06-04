@@ -7,8 +7,8 @@ public class Utente {
     private String email;
     private String nome;
     private String cognome;
-    private String ultima_posizione;
-    private boolean is_logged;
+    private Long ultima_posizione;
+    private int is_logged;
 
     public Utente() {
     }
@@ -61,19 +61,19 @@ public class Utente {
         this.cognome = cognome;
     }
 
-    public String getUltima_posizione() {
+    public Long getUltima_posizione() {
         return ultima_posizione;
     }
 
-    public void setUltima_posizione(String ultima_posizione) {
+    public void setUltima_posizione(long ultima_posizione) {
         this.ultima_posizione = ultima_posizione;
     }
 
-    public boolean isIs_logged() {
+    public int getIs_logged() {
         return is_logged;
     }
 
-    public void setIs_logged(boolean is_logged) {
+    public void setIs_logged(int is_logged) {
         this.is_logged = is_logged;
     }
 }

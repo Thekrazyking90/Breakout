@@ -11,6 +11,7 @@ public class Scala {
     private double larghezza_media;
     private double lunghezza;
     private ArrayList<Nodo> nodi;
+    private Long[] nodi_long;
     private Beacon beacon;
     private float costo_totale_normalizzato;
 
@@ -28,6 +29,14 @@ public class Scala {
             }
         }
     return other;
+    }
+
+    public Long[] getNodi_long() {
+        return nodi_long;
+    }
+
+    public void setNodi_long(Long[] nodi_long) {
+        this.nodi_long = nodi_long;
     }
 
     public ArrayList<Nodo> getNodi() {

@@ -10,8 +10,17 @@ public class Piano {
     private long ID_piano;
     private String quota;
     private ArrayList<Mappa> mappe;
+    private Long[] mappe_long;
 
     public Piano() {
+    }
+
+    public Long[] getMappe_long() {
+        return mappe_long;
+    }
+
+    public void setMappe_long(Long[] mappe_long) {
+        this.mappe_long = mappe_long;
     }
 
     public ArrayList<Mappa> getMappe() {
