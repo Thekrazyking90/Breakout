@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import java.util.ArrayList;
 
 import ids.univpm.breakout.model.Beacon;
+import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Scala;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
@@ -17,12 +18,21 @@ import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
 
 public class NodoManager{
 
-
+    private Context context;
     private DBHelper dbHelper;
 
     public NodoManager(Context ctx)
     {
+        setContext(ctx);
         dbHelper =new DBHelper(ctx);
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public void save(long id, long piano, float coordx, float coordy, String code, float width, float length, boolean is_pdi, String type)
@@ -121,11 +131,38 @@ public class NodoManager{
     }
 
     private Long[] getStar_Long(long id_pdi) {
-        return TroncoManager.getArcsByNode_Long(id_pdi, dbHelper);
+        TroncoManager troncoMng = new TroncoManager(context);
+        return troncoMng.getArcsByNode_Long(id_pdi);
     }
 
     private Long[] getBeacons_Long(long id_pdi) {
-        return BeaconManager.getBeaconsByPdi_Long(id_pdi, dbHelper);
+        BeaconManager beaconMng = new BeaconManager(context);
+        return beaconMng.getBeaconsByPdi_Long(id_pdi);
     }
 
+    public Nodo findById(Long id) {
+        Cursor crs=null;
+        Nodo nodo = new Nodo();
+        String[] args = new String[] {Long.toString(id)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(NodoStrings.TBL_NAME, null, NodoStrings.FIELD_ID + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        nodo.setID(id);
+        nodo.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
+        nodo.setTronchi_stella_long(getStar_Long(id));
+        nodo.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
+        nodo.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
+        nodo.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
+        nodo.setID_mappa(crs.getLong(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+
+        return nodo;
+    }
 }

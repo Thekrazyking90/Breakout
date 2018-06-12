@@ -15,15 +15,24 @@ import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
 public class UtenteManager {
 
-
+    private Context context;
         private DBHelper dbHelper;
 
         public UtenteManager(Context ctx)
         {
+            setContext(ctx);
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(Long last_position, String email, String name, String password, String surname, String username, int is_logged)
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void save(Long last_position, String email, String name, String password, String surname, String username, int is_logged)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();

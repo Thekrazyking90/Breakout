@@ -10,15 +10,24 @@ import ids.univpm.breakout.model.database.DBHelper;
 
 public class PianoManager {
 
-
+    private Context context;
         private DBHelper dbHelper;
 
         public PianoManager(Context ctx)
         {
+            setContext(ctx);
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long id, String alt)
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void save(long id, String alt)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();

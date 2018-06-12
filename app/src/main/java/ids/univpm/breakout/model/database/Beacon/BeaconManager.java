@@ -6,21 +6,29 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.database.DBHelper;
-import ids.univpm.breakout.model.database.Utente.UtenteStrings;
 
 public class BeaconManager {
 
-
+    private Context context;
         private DBHelper dbHelper;
 
         public BeaconManager(Context ctx)
         {
+            setContext(ctx);
             dbHelper =new DBHelper(ctx);
         }
 
-        public void save(long id, long pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void save(long id, long pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -76,12 +84,12 @@ public class BeaconManager {
         }
 
 
-    public static Long[] getBeaconsByPdi_Long(long id_pdi, DBHelper dbHlpr) {
+    public Long[] getBeaconsByPdi_Long(long id_pdi) {
         Cursor crs=null;
         String[] args = new String[] {Long.toString(id_pdi)};
         try
         {
-            SQLiteDatabase db= dbHlpr.getReadableDatabase();
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
             crs=db.query(BeaconStrings.TBL_NAME, null, BeaconStrings.FIELD_ID_PDI + " = ?", args, null, null, null, null);
         }
         catch(SQLiteException sqle)
@@ -98,5 +106,32 @@ public class BeaconManager {
         }
 
         return listaBeacon;
+    }
+
+    public Beacon findById(long id) {
+        Cursor crs=null;
+        Beacon beacon = new Beacon();
+        String[] args = new String[] {Long.toString(id)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(BeaconStrings.TBL_NAME, null, BeaconStrings.FIELD_ID + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        beacon.setID_beacon(id);
+        beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
+        beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
+        beacon.setID_pdi(crs.getLong(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+        beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
+        beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
+        beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
+        beacon.setInd_LOS(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_LOS)));
+
+        return beacon;
     }
 }

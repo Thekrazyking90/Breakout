@@ -18,15 +18,13 @@ public class Scala {
     public Scala() {
     }
 
-    public Nodo otherNode (Nodo node){
-        Nodo other = null;
-        ArrayList<Nodo> i = this.getNodi();
-
-        for(Nodo f:i){
-            if (f.equals(node)){
-            } else {
-                other = (Nodo) f;
-            }
+    public Long otherNode (Long id){
+        Long other = null;
+        Long[] nodi = this.getNodi_long();
+        if (id==nodi[0]){
+            other=nodi[1];
+        }else{
+            other=nodi[0];
         }
     return other;
     }
@@ -85,5 +83,9 @@ public class Scala {
 
     public void setCosto_totale_normalizzato(float costo_totale_normalizzato) {
         this.costo_totale_normalizzato = costo_totale_normalizzato;
+    }
+
+    public void setCosto_totale_normalizzato(Beacon beacon) { //TODO da implementare
+
     }
 }

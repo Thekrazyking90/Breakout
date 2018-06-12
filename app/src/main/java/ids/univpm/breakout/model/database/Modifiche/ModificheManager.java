@@ -12,11 +12,22 @@ import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
 public class ModificheManager {
+
+    private Context context;
     private DBHelper dbHelper;
 
     public ModificheManager(Context ctx)
     {
+        setContext(ctx);
         dbHelper =new DBHelper(ctx);
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public void save(long id, long id_ogg_mod, String type, String table, int date)
