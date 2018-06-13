@@ -130,7 +130,8 @@ public class TroncoManager {
         crs.moveToFirst();
         arc.setID(arcId);
         arc.setBeacon(getBeacon(crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID_BEACON))));
-        arc.setCosto_totale_normalizzato(arc.getBeacon());
+
+        arc.setCosto_totale();
 
         Long[] nodes = null;
         nodes[0] = crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));

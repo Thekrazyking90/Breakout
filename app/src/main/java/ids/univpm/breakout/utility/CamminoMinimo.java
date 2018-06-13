@@ -137,7 +137,7 @@ public class CamminoMinimo {
 
                 cammino[cammino.length] = i.getID(); //TODO verificare se è giusto
 
-                costo= i.getCosto_totale_normalizzato()+dijkstraDef.get(nodoId).getCosto();
+                costo= i.getCosto_totale()+dijkstraDef.get(nodoId).getCosto();
 
                 cost_camm.setCosto(costo);
                 cost_camm.setCammino(cammino);

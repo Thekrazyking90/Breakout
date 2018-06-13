@@ -7,7 +7,7 @@ public class Beacon {
     private float coord_Y;
     private float ind_fuoco;
     private float ind_fumi;
-    private float ind_LOS;
+    private float ind_NDC;
     private float ind_rischio;
     private long ID_pdi;
 
@@ -62,12 +62,12 @@ public class Beacon {
         this.ind_fumi = ind_fumi;
     }
 
-    public float getInd_LOS() {
-        return ind_LOS;
+    public float getInd_NDC() {
+        return ind_NDC;
     }
 
-    public void setInd_LOS(float ind_LOS) {
-        this.ind_LOS = ind_LOS;
+    public void setInd_NDC(float ind_NDC) {
+        this.ind_NDC = ind_NDC;
     }
 
     public float getInd_rischio() {

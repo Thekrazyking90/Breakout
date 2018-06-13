@@ -130,7 +130,7 @@ public class BeaconManager {
         beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
         beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
         beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
-        beacon.setInd_LOS(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_LOS)));
+        beacon.setInd_NDC(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_LOS)));
 
         return beacon;
     }

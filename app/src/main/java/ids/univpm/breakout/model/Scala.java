@@ -13,7 +13,7 @@ public class Scala {
     private ArrayList<Nodo> nodi;
     private Long[] nodi_long;
     private Beacon beacon;
-    private float costo_totale_normalizzato;
+    private float costo_totale;
 
     public Scala() {
     }
@@ -77,15 +77,16 @@ public class Scala {
         this.beacon = beacon;
     }
 
-    public float getCosto_totale_normalizzato() {
-        return costo_totale_normalizzato;
+    public float getCosto_totale() {
+        return costo_totale;
     }
 
-    public void setCosto_totale_normalizzato(float costo_totale_normalizzato) {
-        this.costo_totale_normalizzato = costo_totale_normalizzato;
+    public void setCosto_totale(float costo_totale) {
+        this.costo_totale = costo_totale;
     }
 
-    public void setCosto_totale_normalizzato(Beacon beacon) { //TODO da implementare
-
+    public void setCosto_totale() {
+        double LOS = larghezza_media * lunghezza / beacon.getInd_NDC();
+        costo_totale = (float) (LOS + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
     }
 }
