@@ -28,7 +28,7 @@ public class BeaconManager {
         this.context = context;
     }
 
-    public void save(long id, long pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
+    public void save(Integer id, Integer pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -52,12 +52,12 @@ public class BeaconManager {
             }
         }
 
-        public boolean deleteByID(long id)
+        public boolean deleteByID(Integer id)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(BeaconStrings.TBL_NAME, BeaconStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(BeaconStrings.TBL_NAME, BeaconStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                     return true;
                 return false;
             }
@@ -84,9 +84,9 @@ public class BeaconManager {
         }
 
 
-    public Long[] getBeaconsByPdi_Long(long id_pdi) {
+    public Integer[] getBeaconsByPdi_Integer(Integer id_pdi) {
         Cursor crs=null;
-        String[] args = new String[] {Long.toString(id_pdi)};
+        String[] args = new String[] {Integer.toString(id_pdi)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -97,21 +97,21 @@ public class BeaconManager {
             return null;
         }
 
-        Long[] listaBeacon = null;
+        Integer[] listaBeacon = null;
         int i = 0;
 
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            listaBeacon[i] = crs.getLong(crs.getColumnIndex(BeaconStrings.FIELD_ID));
+            listaBeacon[i] = crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID));
             i++;
         }
 
         return listaBeacon;
     }
 
-    public Beacon findById(long id) {
+    public Beacon findById(Integer id) {
         Cursor crs=null;
         Beacon beacon = new Beacon();
-        String[] args = new String[] {Long.toString(id)};
+        String[] args = new String[] {Integer.toString(id)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -126,7 +126,7 @@ public class BeaconManager {
         beacon.setID_beacon(id);
         beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
         beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
-        beacon.setID_pdi(crs.getLong(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+        beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
         beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
         beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
         beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));

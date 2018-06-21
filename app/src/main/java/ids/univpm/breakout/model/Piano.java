@@ -7,20 +7,20 @@ import java.util.ArrayList;
  * @author costantino
  */
 public class Piano {
-    private long ID_piano;
+    private Integer ID_piano;
     private String quota;
     private ArrayList<Mappa> mappe;
-    private Long[] mappe_long;
+    private Integer[] mappe_Integer;
 
     public Piano() {
     }
 
-    public Long[] getMappe_long() {
-        return mappe_long;
+    public Integer[] getMappe_Integer() {
+        return mappe_Integer;
     }
 
-    public void setMappe_long(Long[] mappe_long) {
-        this.mappe_long = mappe_long;
+    public void setMappe_Integer(Integer[] mappe_Integer) {
+        this.mappe_Integer = mappe_Integer;
     }
 
     public ArrayList<Mappa> getMappe() {
@@ -31,11 +31,11 @@ public class Piano {
         this.mappe = mappe;
     }
 
-    public long getID_piano() {
+    public Integer getID_piano() {
         return ID_piano;
     }
 
-    public void setID_piano(long ID_piano) {
+    public void setID_piano(Integer ID_piano) {
         this.ID_piano = ID_piano;
     }
 

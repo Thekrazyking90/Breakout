@@ -31,7 +31,7 @@ public class TroncoManager {
         this.context = context;
     }
 
-    public void save(long id, long node1, long node2, long beacon, float length)
+    public void save(Integer id, Integer node1, Integer node2, Integer beacon, float length)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
@@ -52,12 +52,12 @@ public class TroncoManager {
         }
     }
 
-    public boolean deleteByID(long id)
+    public boolean deleteByID(Integer id)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         try
         {
-            if (db.delete(TroncoStrings.TBL_NAME, TroncoStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+            if (db.delete(TroncoStrings.TBL_NAME, TroncoStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                 return true;
             return false;
         }
@@ -84,9 +84,9 @@ public class TroncoManager {
     }
 
 
-    public Long[] getArcsByNode_Long(long id_nodo) {
+    public Integer[] getArcsByNode_Integer(Integer id_nodo) {
         Cursor crs=null;
-        String[] args = new String[] {Long.toString(id_nodo), Long.toString(id_nodo)};
+        String[] args = new String[] {Integer.toString(id_nodo), Integer.toString(id_nodo)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -97,26 +97,26 @@ public class TroncoManager {
             return null;
         }
 
-        Long[] listaTronchi = null;
+        Integer[] listaTronchi = null;
         int i = 0;
 
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            listaTronchi[i] = crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID));
+            listaTronchi[i] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID));
             i++;
         }
 
         return listaTronchi;
     }
 
-    private Beacon getBeacon(long id_beacon) {
+    private Beacon getBeacon(Integer id_beacon) {
         BeaconManager beaconMng = new BeaconManager(context);
         return beaconMng.findById(id_beacon);
     }
 
-    public Scala findByIdGeneric(Long arcId) {
+    public Scala findByIdGeneric(Integer arcId) {
         Cursor crs=null;
         Scala arc = new Scala();
-        String[] args = new String[] {Long.toString(arcId)};
+        String[] args = new String[] {Integer.toString(arcId)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -129,14 +129,16 @@ public class TroncoManager {
 
         crs.moveToFirst();
         arc.setID(arcId);
-        arc.setBeacon(getBeacon(crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID_BEACON))));
+        arc.setBeacon(getBeacon(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_BEACON))));
 
-        arc.setCosto_totale();
+        arc.setLarghezza_media(context);
 
-        Long[] nodes = null;
-        nodes[0] = crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
-        nodes[1] = crs.getLong(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
-        arc.setNodi_long(nodes);
+        arc.setCosto_totale_normalizzato();
+
+        Integer[] nodes = null;
+        nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+        nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+        arc.setNodi_Integer(nodes);
 
         return arc;
     }

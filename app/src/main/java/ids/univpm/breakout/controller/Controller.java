@@ -85,10 +85,10 @@ public class Controller {
         return false;
     }
 
-    public static long getPosizione(String username, Context ctx) {
+    public static Integer getPosizione(String username, Context ctx) {
         UtenteManager utenteMng = new UtenteManager(ctx);
         Utente utente = utenteMng.findByUser(username);
-        Long idbeacon = null;
+        Integer idbeacon = null;
         if(utente.getUltima_posizione() != null){
             idbeacon = utente.getUltima_posizione();
         }

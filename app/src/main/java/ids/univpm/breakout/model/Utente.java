@@ -1,23 +1,23 @@
 package ids.univpm.breakout.model;
 
 public class Utente {
-    private long ID_utente;
+    private Integer ID_utente;
     private String username;
     private String password;
     private String email;
     private String nome;
     private String cognome;
-    private Long ultima_posizione;
+    private Integer ultima_posizione;
     private int is_logged;
 
     public Utente() {
     }
 
-    public long getID_utente() {
+    public Integer getID_utente() {
         return ID_utente;
     }
 
-    public void setID_utente(long ID_utente) {
+    public void setID_utente(Integer ID_utente) {
         this.ID_utente = ID_utente;
     }
 
@@ -61,11 +61,11 @@ public class Utente {
         this.cognome = cognome;
     }
 
-    public Long getUltima_posizione() {
+    public Integer getUltima_posizione() {
         return ultima_posizione;
     }
 
-    public void setUltima_posizione(long ultima_posizione) {
+    public void setUltima_posizione(Integer ultima_posizione) {
         this.ultima_posizione = ultima_posizione;
     }
 

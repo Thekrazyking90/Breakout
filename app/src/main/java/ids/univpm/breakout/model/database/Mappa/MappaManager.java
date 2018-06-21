@@ -30,7 +30,7 @@ public class MappaManager {
         this.context = context;
     }
 
-    public void save(long id, long piano, String img, String name)
+    public void save(Integer id, Integer piano, String img, String name)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -50,12 +50,12 @@ public class MappaManager {
             }
         }
 
-        public boolean deleteByID(long id)
+        public boolean deleteByID(Integer id)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(MappaStrings.TBL_NAME, MappaStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(MappaStrings.TBL_NAME, MappaStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                     return true;
                 return false;
             }
@@ -81,10 +81,10 @@ public class MappaManager {
             return crs;
         }
 
-        public Mappa findByID (long id){
+        public Mappa findByID (Integer id){
             Cursor crs=null;
             Mappa mappa = new Mappa();
-            String[] args = new String[] {Long.toString(id)};
+            String[] args = new String[] {Integer.toString(id)};
             try
             {
                 SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -97,7 +97,7 @@ public class MappaManager {
 
             crs.moveToFirst();
             mappa.setID_mappa(id);
-            mappa.setID_piano(crs.getLong(crs.getColumnIndex(MappaStrings.FIELD_ID_PIANO)));
+            mappa.setID_piano(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID_PIANO)));
             mappa.setNome(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_NAME)));
             mappa.setUrlImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
 
@@ -108,7 +108,7 @@ public class MappaManager {
         ArrayList<Mappa> listaMappe = new ArrayList<>();
         Cursor crs = query();
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            Mappa mappa = findByID(crs.getLong(crs.getColumnIndex(MappaStrings.FIELD_ID)));
+            Mappa mappa = findByID(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID)));
             listaMappe.add(mappa);
         }
         return listaMappe;

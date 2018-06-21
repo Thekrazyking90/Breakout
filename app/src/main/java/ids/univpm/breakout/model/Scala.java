@@ -1,26 +1,30 @@
 package ids.univpm.breakout.model;
 
+import android.content.Context;
+
 import java.util.ArrayList;
+
+import ids.univpm.breakout.model.database.Nodi.NodoManager;
 
 /**
  *
  * @author costantino
  */
 public class Scala {
-    private long ID;
+    private Integer ID;
     private double larghezza_media;
     private double lunghezza;
     private ArrayList<Nodo> nodi;
-    private Long[] nodi_long;
+    private Integer[] nodi_Integer;
     private Beacon beacon;
-    private float costo_totale;
+    private float costo_totale_normalizzato;
 
     public Scala() {
     }
 
-    public Long otherNode (Long id){
-        Long other = null;
-        Long[] nodi = this.getNodi_long();
+    public Integer otherNode (Integer id){
+        Integer other = null;
+        Integer[] nodi = this.getNodi_Integer();
         if (id==nodi[0]){
             other=nodi[1];
         }else{
@@ -29,12 +33,12 @@ public class Scala {
     return other;
     }
 
-    public Long[] getNodi_long() {
-        return nodi_long;
+    public Integer[] getNodi_Integer() {
+        return nodi_Integer;
     }
 
-    public void setNodi_long(Long[] nodi_long) {
-        this.nodi_long = nodi_long;
+    public void setNodi_Integer(Integer[] nodi_Integer) {
+        this.nodi_Integer = nodi_Integer;
     }
 
     public ArrayList<Nodo> getNodi() {
@@ -45,11 +49,11 @@ public class Scala {
         this.nodi = nodi;
     }
 
-    public long getID() {
+    public Integer getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -59,6 +63,17 @@ public class Scala {
 
     public void setLarghezza_media(double larghezza_media) {
         this.larghezza_media = larghezza_media;
+    }
+
+    public void setLarghezza_media(Context ctx) {
+        setNodi(ctx);
+        this.larghezza_media = (nodi.get(0).getLarghezza() + nodi.get(1).getLarghezza()) / 2;
+    }
+
+    private void setNodi(Context ctx) {
+        NodoManager nodoMng = new NodoManager(ctx);
+        nodi.add(nodoMng.findById(nodi_Integer[0]));
+        nodi.add(nodoMng.findById(nodi_Integer[1]));
     }
 
     public double getLunghezza() {
@@ -77,16 +92,16 @@ public class Scala {
         this.beacon = beacon;
     }
 
-    public float getCosto_totale() {
-        return costo_totale;
+    public float getCosto_totale_normalizzato() {
+        return costo_totale_normalizzato;
     }
 
-    public void setCosto_totale(float costo_totale) {
-        this.costo_totale = costo_totale;
+    public void setCosto_totale_normalizzato(float costo_totale_normalizzato) {
+        this.costo_totale_normalizzato = costo_totale_normalizzato;
     }
 
-    public void setCosto_totale() {
-        double LOS = larghezza_media * lunghezza / beacon.getInd_NDC();
-        costo_totale = (float) (LOS + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
+    public void setCosto_totale_normalizzato() { //TODO qui c'è bisogno di un flag che distingua  tra modalità di emergenza e normale
+        double LOS = beacon.getInd_NDC() / larghezza_media * lunghezza;
+        costo_totale_normalizzato = (float) ((LOS*0.7) + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
     }
 }

@@ -8,19 +8,19 @@ import java.util.ArrayList;
  */
 public class Pdi extends Nodo {
     private ArrayList<Beacon> beacon;
-    private Long[] beacon_long;
+    private Integer[] beacon_Integer;
     private String tipo;
     private float lunghezza;
 
     public Pdi() {
     }
 
-    public Long[] getBeacon_long() {
-        return beacon_long;
+    public Integer[] getBeacon_Integer() {
+        return beacon_Integer;
     }
 
-    public void setBeacon_long(Long[] beacon_long) {
-        this.beacon_long = beacon_long;
+    public void setBeacon_Integer(Integer[] beacon_Integer) {
+        this.beacon_Integer = beacon_Integer;
     }
 
     public ArrayList<Beacon> getBeacon() {

@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
 
-import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
-import ids.univpm.breakout.model.Scala;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
@@ -35,7 +33,7 @@ public class NodoManager{
         this.context = context;
     }
 
-    public void save(long id, long piano, float coordx, float coordy, String code, float width, float length, boolean is_pdi, String type)
+    public void save(Integer id, Integer piano, float coordx, float coordy, String code, float width, float length, boolean is_pdi, String type)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
@@ -60,12 +58,12 @@ public class NodoManager{
         }
     }
 
-    public boolean deleteByID(long id)
+    public boolean deleteByID(Integer id)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         try
         {
-            if (db.delete(NodoStrings.TBL_NAME, NodoStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+            if (db.delete(NodoStrings.TBL_NAME, NodoStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                 return true;
             return false;
         }
@@ -95,16 +93,16 @@ public class NodoManager{
         ArrayList<Pdi> listaPdi = new ArrayList<>();
         Cursor crs = query();
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            Pdi pdi = findPdiByID(crs.getLong(crs.getColumnIndex(NodoStrings.FIELD_ID)));
+            Pdi pdi = findPdiByID(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
             listaPdi.add(pdi);
         }
         return listaPdi;
     }
 
-    private Pdi findPdiByID(long id_pdi) {
+    private Pdi findPdiByID(Integer id_pdi) {
         Cursor crs=null;
         Pdi pdi = new Pdi();
-        String[] args = new String[] {Long.toString(id_pdi)};
+        String[] args = new String[] {Integer.toString(id_pdi)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -117,33 +115,33 @@ public class NodoManager{
 
         crs.moveToFirst();
         pdi.setID(id_pdi);
-        pdi.setBeacon_long(getBeacons_Long(id_pdi));
+        pdi.setBeacon_Integer(getBeacons_Integer(id_pdi));
         pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
         pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
-        pdi.setTronchi_stella_long(getStar_Long(id_pdi));
+        pdi.setTronchi_stella_Integer(getStar_Integer(id_pdi));
         pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
         pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
         pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
         pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
-        pdi.setID_mappa(crs.getLong(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+        pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
 
         return pdi;
     }
 
-    private Long[] getStar_Long(long id_pdi) {
+    private Integer[] getStar_Integer(Integer id_pdi) {
         TroncoManager troncoMng = new TroncoManager(context);
-        return troncoMng.getArcsByNode_Long(id_pdi);
+        return troncoMng.getArcsByNode_Integer(id_pdi);
     }
 
-    private Long[] getBeacons_Long(long id_pdi) {
+    private Integer[] getBeacons_Integer(Integer id_pdi) {
         BeaconManager beaconMng = new BeaconManager(context);
-        return beaconMng.getBeaconsByPdi_Long(id_pdi);
+        return beaconMng.getBeaconsByPdi_Integer(id_pdi);
     }
 
-    public Nodo findById(Long id) {
+    public Nodo findById(Integer id) {
         Cursor crs=null;
         Nodo nodo = new Nodo();
-        String[] args = new String[] {Long.toString(id)};
+        String[] args = new String[] {Integer.toString(id)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -157,11 +155,11 @@ public class NodoManager{
         crs.moveToFirst();
         nodo.setID(id);
         nodo.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
-        nodo.setTronchi_stella_long(getStar_Long(id));
+        nodo.setTronchi_stella_Integer(getStar_Integer(id));
         nodo.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
         nodo.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
         nodo.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
-        nodo.setID_mappa(crs.getLong(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+        nodo.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
 
         return nodo;
     }

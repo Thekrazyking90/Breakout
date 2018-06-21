@@ -55,7 +55,7 @@ public class Login extends AppCompatActivity {
                 String pass = mPasswordView.getText().toString();
                 if(Controller.autenticazioneUtente(user, pass)){
                     Controller.aggiornamentoMappe();
-                    long idbeacon = Controller.getPosizione(user, Login.this);
+                    Integer idbeacon = Controller.getPosizione(user, Login.this);
 
                     Intent intent = new Intent(Login.this, Navigation1.class);
                     intent.putExtra("posizione_utente", idbeacon);

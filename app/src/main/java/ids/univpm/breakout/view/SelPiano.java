@@ -86,7 +86,7 @@ public class SelPiano extends AppCompatActivity {
                 nome.setTextSize(50);
                 nome.setTypeface(Typeface.DEFAULT_BOLD);
 
-                final long idmap = i.getID_mappa();
+                final Integer idmap = i.getID_mappa();
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -32,7 +32,7 @@ public class UtenteManager {
         this.context = context;
     }
 
-    public void save(Long last_position, String email, String name, String password, String surname, String username, int is_logged)
+    public void save(Integer last_position, String email, String name, String password, String surname, String username, int is_logged)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -55,12 +55,12 @@ public class UtenteManager {
             }
         }
 
-        public boolean deleteByID(long id)
+        public boolean deleteByID(Integer id)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(UtenteStrings.TBL_NAME, UtenteStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(UtenteStrings.TBL_NAME, UtenteStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                     return true;
                 return false;
             }
@@ -90,7 +90,7 @@ public class UtenteManager {
         ArrayList<Utente> listaUtenti = new ArrayList<>();
         Cursor crs = query();
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            Utente utente = findByID(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
+            Utente utente = findByID(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
             listaUtenti.add(utente);
         }
         return listaUtenti;
@@ -111,22 +111,22 @@ public class UtenteManager {
         }
 
         crs.moveToFirst();
-        utente.setID_utente(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
+        utente.setID_utente(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
         utente.setNome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_NAME)));
         utente.setCognome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_SURNAME)));
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
     }
 
-    public Utente findByID (long id){
+    public Utente findByID (Integer id){
         Cursor crs=null;
         Utente utente = new Utente();
-        String[] args = new String[] {Long.toString(id)};
+        String[] args = new String[] {Integer.toString(id)};
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -144,7 +144,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getLong(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;

@@ -30,7 +30,7 @@ public class ModificheManager {
         this.context = context;
     }
 
-    public void save(long id, long id_ogg_mod, String type, String table, int date)
+    public void save(Integer id, Integer id_ogg_mod, String type, String table, int date)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
@@ -51,12 +51,12 @@ public class ModificheManager {
         }
     }
 
-    public boolean deleteByID(long id)
+    public boolean deleteByID(Integer id)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         try
         {
-            if (db.delete(ModificheStrings.TBL_NAME, ModificheStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+            if (db.delete(ModificheStrings.TBL_NAME, ModificheStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                 return true;
             return false;
         }

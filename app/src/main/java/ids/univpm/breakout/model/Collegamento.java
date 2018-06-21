@@ -1,13 +1,13 @@
 package ids.univpm.breakout.model;
 
 public class Collegamento extends Scala {
-    private long ID_Piano;
+    private Integer ID_Piano;
 
-    public long getID_Piano() {
+    public Integer getID_Piano() {
         return ID_Piano;
     }
 
-    public void setID_Piano(long ID_Piano) {
+    public void setID_Piano(Integer ID_Piano) {
         this.ID_Piano = ID_Piano;
     }
 }

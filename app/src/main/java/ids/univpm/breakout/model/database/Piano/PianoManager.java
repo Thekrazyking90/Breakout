@@ -27,7 +27,7 @@ public class PianoManager {
         this.context = context;
     }
 
-    public void save(long id, String alt)
+    public void save(Integer id, String alt)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
@@ -45,12 +45,12 @@ public class PianoManager {
             }
         }
 
-        public boolean deleteByID(long id)
+        public boolean deleteByID(Integer id)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             try
             {
-                if (db.delete(PianoStrings.TBL_NAME, PianoStrings.FIELD_ID+"=?", new String[]{Long.toString(id)})>0)
+                if (db.delete(PianoStrings.TBL_NAME, PianoStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
                     return true;
                 return false;
             }
