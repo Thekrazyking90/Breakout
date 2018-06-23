@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
+import ids.univpm.breakout.controller.MainApplication;
 
 public class Navigation1 extends AppCompatActivity {
 
@@ -31,6 +32,8 @@ public class Navigation1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation1);
 
+        MainApplication.start(this);
+
         connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
@@ -44,6 +47,7 @@ public class Navigation1 extends AppCompatActivity {
             non_connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Disconnected");
         }
+
 //TODO caricamento mappa
         if(getIntent() != null){
             //get id mappa from intent
