@@ -26,9 +26,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="vertical"  >
 
-            />
+            <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/immagine150"
+                android:src="@drawable/q150_color"
+                />
+
+        </LinearLayout>
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+
