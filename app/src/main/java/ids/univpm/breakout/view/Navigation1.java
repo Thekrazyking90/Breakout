@@ -97,35 +97,80 @@ public class Navigation1 extends AppCompatActivity {
         //usando il Paint disegno un cerchio nella Drawable
 
         //TODO: le coordinate dei beacon le devo prendere dal db e fare un ciclo for per mettere
-        // i beacon li disegno con dei puntini nella mappa
-        // le varie cx e cy sono le coordinate in PIXEL dei beacon
-        int cx1=110;
-        int cy1=200;
-        int cx2=500;
-        int cy2=300;
-        canvas.drawCircle(cx1, cy1, 12, paint);
-        canvas.drawCircle(cx2, cy2, 12, paint);
+        // tutti i puntini =beacon , nel disegno --> TODO prendere dati dal file excel?
+        // METTO ANCHE I NODI
+        // le varie b0x e b0y sono le coordinate in PIXEL dei beacon
 
-        //disegno le linee che collegano i beacon
+
+        //scale vicino g1 --> coordinate x=98, y=58 ora copiate a mano dal file excel
+        int db_b1x=98;
+        int db_b1y=58;
+
+        int b0x,b0y,b1x,b1y,b2x,b2y,b3x,b3y,b4x,b4y,b5x,b5y;
+
+        //cordinate iniziali
+        b0x=31;
+        b0y=39;
+
+        //conversione nei pixel dell'immagine
+        b1x=(int) (db_b1x*2.7)+31;;
+        b1y=(int) ((db_b1y)*3.7)-38;
+
+        //esempio beacon CORRIDOIO biblio (TODO da prendere dal db)
+        int db_b2x=305;
+        int db_b2y=205;
+
+        b2x=(int) (db_b2x*2.7)+31;
+        b2y=(int) ((db_b2y)*3.3)-38;
+
+        //esempio 150/2
+        b3x= (int) (220*2.7)+31;
+        b3y= (int) ((72)*3.3)-39;
+
+
+        //esempio corridoio atelier
+        b4x=(int) ((285)*2.7)+30;
+        b4y=(int) ((70)*3.3)-38;
+
+        //g1 aula
+        b5x=(int) ((126)*2.7)+31;
+        b5y=(int) ((109)*3.3)-38;
+
+
+        //TODO anche qui va messa l'iterazione per disegnare puntini e le linee
+        canvas.drawCircle(b0x, b0y, 12, paint);
+        canvas.drawCircle(b1x, b1y, 12, paint);
+        canvas.drawCircle(b2x, b2y, 12, paint);
+        canvas.drawCircle(b3x, b3y, 12, paint);
+        canvas.drawCircle(b4x, b4y, 12, paint);
+        canvas.drawCircle(b5x, b5y, 12, paint);
+
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
-        canvas.drawLine(cx1,cy1,cx2,cy2, paint);
+        //DISEGNO LA LINEA che collega i beacon
+        canvas.drawLine(b1x,b1y,b5x,b5y, paint);
 
 
-        //TODO: in base a quale beacon sono collegato, faccio apparire il simbolo gps
-        //Qui lo inserisco nel primo punto, cioe cx1,cy1
+        //TODO: in base a quale beacon sono collegato, faccio apparire il simbolo gps e ne disegno
+        //le coordinate con drawBitmap (sotto)
+
         gps_pic= BitmapFactory.decodeResource(getResources(),R.drawable.gps);
         gps= Bitmap.createScaledBitmap(gps_pic,gps_pic.getWidth()/50,gps_pic.getHeight()/50,true);
 
-        gps_x=cx1;
-        gps_y=cy1;
+        //metto il segnale gps in corrispondenza del primo beacon
+        gps_x=b1x;
+        gps_y=b1y;
+
+
         canvas.drawBitmap(gps,gps_x -(gps.getWidth()/2),gps_y-(gps.getHeight()),null);
+
         //Ho cosi inserito il simbolo gps nella mappa
 
+
         //la Bitmap disegnata con il Canvas diventa il contenuto della ImageView
-        SubsamplingScaleImageView imageView = findViewById(R.id.immagine150);
+        SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)findViewById(R.id.immagine150);
         imageView.setImage(ImageSource.bitmap(bitmap));
-        //fine del disegno su mappa
+
 
     }
 
