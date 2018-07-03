@@ -94,47 +94,53 @@ public class Navigation1 extends AppCompatActivity {
         //Per disegnare il tratto con cui il Canvas disegnerà --> Paint
         Paint paint = new Paint();
         paint.setColor(Color.RED);
+
         //usando il Paint disegno un cerchio nella Drawable
+
+        //cordinate iniziali
+        int b0x=31;
+        int b0y=37;
 
         //TODO: le coordinate dei beacon le devo prendere dal db e fare un ciclo for per mettere
         // tutti i puntini =beacon , nel disegno --> TODO prendere dati dal file excel?
         // METTO ANCHE I NODI
-        // le varie b0x e b0y sono le coordinate in PIXEL dei beacon
-
 
         //scale vicino g1 --> coordinate x=98, y=58 ora copiate a mano dal file excel
         int db_b1x=98;
         int db_b1y=58;
 
-        int b0x,b0y,b1x,b1y,b2x,b2y,b3x,b3y,b4x,b4y,b5x,b5y;
 
-        //cordinate iniziali
-        b0x=31;
-        b0y=39;
+        double factor = 2.7;
 
-        //conversione nei pixel dell'immagine
-        b1x=(int) (db_b1x*2.7)+31;;
-        b1y=(int) ((db_b1y)*3.7)-38;
+        //conversione nei pixel dell'immagine: scale vicino g1
+        int b1x=(int) (db_b1x*factor)+b0x;
+        int b1y=(int) (db_b1y*factor)+b0y;
 
         //esempio beacon CORRIDOIO biblio (TODO da prendere dal db)
         int db_b2x=305;
         int db_b2y=205;
 
-        b2x=(int) (db_b2x*2.7)+31;
-        b2y=(int) ((db_b2y)*3.3)-38;
+        int b2x=(int) (db_b2x*factor)+b0x;
+        int b2y=(int) ((db_b2y)*factor)+b0y;
 
-        //esempio 150/2
-        b3x= (int) (220*2.7)+31;
-        b3y= (int) ((72)*3.3)-39;
+        //PROVO A DISEGNARE ALTRI PUNTI NELLA MAPPA
+        //esempio 150/2 --> qui avrei db_b3x e db_b3y etc etc per ogni nodo/beacon
+        //e avrei factor al posto di 2.71
+        int b3x= (int) (220*2.71)+b0x;
+        int b3y= (int) ((72)*2.71)+b0y;
 
 
         //esempio corridoio atelier
-        b4x=(int) ((285)*2.7)+30;
-        b4y=(int) ((70)*3.3)-38;
+        int b4x=(int) ((285)*2.71)+b0x;
+        int b4y=(int) ((70)*2.71)+b0y;
 
         //g1 aula
-        b5x=(int) ((126)*2.7)+31;
-        b5y=(int) ((109)*3.3)-38;
+        int b5x=(int) ((126)*2.71)+b0x;
+        int b5y=(int) ((109)*2.71)+b0y;
+        // uscita
+        int b6x=(int) ((245)*2.71)+b0x;
+        int b6y=(int) ((5)*2.71)+b0x;
+
 
 
         //TODO anche qui va messa l'iterazione per disegnare puntini e le linee
@@ -144,11 +150,14 @@ public class Navigation1 extends AppCompatActivity {
         canvas.drawCircle(b3x, b3y, 12, paint);
         canvas.drawCircle(b4x, b4y, 12, paint);
         canvas.drawCircle(b5x, b5y, 12, paint);
+        canvas.drawCircle(b6x, b6y, 12, paint);
 
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
-        //DISEGNO LA LINEA che collega i beacon
+        //DISEGNO unA LINEA --> anche qui ci va un'ITERAZIONE PER DISEGNARE IL PERCORSO
         canvas.drawLine(b1x,b1y,b5x,b5y, paint);
+
+
 
 
         //TODO: in base a quale beacon sono collegato, faccio apparire il simbolo gps e ne disegno
