@@ -30,8 +30,6 @@ import ids.univpm.breakout.controller.MainApplication;
 
 public class Navigation1 extends AppCompatActivity {
 
-    Bitmap gps_pic, gps;
-    int gps_x, gps_y;
     private TextView connection_status;
     private ImageView non_connesso;
     private ImageView connesso;
@@ -68,89 +66,74 @@ public class Navigation1 extends AppCompatActivity {
         }
 
       //TODO: da inserire TUTTO nella parte di caricamento mappa
-        //Prendere dimensioni pixel del display
-        Display display = ((WindowManager)
-                getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int displayWidth = display.getWidth();
-        int displayHeight = display.getHeight();
-
 
         //Preparazione Bitmap
-        //TODO: deve prendere la mappa in base a che piano sta
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color);
-        int originalHeight= bitmap.getHeight();
-        int originalWidth=bitmap.getWidth();
 
-        //Adatto la larghezza facendo una proporzione: altezza display (scalata) sta a altezza
-        // originale dell'immagine, come la larghezza scalata sta alla larghezza originale
-        // cosi mantengo le proporzioni dell'immagine, quindi lascio display Height, ma per
-        // la larghezza scalata ho --> altezzaDisplay*larghezza originale/altezza originale
-        bitmap = Bitmap.createScaledBitmap(bitmap, displayHeight*originalWidth/originalHeight, displayHeight, true);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inScaled = false;
+        //TODO: deve prendere la mappa in base a che piano sta
+        Bitmap workingbitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color2, opt);
+
+        //Bitmap workingBitmap = Bitmap.createBitmap(chosenFrame);
+        Bitmap bitmap = workingbitmap.copy(Bitmap.Config.ARGB_8888, true);
 
 
         //istanzio un Canvas: lo uso per disegnare su una Bitmap
         Canvas canvas = new Canvas(bitmap);
 
+
         //Per disegnare il tratto con cui il Canvas disegnerà --> Paint
         Paint paint = new Paint();
         paint.setColor(Color.RED);
-
         //usando il Paint disegno un cerchio nella Drawable
 
-        //cordinate iniziali
-        int b0x=31;
-        int b0y=37;
+        //cordinate iniziali 0 0
+
 
         //TODO: le coordinate dei beacon le devo prendere dal db e fare un ciclo for per mettere
         // tutti i puntini =beacon , nel disegno --> TODO prendere dati dal file excel?
         // METTO ANCHE I NODI
 
-        //scale vicino g1 --> coordinate x=98, y=58 ora copiate a mano dal file excel
-        int db_b1x=98;
-        int db_b1y=58;
-
-
-        double factor = 2.7;
+        //scale vicino g1 --> coordinate ora copiate a mano dal file excel, ma vanno prese dal db
+        int server_b1x=218;
+        int server_b1y=129;
 
         //conversione nei pixel dell'immagine: scale vicino g1
-        int b1x=(int) (db_b1x*factor)+b0x;
-        int b1y=(int) (db_b1y*factor)+b0y;
+        int b1x= server_b1x;
+        int b1y= server_b1y;
 
-        //esempio beacon CORRIDOIO biblio (TODO da prendere dal db)
-        int db_b2x=305;
-        int db_b2y=205;
+        //esempio beacon CORRIDOIO biblio
+        int b2x= 678;
+        int b2y= 456;
 
-        int b2x=(int) (db_b2x*factor)+b0x;
-        int b2y=(int) ((db_b2y)*factor)+b0y;
 
         //PROVO A DISEGNARE ALTRI PUNTI NELLA MAPPA
-        //esempio 150/2 --> qui avrei db_b3x e db_b3y etc etc per ogni nodo/beacon
-        //e avrei factor al posto di 2.71
-        int b3x= (int) (220*2.71)+b0x;
-        int b3y= (int) ((72)*2.71)+b0y;
-
+        //esempio 150/2
+        int b3x= 489;
+        int b3y= 160;
 
         //esempio corridoio atelier
-        int b4x=(int) ((285)*2.71)+b0x;
-        int b4y=(int) ((70)*2.71)+b0y;
+        int b4x=633;
+        int b4y=156;
 
         //g1 aula
-        int b5x=(int) ((126)*2.71)+b0x;
-        int b5y=(int) ((109)*2.71)+b0y;
-        // uscita
-        int b6x=(int) ((245)*2.71)+b0x;
-        int b6y=(int) ((5)*2.71)+b0x;
+        int b5x=280;
+        int b5y=242;
+        // uscita em
+        int b6x=(int) 544;
+        int b6y=(int) 11;
+
 
 
 
         //TODO anche qui va messa l'iterazione per disegnare puntini e le linee
-        canvas.drawCircle(b0x, b0y, 12, paint);
-        canvas.drawCircle(b1x, b1y, 12, paint);
-        canvas.drawCircle(b2x, b2y, 12, paint);
-        canvas.drawCircle(b3x, b3y, 12, paint);
-        canvas.drawCircle(b4x, b4y, 12, paint);
-        canvas.drawCircle(b5x, b5y, 12, paint);
-        canvas.drawCircle(b6x, b6y, 12, paint);
+
+        canvas.drawCircle(b1x, b1y, 8, paint);
+        canvas.drawCircle(b2x, b2y, 8, paint);
+        canvas.drawCircle(b3x, b3y, 8, paint);
+        canvas.drawCircle(b4x, b4y, 8, paint);
+        canvas.drawCircle(b5x, b5y, 8, paint);
+        canvas.drawCircle(b6x, b6y, 8, paint);
 
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
@@ -158,26 +141,26 @@ public class Navigation1 extends AppCompatActivity {
         canvas.drawLine(b1x,b1y,b5x,b5y, paint);
 
 
-
-
         //TODO: in base a quale beacon sono collegato, faccio apparire il simbolo gps e ne disegno
-        //le coordinate con drawBitmap (sotto)
+        //        le coordinate con drawBitmap (sotto)
 
-        gps_pic= BitmapFactory.decodeResource(getResources(),R.drawable.gps);
-        gps= Bitmap.createScaledBitmap(gps_pic,gps_pic.getWidth()/50,gps_pic.getHeight()/50,true);
 
-        //metto il segnale gps in corrispondenza del primo beacon
-        gps_x=b1x;
-        gps_y=b1y;
+        Bitmap gps_pic= BitmapFactory.decodeResource(getResources(),R.drawable.gps,opt);
+        Bitmap gps= Bitmap.createScaledBitmap(gps_pic,gps_pic.getWidth()/20,gps_pic.getHeight()/20,true);
 
+
+        //metto il segnale gps in corrispondenza del primo beacon per ora
+        int gps_x=b1x;
+        int gps_y=b1y;
 
         canvas.drawBitmap(gps,gps_x -(gps.getWidth()/2),gps_y-(gps.getHeight()),null);
 
-        //Ho cosi inserito il simbolo gps nella mappa
+        //le coordinate da mettere nel drawbitmap (riga sopra) sono da prendere in riferimento
+        // al beacon a cui sono collegato --> così ho il simbolo gps inserito nella mappa
 
 
         //la Bitmap disegnata con il Canvas diventa il contenuto della ImageView
-        SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)findViewById(R.id.immagine150);
+        SubsamplingScaleImageView imageView = findViewById(R.id.immagine150);
         imageView.setImage(ImageSource.bitmap(bitmap));
 
 
