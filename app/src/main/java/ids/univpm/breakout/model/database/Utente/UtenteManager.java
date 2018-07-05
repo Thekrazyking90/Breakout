@@ -150,5 +150,74 @@ public class UtenteManager {
         return utente;
     }
 
+    public Utente findByIsLoggato (){
+        Cursor crs=null;
+        Utente utente = new Utente();
+        String[] args = new String[] {Integer.toString(1)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(UtenteStrings.TBL_NAME, null, "is_loggato = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
 
+        crs.moveToFirst();
+        utente.setID_utente(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
+        utente.setNome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_NAME)));
+        utente.setCognome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_SURNAME)));
+        utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
+        utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
+        utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
+        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
+
+        return utente;
+    }
+
+
+    public boolean isLoggato() {
+        Cursor crs=null;
+        Utente utente = new Utente();
+        String[] args = new String[] {Integer.toString(1)};
+
+        boolean flag = false;
+
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(UtenteStrings.TBL_NAME, null, "is_loggato = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return flag;
+        }
+
+        if(crs.getCount()>=1){
+            flag=true;
+        }
+
+        return flag;
+    }
+
+    public void updatePosition(Utente user, String cod) {
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        dbHelper.getWritableDatabase();
+
+        String[] args = null;
+        args[0]= user.getID_utente().toString();
+
+        ContentValues cv=new ContentValues();
+        cv.put(UtenteStrings.FIELD_LAST_POSITION, cod);
+        try
+        {
+            db.update(UtenteStrings.TBL_NAME,cv,UtenteStrings.FIELD_ID + "= ?", args);
+        }
+        catch (SQLiteException sqle)
+        {
+            // Gestione delle eccezioni
+        }
+    }
 }

@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import java.util.ArrayList;
+
 import ids.univpm.breakout.model.Beacon;
+import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.DBHelper;
+import ids.univpm.breakout.model.database.Utente.UtenteStrings;
 
 public class BeaconManager {
 
@@ -28,13 +32,14 @@ public class BeaconManager {
         this.context = context;
     }
 
-    public void save(Integer id, Integer pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
+    public void save(Integer id, String address, Integer pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
             cv.put(BeaconStrings.FIELD_ID, id);
+            cv.put(BeaconStrings.FIELD_ADDRESS, address);
             cv.put(BeaconStrings.FIELD_ID_PDI, pdi);
             cv.put(BeaconStrings.FIELD_COORD_X, coordx);
             cv.put(BeaconStrings.FIELD_COORD_Y, coordy);
@@ -124,6 +129,7 @@ public class BeaconManager {
 
         crs.moveToFirst();
         beacon.setID_beacon(id);
+        beacon.setAddress(crs.getString(crs.getColumnIndex(BeaconStrings.FIELD_ADDRESS)));
         beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
         beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
         beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
@@ -133,5 +139,15 @@ public class BeaconManager {
         beacon.setInd_NDC(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_LOS)));
 
         return beacon;
+    }
+
+    public ArrayList<Beacon> findAll() {
+        ArrayList<Beacon> listaBeacon = new ArrayList<>();
+        Cursor crs = query();
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+            Beacon beacon = findById(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
+            listaBeacon.add(beacon);
+        }
+        return listaBeacon;
     }
 }

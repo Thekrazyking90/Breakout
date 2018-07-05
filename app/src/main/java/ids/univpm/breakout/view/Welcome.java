@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
+import ids.univpm.breakout.controller.MainApplication;
 
 public class Welcome extends AppCompatActivity {
 
@@ -20,6 +21,8 @@ public class Welcome extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.setCurrentActivity(this);
+
         setContentView(R.layout.activity_welcome);
         bottoneMappe = (Button) findViewById(R.id.mappeoffline);
 

@@ -4,12 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Mappa.MappaManager;
 import ids.univpm.breakout.model.database.Nodi.NodoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
@@ -70,10 +73,33 @@ public class Controller {
     - invio richiesta di autenticazione dell'utente al server
     - modifica del campo is_loggato nella tabella dell'utente nel DB locale
      */
-    public static boolean autenticazioneUtente(String user, String pass) {
-        return false;
-    }
+    public static boolean verificaAutenticazioneUtente(String user, String pass) {
 
+        Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
+
+        UtenteManager u_manager= new UtenteManager(ctx);
+
+        boolean flag = false;
+
+        try {
+
+            Utente utente_log=u_manager.findByUser(user);
+
+            if(utente_log!=null && utente_log.getPassword().equals(pass)){
+                flag = true;
+                Server.autenticazioneUtente(user, pass);
+                //TODO: per la posizione dell utente?
+            }
+
+        } catch (Exception e) {
+            //gestire eccezioni
+            e.printStackTrace();
+        }
+        return flag;
+
+
+
+    }
     public static void aggiornamentoMappe(){
         if (checkModifiche()){
             //TODO procedura che scarica le modifiche dal server

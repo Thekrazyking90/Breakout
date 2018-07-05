@@ -18,6 +18,7 @@ import java.util.Arrays;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
+import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 
@@ -31,6 +32,8 @@ public class RicercaPDI extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.setCurrentActivity(this);
+
         setContentView(R.layout.ricerca_pdi);
 
         ListView lv= findViewById(R.id.lista_pdi);

@@ -39,9 +39,6 @@
             android:name=".view.Navigation1"
             android:label="Mappa"/>
         <activity
-            android:name=".view.Recupera"
-            android:label="@string/recuperapw1"/>
-        <activity
             android:name=".view.SelPiano"
             android:label="@string/sel_piano"/>
 

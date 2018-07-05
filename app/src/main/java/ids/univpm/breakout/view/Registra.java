@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.view.validation.FormControl;
 
 public class Registra extends AppCompatActivity {
@@ -32,6 +33,7 @@ public class Registra extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.setCurrentActivity(this);
 
         setContentView(R.layout.registra);
         Email = findViewById(R.id.email_txt);
@@ -43,7 +45,9 @@ public class Registra extends AppCompatActivity {
 
 
     }
-    // VEDERE FILE INFORMATIONSHANDLER
+
+
+
 }
 
 

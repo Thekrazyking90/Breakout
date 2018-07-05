@@ -80,20 +80,6 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/recuperapw"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="90dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:text="@string/recuperapw"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_blue_dark"
-                    android:textColorLink="@android:color/black"
-                    android:textSize="18sp" />
 
         </LinearLayout>
 

@@ -9,8 +9,17 @@ public class Utente {
     private String cognome;
     private Integer ultima_posizione;
     private int is_logged;
+    private String token;
 
     public Utente() {
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Integer getID_utente() {

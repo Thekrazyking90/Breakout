@@ -3,6 +3,7 @@ package ids.univpm.breakout.model;
 public class Beacon {
 
     private Integer ID_beacon;
+    private String address;
     private float coord_X;
     private float coord_Y;
     private float ind_fuoco;
@@ -12,6 +13,14 @@ public class Beacon {
     private Integer ID_pdi;
 
     public Beacon() {
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getID_pdi() {

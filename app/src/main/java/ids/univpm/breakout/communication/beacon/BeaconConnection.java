@@ -15,7 +15,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.communication.StateMachine;
+import ids.univpm.breakout.communication.message.MessageBuilder;
+import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 /**
     Classe utilizzata per gestire la connessione con un beacon
@@ -205,7 +210,7 @@ public class BeaconConnection extends StateMachine {
                 if(MainApplication.getOnlineMode()) {
                     String mex = packingMessage();
                     try {
-                        ServerComunication.sendValue(mex);
+                        Server.sendValue(mex);
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -274,6 +279,10 @@ public class BeaconConnection extends StateMachine {
      * Metodo per impacchettare il messaggio da inviare al server
      */
     private String packingMessage() {
+        UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
+        Utente user = new Utente();
+        if (utenteMng.isLoggato()) user = utenteMng.findByIsLoggato();
+
         String mex;
             //arraylist delle chiavi per creare il JSON
         ArrayList<String> keys = new ArrayList<>();
@@ -281,7 +290,7 @@ public class BeaconConnection extends StateMachine {
         ArrayList<String> values = new ArrayList<>();
 
             //create le chiavi per il documento
-        keys.add("beacon_ID");
+        keys.add("beacon_address");
         keys.add("user_ID");
         keys.add("timestamp");
         keys.add("temperature");
@@ -293,7 +302,7 @@ public class BeaconConnection extends StateMachine {
 
             //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, orario e utente)
         values.add(device.getAddress());
-        values.add(UserHandler.getIpAddress());
+        values.add(user.getID_utente().toString());
         values.add(new Timestamp(System.currentTimeMillis()).toString());
 
         int c = 0;

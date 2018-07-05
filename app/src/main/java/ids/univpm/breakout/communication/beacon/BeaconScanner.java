@@ -22,8 +22,12 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import ids.univpm.breakout.communication.DataListener;
+import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.communication.StateMachine;
+import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 
 /**
@@ -121,7 +125,6 @@ public class BeaconScanner extends StateMachine implements DataListener {
      */
     public BeaconScanner(Activity a, String set) {
         super();
- //TODO listener posizione utente    Data.getUserPosition().addDataListener(this);
         activity = a;
         //inizializza il contenitore
         setup = new Setup(set);
@@ -289,26 +292,30 @@ public class BeaconScanner extends StateMachine implements DataListener {
      * Metodo per impacchettare il messaggio da inviare al server
      */
 
-    //TODO da rivedere e modificare
-    /*public String packingMessage() {
+    //TODO metodo che costruisce il messaggio contenente la posizione dell'utente da inviare al server
+    public String packingMessage() {
+        UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
+        Utente user = new Utente();
+        if (utenteMng.isLoggato()) user = utenteMng.findByIsLoggato();
+
         String mex;
             //arraylist delle chiavi per creare il JSON
         ArrayList<String> keys = new ArrayList<>();
             //arraylist dei valori per creare il JSON
         ArrayList<String> values = new ArrayList<>();
             //create le chiavi per il documento
-        keys.add("beacon_ID");
+        keys.add("beacon_address");
         keys.add("user_ID");
         keys.add("nome");
         keys.add("cognome");
 
             //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
         values.add(currentBeacon.getAddress());
-        values.add(UserHandler.getIpAddress());
+        values.add(user.getID_utente().toString());
             //nel caso in cui l'utente sia loggato vengono messi anche i suoi dati nel messaggio
-        if(UserHandler.isLogged()){
-            values.add(UserHandler.getNome());
-            values.add(UserHandler.getCognome());
+        if(user.getIs_logged()==1){
+            values.add(user.getNome());
+            values.add(user.getCognome());
         }
             //se l'utente non è loggato vengono aggiunti dati di default al messaggio
         else {
@@ -320,7 +327,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         Log.i("mex",mex);
 
         return mex;
-    }*/
+    }
 
     /**
      * Metodo per attendere il tempo necessario fra due scan consecutivi
@@ -512,26 +519,30 @@ public class BeaconScanner extends StateMachine implements DataListener {
     };
 
     @Override
-    public void update() {  //TODO da rivedere e da capire
+    public void update() {  //TODO metodo per aggiornare la posizione dell'utente e per notificarla al server qualora collegato
         String mex = packingMessage();
 //        if(MainApplication.getFloors()!=null) {
                 //viene aggiornato il beacon a cui si è collegato l'utente
             String cod = currentBeacon.getAddress();
-            Node n = MainApplication.getSensors().get(cod);
 
-            Log.e("get","coords " + n.getCoords() + " flor " + n.getFloor());
+            Log.e("get","BeaconAddress " + cod);
 
                 //viene aggiornato il piano in cui si trova l'utente e le sue coordinate x,y
-            Data.getUserPosition().setFloor(n.getFloor());
-            Data.getUserPosition().setPosition(n.getCoords());
+      //      Data.getUserPosition().setFloor(beacon.getFloor());
+       //     Data.getUserPosition().setPosition(beacon.getCoords());
 
-
+            UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
+            Utente user = new Utente();
+        if (utenteMng.isLoggato()) {
+            user = utenteMng.findByIsLoggato();
+            utenteMng.updatePosition(user, cod);
+        }
 
             //Data.getUserPosition().updateInformation();
         if(MainApplication.getOnlineMode()) {
             try {
                     //inviato un messaggio con la posizione dell'utente
-                ServerComunication.sendPosition(mex);
+                Server.sendPosition(mex);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

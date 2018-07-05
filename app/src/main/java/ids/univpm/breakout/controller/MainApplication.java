@@ -21,6 +21,10 @@ import java.util.concurrent.ExecutionException;
 import ids.univpm.breakout.communication.beacon.BeaconScanner;
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Piano;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Beacon.BeaconManager;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.view.Navigation1;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -89,8 +93,9 @@ public class MainApplication {
 //TODO         ServerComunication.setHostMaster(PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext()).getString("serverIp",""));
 
             //creata struttura dati legata ai beacon nell'edificio, leggendo dal file salvato in memoria intera
-/*TODO in caso da fare leggendo i dati nel db locale        ArrayList<String[]> beaconList = CSVHandler.readCSV("beaconlist",activity.getBaseContext());
-        loadSensors(beaconList);*/
+        BeaconManager beaconMng = new BeaconManager(activity.getBaseContext());
+        ArrayList<Beacon> beaconList = beaconMng.findAll();
+        loadSensors(beaconList);
 
             //creata struttura dati legata alle stanze nell'edificio, leggendo dal file salvato in memoria intera
 /*TODO in caso da fare leggendo i dati nel db locale       ArrayList<String[]> roomsList = CSVHandler.readCSV("roomlist",activity.getBaseContext());
@@ -245,19 +250,13 @@ public class MainApplication {
      * Metodo per caricare nella struttura dati dei beacon, i valori passati come parametro
      * @param b, i valori dei sensori da caricare in memoria
      */
-    private static void loadSensors(ArrayList<String[]> b) {
-        int coords[] = new int[2];
-        String fl;
+    private static void loadSensors(ArrayList<Beacon> b) {
         String cod;
         sensors = new HashMap<>();
 
-
-        for(String[] beacon : b) {
-            cod = beacon[0];
-            coords[0] = Integer.parseInt(beacon[2]);
-            coords[1] = Integer.parseInt(beacon[3]);
-            fl = beacon[1];
-            sensors.put(cod,new Beacon(coords.clone(),fl)); //TODO vedere se rimaneggiare il costruttore oppure no
+        for(Beacon beacon : b) {
+            cod = beacon.getAddress();
+            sensors.put(cod, beacon);
         }
 
     }
@@ -266,7 +265,7 @@ public class MainApplication {
      * Metodo per caricare nella struttura dati delle stanze, i valori passati come parametro
      * @param b, i valori delle stanze da caricare in memoria
      */
-    /*private static void loadRooms(ArrayList<String[]> b) {  TODO credo non serva questo metono, però teniamolo e rivediamolo incaso dovesse servire
+    /*private static void loadRooms(ArrayList<String[]> b) {  TODO credo non serva questo metodo, però teniamolo e rivediamolo in caso dovesse servire
 
         int[] coords = new int[2];
         double width;
@@ -348,21 +347,16 @@ public class MainApplication {
                     if(scanner.getSetup().getState().equals("NORMAL")) {
                         scanner.closeScan();
                         scanner = null;
-                        //presi i dati riferiti alla posizione per poter inizializzare l'activity Full Screen Maps
-                        String floor = Data.getUserPosition().getFloor();
-                        if(floor == null){
-                            if(Data.getNotification().getNotifies()==null || Data.getNotification().getNotifies().size()==0){
-                                floor = "145";
-                            }else {
-                                floor = Data.getNotification().getNotifies().get(0).getFloor();
-                            }
+                        UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
+                        Utente user = new Utente();
+                        if (utenteMng.isLoggato()) user = utenteMng.findByIsLoggato();
+                        //presi i dati riferiti alla posizione per poter inizializzare l'activity Navigation1
 
-                        }
                         //viene messo come obiettivo da raggiungere la via di fuga nel piano
-                        String mex = floor.concat(";").concat(floor).concat("EMERGENCY");
+                        String mex = "beacon_ID = " + user.getUltima_posizione().toString().concat(";").concat("EMERGENCY");
                         Log.i("mex",mex);
                         Intent intentTWO = new Intent(context,
-                                FullScreenMap.class);
+                                Navigation1.class);
                         intentTWO.putExtra("MAP_ID",mex);
                         context.startActivity(intentTWO);
 

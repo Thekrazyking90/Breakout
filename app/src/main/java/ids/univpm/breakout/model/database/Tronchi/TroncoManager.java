@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Scala;
+import ids.univpm.breakout.model.Tronco;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.DBHelper;
 
@@ -141,5 +142,9 @@ public class TroncoManager {
         arc.setNodi_Integer(nodes);
 
         return arc;
+    }
+
+    public Scala getByBeaconID(Integer id_beacon) {
+        return null;
     }
 }

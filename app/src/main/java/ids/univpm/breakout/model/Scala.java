@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
+import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.database.Nodi.NodoManager;
 
 /**
@@ -100,8 +101,13 @@ public class Scala {
         this.costo_totale_normalizzato = costo_totale_normalizzato;
     }
 
-    public void setCosto_totale_normalizzato() { //TODO qui c'è bisogno di un flag che distingua  tra modalità di emergenza e normale
-        double LOS = beacon.getInd_NDC() / larghezza_media * lunghezza;
-        costo_totale_normalizzato = (float) ((LOS*0.7) + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
+    public void setCosto_totale_normalizzato() {
+
+        if (MainApplication.getScanner().getSetup().getState().equals("EMERGENCY")) {
+            double LOS = beacon.getInd_NDC() / larghezza_media * lunghezza;
+            costo_totale_normalizzato = (float) ((LOS * 0.7) + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
+        }else{
+            costo_totale_normalizzato = (float) lunghezza;
+        }
     }
 }

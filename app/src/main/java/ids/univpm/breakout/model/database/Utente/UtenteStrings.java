@@ -10,6 +10,7 @@ public class UtenteStrings {
     public static final String FIELD_SURNAME="Cognome";
     public static final String FIELD_IS_LOGGED ="is_loggato";
     public static final String FIELD_LAST_POSITION ="ultima_posizione";
+    public static final String FIELD_TOKEN = "token";
 
 
 }

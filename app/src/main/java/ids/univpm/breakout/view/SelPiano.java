@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
+import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Mappa;
 
 public class SelPiano extends AppCompatActivity {
@@ -33,6 +34,8 @@ public class SelPiano extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.setCurrentActivity(this);
+
         setContentView(R.layout.sel_piano);
 
         //Check connessione: di default disconnesso

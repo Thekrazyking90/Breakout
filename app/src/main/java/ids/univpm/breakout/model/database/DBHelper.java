@@ -30,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 UtenteStrings.FIELD_EMAIL+" TEXT NOT NULL UNIQUE," +
                 UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
                 UtenteStrings.FIELD_LAST_POSITION+" INTEGER," +
+                UtenteStrings.FIELD_TOKEN+" TEXT NOT NULL," +
                 UtenteStrings.FIELD_IS_LOGGED+" INTEGER NOT NULL DEFAULT 0," +
                 UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);";
 

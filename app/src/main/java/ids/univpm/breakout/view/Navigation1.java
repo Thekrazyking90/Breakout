@@ -40,6 +40,8 @@ public class Navigation1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.setCurrentActivity(this);
+
         setContentView(R.layout.navigation1);
 
         MainApplication.start(this);
