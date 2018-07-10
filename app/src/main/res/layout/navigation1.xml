@@ -32,8 +32,8 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/immagine150"
-                android:src="@drawable/q150_color"
+                android:id="@+id/immagine"
+
                 />
 
         </LinearLayout>

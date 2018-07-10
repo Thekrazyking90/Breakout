@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.MainApplication;
-import ids.univpm.breakout.view.validation.FormControl;
 
 public class Registra extends AppCompatActivity {
 

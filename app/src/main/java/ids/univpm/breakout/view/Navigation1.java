@@ -1,9 +1,6 @@
 package ids.univpm.breakout.view;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,12 +9,11 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.view.Display;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,21 +56,70 @@ public class Navigation1 extends AppCompatActivity {
             connection_status.setText("Disconnected");
         }
 
-//TODO caricamento mappa
-        if(getIntent() != null){
-            //get id mappa from intent
-        }else{
 
+        //ottiene l'oggetto Intent dall'activity che lo richiama
+        Intent intent = this.getIntent();
+
+//TODO caricamento mappa
+        if(intent != null){
+
+            String fromActivity = intent.getExtras().getString("ID_Activity");
+
+            if(fromActivity.equals("From_Login")) {
+                //get id mappa from intent
+                disegnoMappa();
+
+            }
+            else if (fromActivity.equals("From_SelPiano")) {
+                String piano = intent.getExtras().getString("Btn");
+
+                //Preparazione Bitmap
+                BitmapFactory.Options opt = new BitmapFactory.Options();
+                opt.inScaled = false;
+
+                Bitmap workingBitmap;
+                
+                if (piano.equals("145")) {
+                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q145_color, opt);
+
+                } else if (piano.equals("150")) {
+                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color, opt);
+                } else { //so gia che è 155
+                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q155_color, opt);
+                }
+
+                Bitmap bitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
+                imageView.setImage(ImageSource.bitmap(bitmap));
+
+            }
+
+        }else{
+            Log.d("ERROR: ","Riconoscimento intent non riuscito");
         }
 
-      //TODO: da inserire TUTTO nella parte di caricamento mappa
+        //TODO: da inserire TUTTO nella parte di caricamento mappa
+       // disegnoMappa();
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+    public void disegnoMappa() {
 
         //Preparazione Bitmap
-
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inScaled = false;
         //TODO: deve prendere la mappa in base a che piano sta
-        Bitmap workingbitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color2, opt);
+        Bitmap workingbitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color, opt);
 
         //Bitmap workingBitmap = Bitmap.createBitmap(chosenFrame);
         Bitmap bitmap = workingbitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -97,35 +142,33 @@ public class Navigation1 extends AppCompatActivity {
         // METTO ANCHE I NODI
 
         //scale vicino g1 --> coordinate ora copiate a mano dal file excel, ma vanno prese dal db
-        int server_b1x=218;
-        int server_b1y=129;
+        int server_b1x = 218;
+        int server_b1y = 129;
 
         //conversione nei pixel dell'immagine: scale vicino g1
-        int b1x= server_b1x;
-        int b1y= server_b1y;
+        int b1x = server_b1x;
+        int b1y = server_b1y;
 
         //esempio beacon CORRIDOIO biblio
-        int b2x= 678;
-        int b2y= 456;
+        int b2x = 678;
+        int b2y = 456;
 
 
         //PROVO A DISEGNARE ALTRI PUNTI NELLA MAPPA
         //esempio 150/2
-        int b3x= 489;
-        int b3y= 160;
+        int b3x = 489;
+        int b3y = 160;
 
         //esempio corridoio atelier
-        int b4x=633;
-        int b4y=156;
+        int b4x = 633;
+        int b4y = 156;
 
         //g1 aula
-        int b5x=280;
-        int b5y=242;
+        int b5x = 280;
+        int b5y = 242;
         // uscita em
-        int b6x=(int) 544;
-        int b6y=(int) 11;
-
-
+        int b6x = (int) 544;
+        int b6y = (int) 11;
 
 
         //TODO anche qui va messa l'iterazione per disegnare puntini e le linee
@@ -140,33 +183,40 @@ public class Navigation1 extends AppCompatActivity {
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
         //DISEGNO unA LINEA --> anche qui ci va un'ITERAZIONE PER DISEGNARE IL PERCORSO
-        canvas.drawLine(b1x,b1y,b5x,b5y, paint);
+        canvas.drawLine(b1x, b1y, b5x, b5y, paint);
 
 
         //TODO: in base a quale beacon sono collegato, faccio apparire il simbolo gps e ne disegno
         //        le coordinate con drawBitmap (sotto)
 
 
-        Bitmap gps_pic= BitmapFactory.decodeResource(getResources(),R.drawable.gps,opt);
-        Bitmap gps= Bitmap.createScaledBitmap(gps_pic,gps_pic.getWidth()/20,gps_pic.getHeight()/20,true);
+        Bitmap gps_pic = BitmapFactory.decodeResource(getResources(), R.drawable.gps, opt);
+        Bitmap gps = Bitmap.createScaledBitmap(gps_pic, gps_pic.getWidth() / 20, gps_pic.getHeight() / 20, true);
 
 
         //metto il segnale gps in corrispondenza del primo beacon per ora
-        int gps_x=b1x;
-        int gps_y=b1y;
+        int gps_x = b1x;
+        int gps_y = b1y;
 
-        canvas.drawBitmap(gps,gps_x -(gps.getWidth()/2),gps_y-(gps.getHeight()),null);
+        canvas.drawBitmap(gps, gps_x - (gps.getWidth() / 2), gps_y - (gps.getHeight()), null);
 
         //le coordinate da mettere nel drawbitmap (riga sopra) sono da prendere in riferimento
         // al beacon a cui sono collegato --> così ho il simbolo gps inserito nella mappa
 
 
         //la Bitmap disegnata con il Canvas diventa il contenuto della ImageView
-        SubsamplingScaleImageView imageView = findViewById(R.id.immagine150);
+        SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
         imageView.setImage(ImageSource.bitmap(bitmap));
-
-
     }
+
+
+
+
+
+
+
+
+
 
 
 
