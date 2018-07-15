@@ -1,13 +1,21 @@
 package ids.univpm.breakout.controller;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Pdi;
@@ -16,8 +24,69 @@ import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Mappa.MappaManager;
 import ids.univpm.breakout.model.database.Nodi.NodoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.view.Navigation1;
+
+import static android.graphics.Color.RED;
 
 public class Controller {
+
+
+
+    public static void displayNotifica(int ID_Notifica, Context context) {
+        //TODO: questo metodo va richiamato solo in caso di emergenza, quindi SE comunicato dal server
+        // dopo che un dispositivo ha rilevato valori anomali da un Beacon (fuoco)
+        // Gli passo l'ID della notifica, che va settato come int ID_Notifica=1 PRIMA di richiamare il
+        // metodo displayNotifica, all'interno della activity o della classe desiderata.
+
+
+        Intent Int_Notifica = new Intent(context, Navigation1.class);
+        Int_Notifica.putExtra("ID_Notifica", ID_Notifica);
+
+        //Questo genera la notifica.
+
+        //Il PendingIntent ci consentirà di comunicare con il servizio di notifica caricato su un oggetto
+        //NotificationManager. Quest'ultimo, sarà utilizzato per inviare la notifica creata con il
+        // Notification.Builder, settando opportuni attributi come il titolo, l'oggetto, l'icona, ecc.
+        //Al click sulla notifica verrà avviata l'Activity indicata nella prima Intent del metodo
+        //displayNotifica.
+
+        PendingIntent pint = PendingIntent.getActivity(context, 0, Int_Notifica,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationManager nmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder noti = new NotificationCompat.Builder(context,"notify_001");
+
+
+        noti.setContentIntent(pint)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle("EMERGENZA")
+                .setColor(RED)
+                .setContentText("Evacuare l'edificio!")
+                .setAutoCancel(false)
+                .setSmallIcon(R.drawable.danger)
+                .setPriority(Notification.PRIORITY_MAX);
+
+
+
+        //Per fare apparire la notifica, da Oreo in poi serve questa serie di istruzioni
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_001",
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            nmanager.createNotificationChannel(channel);
+        }
+
+        nmanager.notify(ID_Notifica, noti.build());
+
+    }
+
+
+
+
+
+
+
+
 
     public static int checkLog(Context ctx) {
         ArrayList<Utente> listaUtenti;

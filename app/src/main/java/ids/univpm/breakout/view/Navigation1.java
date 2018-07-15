@@ -30,17 +30,16 @@ public class Navigation1 extends AppCompatActivity {
     private ImageView non_connesso;
     private ImageView connesso;
 
-    // inserire check per la connessione al server --> sotto icona rossa oppure verde x connesso
+    // inserire check per la connessione al server --> sotto icona rossa oppure verde se connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainApplication.setCurrentActivity(this);
-
         setContentView(R.layout.navigation1);
-
         MainApplication.start(this);
+
 
         connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
@@ -60,8 +59,19 @@ public class Navigation1 extends AppCompatActivity {
         //ottiene l'oggetto Intent dall'activity che lo richiama
         Intent intent = this.getIntent();
 
+
 //TODO caricamento mappa
         if(intent != null){
+
+            Integer ID_Notifica= intent.getExtras().getInt("ID_Notifica");
+            if (ID_Notifica != null) {
+                //TODO far apparire il percorso di uscita calcolato (Dijkstra),
+                // dopo aver preso la posizione dell'utente
+            }
+
+            // Distinguiamo da dove arriva la chiamata: se da Login, disegno la mappa
+            // con i nodi presi dal db (i tronchi penso si vedano solo in caso di emergenza, ma il
+            // codice con DrawLine lho lasciato per ora)
 
             String fromActivity = intent.getExtras().getString("ID_Activity");
 
@@ -70,6 +80,10 @@ public class Navigation1 extends AppCompatActivity {
                 disegnoMappa();
 
             }
+            // Se la chiamata arriva da SelPiano, si apre la schermata con la sola visualizzazione
+            // della mappa zoomabile dei piani. Per 150 si possono lasciare anche i pallini dei nodi,
+            // ma di 145 e 155 lascerei la visualizzazione così
+
             else if (fromActivity.equals("From_SelPiano")) {
                 String piano = intent.getExtras().getString("Btn");
 
@@ -98,15 +112,6 @@ public class Navigation1 extends AppCompatActivity {
             Log.d("ERROR: ","Riconoscimento intent non riuscito");
         }
 
-        //TODO: da inserire TUTTO nella parte di caricamento mappa
-       // disegnoMappa();
-
-
-
-
-
-
-
 
     }
 
@@ -114,6 +119,7 @@ public class Navigation1 extends AppCompatActivity {
 
 
     public void disegnoMappa() {
+        //TODO: Questo metodo si può mettere anche su Controller, se lo si preferisce
 
         //Preparazione Bitmap
         BitmapFactory.Options opt = new BitmapFactory.Options();
