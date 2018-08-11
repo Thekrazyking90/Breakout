@@ -27,7 +27,7 @@ public class GetRequest extends AsyncTask<String,Void,String> {
 
     private static final String PORT = "8080";
 
-    private static final String SERVER_ID = "RestfulServerTID";
+    private static final String SERVER_ID = "Breakout_server";
 
     private URL url;
 

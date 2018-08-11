@@ -33,58 +33,57 @@ public class UtenteManager {
     }
 
     public void save(Integer last_position, String email, String name, String password, String surname, String username, int is_logged)
-        {
-            SQLiteDatabase db= dbHelper.getWritableDatabase();
-            dbHelper.getWritableDatabase();
+    {
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
 
-            ContentValues cv=new ContentValues();
-            cv.put(UtenteStrings.FIELD_EMAIL, email);
-            cv.put(UtenteStrings.FIELD_NAME, name);
-            cv.put(UtenteStrings.FIELD_PSW, password);
-            cv.put(UtenteStrings.FIELD_SURNAME, surname);
-            cv.put(UtenteStrings.FIELD_USER, username);
-            cv.put(UtenteStrings.FIELD_IS_LOGGED, is_logged);
-            cv.put(UtenteStrings.FIELD_LAST_POSITION, last_position);
-            try
-            {
-                db.insert(UtenteStrings.TBL_NAME, null,cv);
-            }
-            catch (SQLiteException sqle)
-            {
-                // Gestione delle eccezioni
-            }
+        ContentValues cv=new ContentValues();
+        cv.put(UtenteStrings.FIELD_EMAIL, email);
+        cv.put(UtenteStrings.FIELD_NAME, name);
+        cv.put(UtenteStrings.FIELD_PSW, password);
+        cv.put(UtenteStrings.FIELD_SURNAME, surname);
+        cv.put(UtenteStrings.FIELD_USER, username);
+        cv.put(UtenteStrings.FIELD_IS_LOGGED, is_logged);
+        cv.put(UtenteStrings.FIELD_LAST_POSITION, last_position);
+        try
+        {
+            db.insert(UtenteStrings.TBL_NAME, null,cv);
+        }
+        catch (SQLiteException sqle)
+        {
+            // Gestione delle eccezioni
+        }
+    }
+
+    public boolean deleteByID(Integer id)
+    {
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            if (db.delete(UtenteStrings.TBL_NAME, UtenteStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
+                return true;
+            return false;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
         }
 
-        public boolean deleteByID(Integer id)
-        {
-            SQLiteDatabase db= dbHelper.getWritableDatabase();
-            try
-            {
-                if (db.delete(UtenteStrings.TBL_NAME, UtenteStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
-                    return true;
-                return false;
-            }
-            catch (SQLiteException sqle)
-            {
-                return false;
-            }
+    }
 
-        }
-
-        public Cursor query()
+    public Cursor query()
+    {
+        Cursor crs=null;
+        try
         {
-            Cursor crs=null;
-            try
-            {
-                SQLiteDatabase db= dbHelper.getReadableDatabase();
-                crs=db.query(UtenteStrings.TBL_NAME, null, null, null, null, null, null, null);
-            }
-            catch(SQLiteException sqle)
-            {
-                return null;
-            }
-            return crs;
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(UtenteStrings.TBL_NAME, null, null, null, null, null, null, null);
         }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+        return crs;
+    }
 
     public ArrayList<Utente> findAll() {
         ArrayList<Utente> listaUtenti = new ArrayList<>();
@@ -178,7 +177,7 @@ public class UtenteManager {
     }
 
 
-    public boolean isLoggato() {
+    public boolean AnyIsLoggato() {
         Cursor crs=null;
         Utente utente = new Utente();
         String[] args = new String[] {Integer.toString(1)};
@@ -211,6 +210,25 @@ public class UtenteManager {
 
         ContentValues cv=new ContentValues();
         cv.put(UtenteStrings.FIELD_LAST_POSITION, cod);
+        try
+        {
+            db.update(UtenteStrings.TBL_NAME,cv,UtenteStrings.FIELD_ID + "= ?", args);
+        }
+        catch (SQLiteException sqle)
+        {
+            // Gestione delle eccezioni
+        }
+    }
+
+    public void updateIs_loggato(Utente user, Boolean b) {
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        dbHelper.getWritableDatabase();
+
+        String[] args = null;
+        args[0]= user.getID_utente().toString();
+
+        ContentValues cv=new ContentValues();
+        cv.put(UtenteStrings.FIELD_IS_LOGGED, b);
         try
         {
             db.update(UtenteStrings.TBL_NAME,cv,UtenteStrings.FIELD_ID + "= ?", args);

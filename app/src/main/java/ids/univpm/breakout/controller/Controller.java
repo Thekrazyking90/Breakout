@@ -128,47 +128,54 @@ public class Controller {
         return mappe;
     }
 
-    public static boolean checkConnection(Context ctx) {
+    public static void checkConnection(Context ctx) {
         ConnectivityManager cm =
                 (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        return isConnected;
+        NetworkInfo activeNetwork = null;
+        if (cm != null) {
+            activeNetwork = cm.getActiveNetworkInfo();
+        }
+
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting() && Server.handShake())
+            MainApplication.setOnlineMode(true);
+        else MainApplication.setOnlineMode(false);
     }
 
-    /*TODO metodo che effettua l'autenticazione dell'utente:
-    - invio richiesta di autenticazione dell'utente al server
-    - modifica del campo is_loggato nella tabella dell'utente nel DB locale
-     */
     public static boolean verificaAutenticazioneUtente(String user, String pass) {
 
         Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
 
         UtenteManager u_manager= new UtenteManager(ctx);
+        Utente utente_log=u_manager.findByUser(user);
+
+        ArrayList<Utente> listaUtenti = u_manager.findAll();
+
+        for (Utente u: listaUtenti) {
+            u_manager.updateIs_loggato(u, false);
+        }
 
         boolean flag = false;
 
-        try {
-
-            Utente utente_log=u_manager.findByUser(user);
-
-            if(utente_log!=null && utente_log.getPassword().equals(pass)){
-                flag = true;
+        if(utente_log!=null && utente_log.getPassword().equals(pass)) {
+            flag = true;
+            try {
                 Server.autenticazioneUtente(user, pass);
-                //TODO: per la posizione dell utente?
+
+                u_manager.updateIs_loggato(utente_log, true);
+
+            } catch (Exception e) {
+                //gestire eccezioni
+                e.printStackTrace();
+
+                u_manager.updateIs_loggato(utente_log, false);
+                flag = false;
             }
-
-        } catch (Exception e) {
-            //gestire eccezioni
-            e.printStackTrace();
         }
+
         return flag;
-
-
-
     }
+
     public static void aggiornamentoMappe(){
         if (checkModifiche()){
             //TODO procedura che scarica le modifiche dal server
@@ -177,10 +184,13 @@ public class Controller {
 
     //TODO metodo che confronta la data dell'ultima modifica nel DB locale con le modifiche nel server
     public static boolean checkModifiche() {
+
         return false;
     }
 
-    public static Integer getPosizione(String username, Context ctx) {
+
+    //TODO potrebbe essere inutile questo metodo
+    public static Integer getPosizioneCorrente(String username, Context ctx) {
         UtenteManager utenteMng = new UtenteManager(ctx);
         Utente utente = utenteMng.findByUser(username);
         Integer idbeacon = null;

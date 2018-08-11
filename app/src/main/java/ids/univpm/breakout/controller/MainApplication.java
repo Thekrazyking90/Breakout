@@ -1,22 +1,16 @@
 package ids.univpm.breakout.controller;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import ids.univpm.breakout.communication.beacon.BeaconScanner;
 import ids.univpm.breakout.model.Beacon;
@@ -25,8 +19,6 @@ import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
 import ids.univpm.breakout.view.Navigation1;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Questa classe gestisce alcuni elementi riguarda la logica dell'applicazione.
@@ -64,9 +56,9 @@ public class MainApplication {
         //identificativo del messaggio che si può ricevere
     public static final String TERMINATED_SCAN = "TerminatedScan";
         //modalità di funzionamento dell'applicazione (per gestire le comunicazioni col server)
-    private static boolean onlineMode = true;
+    private static boolean onlineMode = true; //TODO
         //parametri per la durata dello scan (presi dal server)
-    private static HashMap<String, Long> scanParameters;
+    private static HashMap<String, Long> scanParameters; //TODO
         //flag che indica quando l'applicazione sta per essere chiusa (passando dal backbutton)
     private static boolean isFinishing;
 
@@ -89,9 +81,6 @@ public class MainApplication {
         if(mBluetoothAdapter!=null) initializeScanner(activity);
             //inizializzata la struttura dati legata all'utente
 //TODO studiare e modificare        UserHandler.init();
-            //impostato l'indirizzo ip del server
-//TODO         ServerComunication.setHostMaster(PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext()).getString("serverIp",""));
-
             //creata struttura dati legata ai beacon nell'edificio, leggendo dal file salvato in memoria intera
         BeaconManager beaconMng = new BeaconManager(activity.getBaseContext());
         ArrayList<Beacon> beaconList = beaconMng.findAll();
@@ -349,7 +338,7 @@ public class MainApplication {
                         scanner = null;
                         UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
                         Utente user = new Utente();
-                        if (utenteMng.isLoggato()) user = utenteMng.findByIsLoggato();
+                        if (utenteMng.AnyIsLoggato()) user = utenteMng.findByIsLoggato();
                         //presi i dati riferiti alla posizione per poter inizializzare l'activity Navigation1
 
                         //viene messo come obiettivo da raggiungere la via di fuga nel piano

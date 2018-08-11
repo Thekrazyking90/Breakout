@@ -52,17 +52,12 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 String user = mUsernameView.getText().toString();
                 String pass = mPasswordView.getText().toString();
-//                if(Controller.verificaAutenticazioneUtente(user, pass)){
-//                    Controller.aggiornamentoMappe();
-//                    Integer idbeacon = Controller.getPosizione(user, Login.this);
-
-                    Intent intent = new Intent(Login.this, Navigation1.class);
-//                    intent.putExtra("posizione_utente", idbeacon);
-                intent.putExtra("ID_Activity","From_Login");
-                    startActivity(intent);
-//                }else{
-//                    mErroreDati.setVisibility(View.VISIBLE);
-//                }
+                if(Controller.verificaAutenticazioneUtente(user, pass)){
+                    Controller.aggiornamentoMappe();
+                    startActivity(new Intent(Login.this, Navigation1.class));
+                }else{
+                    mErroreDati.setVisibility(View.VISIBLE);
+                }
             }
         });
 

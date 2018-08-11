@@ -281,7 +281,7 @@ public class BeaconConnection extends StateMachine {
     private String packingMessage() {
         UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
         Utente user = new Utente();
-        if (utenteMng.isLoggato()) user = utenteMng.findByIsLoggato();
+        if (utenteMng.AnyIsLoggato()) user = utenteMng.findByIsLoggato();
 
         String mex;
             //arraylist delle chiavi per creare il JSON

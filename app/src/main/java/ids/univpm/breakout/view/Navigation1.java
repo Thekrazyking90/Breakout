@@ -1,5 +1,6 @@
 package ids.univpm.breakout.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,16 +37,19 @@ public class Navigation1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 4403);
+
         MainApplication.setCurrentActivity(this);
         setContentView(R.layout.navigation1);
-        MainApplication.start(this);
-
 
         connection_status= findViewById(R.id.connection_status);
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
 
-        if(Controller.checkConnection(Navigation1.this)) {
+        Controller.checkConnection(Navigation1.this);
+
+        if(MainApplication.getOnlineMode()) {
             non_connesso.setVisibility(View.INVISIBLE);
             connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Connected");
@@ -55,6 +59,7 @@ public class Navigation1 extends AppCompatActivity {
             connection_status.setText("Disconnected");
         }
 
+        MainApplication.start(this);
 
         //ottiene l'oggetto Intent dall'activity che lo richiama
         Intent intent = this.getIntent();
@@ -111,8 +116,7 @@ public class Navigation1 extends AppCompatActivity {
         }else{
             Log.d("ERROR: ","Riconoscimento intent non riuscito");
         }
-
-
+        
     }
 
 
@@ -214,32 +218,6 @@ public class Navigation1 extends AppCompatActivity {
         SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
         imageView.setImage(ImageSource.bitmap(bitmap));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override

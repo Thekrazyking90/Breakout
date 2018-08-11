@@ -1,5 +1,6 @@
 package ids.univpm.breakout.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,9 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.concurrent.Delayed;
+
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class Welcome extends AppCompatActivity {
 
@@ -23,15 +28,15 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MainApplication.setCurrentActivity(this);
 
+
         setContentView(R.layout.activity_welcome);
         bottoneMappe = (Button) findViewById(R.id.mappeoffline);
 
-        //Premendo mappe offline, faccio un check: se non è connesso al server, appare il toast
-        // oppure se è connesso al server MA non si è mai autenticato quindi non ha le mappe
 
         bottoneMappe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainApplication.setOnlineMode(false);
                 if(Controller.checkMappe(Welcome.this)){
                     startActivity(new Intent(Welcome.this, SelPiano.class));
                 }else {
@@ -46,7 +51,14 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Controller.checkLog(Welcome.this)==1){
-                    startActivity(new Intent(Welcome.this, Navigation1.class));
+                    UtenteManager utenteMng = new UtenteManager(getApplicationContext());
+                    Utente user = utenteMng.findByIsLoggato();
+
+                    if (Controller.verificaAutenticazioneUtente(user.getUsername(), user.getPassword()))
+                        startActivity(new Intent(Welcome.this, Navigation1.class));
+                    else {
+                        Toast.makeText(getApplicationContext(), "Errore nell'autenticazione, riprova", Toast.LENGTH_LONG).show();
+                    }
                 }else{
                     startActivity(new Intent(Welcome.this, Login.class));
                 }

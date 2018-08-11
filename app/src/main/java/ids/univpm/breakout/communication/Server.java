@@ -1,11 +1,15 @@
 package ids.univpm.breakout.communication;
 
 
+import android.annotation.SuppressLint;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import ids.univpm.breakout.communication.http.GetRequest;
 import ids.univpm.breakout.communication.http.PostRequest;
 import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.controller.MainApplication;
@@ -15,8 +19,21 @@ import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class Server {
 
-    private static String hostMaster; //= hostname;
+    private static String ip = ""; //TODO da inserire ip
+    private static String hostMaster = "Breakout_server"; //= hostname;
     private static SQLiteDatabase db;
+
+    public static boolean handShake() {
+        boolean b;
+        try {
+            String s = new GetRequest().execute(ip,"testconnection").get();
+            Log.i("s",s);
+            b = Boolean.parseBoolean(s);
+        } catch (Exception e) {
+            b = false;
+        }
+        return b;
+    }
 
     private static final ArrayList<String> userProfileKeys = new ArrayList<String>(){{
         add("ID_utente");
@@ -31,28 +48,24 @@ public class Server {
     public static boolean autenticazioneUtente(String user, String pw) throws ExecutionException, InterruptedException {
         ArrayList<String> name = new ArrayList<>();
         ArrayList<String> value = new ArrayList<>();
+
         name.add("username");
         name.add("password");
+
         value.add(user);
         value.add(pw);
-        String mex = MessageBuilder.builder(name,value,value.size(),0);//TODO:dopo la richiesta post io devo far processare il risultato ottenendo un json object e prendere il valore booleano (restituito dal db server)di tale object e metterlo nell if
-        if (Boolean.parseBoolean(new PostRequest().execute(hostMaster,"user/login",mex).get()))//TODO:dipende dalla risposta del db server//
 
-        {
-            UtenteManager u_manager= new UtenteManager(MainApplication.getCurrentActivity().getApplicationContext());
-            DBHelper dbhelper= new DBHelper(MainApplication.getCurrentActivity().getApplicationContext());
-            try {
-                db = dbhelper.getWritableDatabase();
-                Utente utente_da_log=u_manager.findByUser(user);
-                //TODO:is_loggato a true??
-                dbhelper.close();
-            }
-            catch (Exception e)  {
-                e.printStackTrace();
-            }
-            return true;
+        String mex = MessageBuilder.builder(name,value,value.size(),0);//dopo la richiesta post io devo far processare il risultato ottenendo un json object e prendere il valore booleano (restituito dal db server)di tale object e metterlo nell if
+
+        boolean flag;
+
+        if (Boolean.parseBoolean(new PostRequest().execute(hostMaster,"user/login",mex).get())){
+
+            flag = true;
         }
-        else return false;
+        else flag = false;
+
+        return flag;
     }
 
     void registrazioneUtente(){
@@ -72,6 +85,7 @@ public class Server {
     }
 
     //TODO metodo invio posizione utente
+    @SuppressLint("WrongConstant")
     public static void sendPosition(String mex) throws ExecutionException, InterruptedException {
 
     }

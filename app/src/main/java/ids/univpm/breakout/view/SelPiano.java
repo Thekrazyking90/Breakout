@@ -48,7 +48,9 @@ public class SelPiano extends AppCompatActivity {
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
 
-        if(Controller.checkConnection(SelPiano.this)) {
+        Controller.checkConnection(SelPiano.this);
+
+        if(MainApplication.getOnlineMode()) {
             non_connesso.setVisibility(View.INVISIBLE);
             connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Connected");

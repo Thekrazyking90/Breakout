@@ -3,6 +3,7 @@ package ids.univpm.breakout.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,16 +11,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
-import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 
 public class RicercaPDI extends AppCompatActivity {
@@ -32,6 +30,7 @@ public class RicercaPDI extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         MainApplication.setCurrentActivity(this);
 
         setContentView(R.layout.ricerca_pdi);
@@ -54,7 +53,9 @@ public class RicercaPDI extends AppCompatActivity {
         non_connesso= findViewById(R.id.non_connesso);
         connesso= findViewById(R.id.connesso);
 
-        if(Controller.checkConnection(RicercaPDI.this)) {
+        Controller.checkConnection(RicercaPDI.this);
+
+        if(MainApplication.getOnlineMode()) {
             non_connesso.setVisibility(View.INVISIBLE);
             connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Connected");
