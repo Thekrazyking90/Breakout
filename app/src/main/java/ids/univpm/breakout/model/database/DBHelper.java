@@ -39,17 +39,14 @@ public class DBHelper extends SQLiteOpenHelper{
                 TroncoStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
                 TroncoStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
                 TroncoStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
-                TroncoStrings.FIELD_LENGTH +" REAL NOT NULL, " +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_NODE1 + ") REFERENCES Nodi ( "+ NodoStrings.FIELD_ID +" ) ON DELETE CASCADE," +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_NODE2 + ") REFERENCES Nodi ( "+ NodoStrings.FIELD_ID +" ) ON DELETE CASCADE," +
-                "FOREIGN KEY(" + TroncoStrings.FIELD_ID_BEACON + ") REFERENCES Beacon ( "+ BeaconStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+                TroncoStrings.FIELD_LENGTH +" REAL NOT NULL);";
 
         String q3="CREATE TABLE "+ ModificheStrings.TBL_NAME+
                 " (" + ModificheStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 ModificheStrings.FIELD_DATE +" NUMERIC NOT NULL," +
-                ModificheStrings.FIELD_ID_OGG_MOD +" INTEGER NOT NULL," +
-                ModificheStrings.FIELD_TBL +" TEXT NOT NULL," +
-                ModificheStrings.FIELD_TYPE +" TEXT NOT NULL);";
+                ModificheStrings.FIELD_ID_OGG_MOD +" INTEGER," +
+                ModificheStrings.FIELD_TBL +" TEXT," +
+                ModificheStrings.FIELD_TYPE +" TEXT);";
 
         String q4="CREATE TABLE "+ PianoStrings.TBL_NAME+
                 " (" + PianoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
@@ -64,15 +61,13 @@ public class DBHelper extends SQLiteOpenHelper{
                 NodoStrings.FIELD_WIDTH +" REAL NOT NULL, " +
                 NodoStrings.FIELD_LENGTH +" REAL, " +
                 NodoStrings.FIELD_IS_PDI +" NUMERIC NOT NULL DEFAULT 0, " +
-                NodoStrings.FIELD_TYPE +" TEXT, " +
-                "FOREIGN KEY(" + NodoStrings.FIELD_ID_MAPPA + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+                NodoStrings.FIELD_TYPE +" TEXT);";
 
         String q7="CREATE TABLE "+ MappaStrings.TBL_NAME+
                 " (" + MappaStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
                 MappaStrings.FIELD_ID_PIANO + " INTEGER," +
                 MappaStrings.FIELD_NAME +" TEXT NOT NULL," +
-                MappaStrings.FIELD_IMG +" TEXT NOT NULL," +
-                "FOREIGN KEY(" + MappaStrings.FIELD_ID_PIANO + ") REFERENCES Piano ( "+ PianoStrings.FIELD_ID +" ) ON DELETE CASCADE);";
+                MappaStrings.FIELD_IMG +" TEXT NOT NULL);";
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
                 " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
@@ -82,8 +77,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 BeaconStrings.FIELD_COORD_X +" REAL NOT NULL," +
                 BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_LOS +" REAL NOT NULL, " +
-                BeaconStrings.FIELD_RISK +" REAL NOT NULL, " +
-                "FOREIGN KEY(" + BeaconStrings.FIELD_ID_PDI + ") REFERENCES Nodo ( "+ NodoStrings.FIELD_ID +" ) ON DELETE SET NULL);";
+                BeaconStrings.FIELD_RISK +" REAL NOT NULL);";
 
         db.execSQL(q1);
         db.execSQL(q2);

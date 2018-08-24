@@ -147,4 +147,23 @@ public class TroncoManager {
     public Scala getByBeaconID(Integer id_beacon) {
         return null;
     }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ TroncoStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+ TroncoStrings.TBL_NAME+
+                    " (" + TroncoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    TroncoStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
+                    TroncoStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
+                    TroncoStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
+                    TroncoStrings.FIELD_LENGTH +" REAL NOT NULL);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
+    }
 }

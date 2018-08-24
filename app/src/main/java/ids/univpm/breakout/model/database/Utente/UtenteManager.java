@@ -238,4 +238,27 @@ public class UtenteManager {
             // Gestione delle eccezioni
         }
     }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ UtenteStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+UtenteStrings.TBL_NAME+
+                    " (" + UtenteStrings.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    UtenteStrings.FIELD_USER + " TEXT NOT NULL UNIQUE," +
+                    UtenteStrings.FIELD_PSW+" TEXT NOT NULL," +
+                    UtenteStrings.FIELD_EMAIL+" TEXT NOT NULL UNIQUE," +
+                    UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
+                    UtenteStrings.FIELD_LAST_POSITION+" INTEGER," +
+                    UtenteStrings.FIELD_TOKEN+" TEXT NOT NULL," +
+                    UtenteStrings.FIELD_IS_LOGGED+" INTEGER NOT NULL DEFAULT 0," +
+                    UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
+    }
 }

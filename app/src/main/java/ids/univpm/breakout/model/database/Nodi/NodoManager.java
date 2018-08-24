@@ -163,4 +163,27 @@ public class NodoManager{
 
         return nodo;
     }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ NodoStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+ NodoStrings.TBL_NAME+
+                    " (" + NodoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    NodoStrings.FIELD_ID_MAPPA + " INTEGER," +
+                    NodoStrings.FIELD_CODE +" TEXT NOT NULL UNIQUE," +
+                    NodoStrings.FIELD_COORD_Y +" REAL NOT NULL," +
+                    NodoStrings.FIELD_COORD_X +" REAL NOT NULL," +
+                    NodoStrings.FIELD_WIDTH +" REAL NOT NULL, " +
+                    NodoStrings.FIELD_LENGTH +" REAL, " +
+                    NodoStrings.FIELD_IS_PDI +" NUMERIC NOT NULL DEFAULT 0, " +
+                    NodoStrings.FIELD_TYPE +" TEXT);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
+    }
 }

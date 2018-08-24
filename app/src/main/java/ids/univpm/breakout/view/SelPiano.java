@@ -1,22 +1,28 @@
 package ids.univpm.breakout.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.CornerPathEffect;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,6 +30,7 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Mappa;
+import ids.univpm.breakout.model.database.Mappa.MappaManager;
 
 public class SelPiano extends AppCompatActivity {
 
@@ -33,6 +40,13 @@ public class SelPiano extends AppCompatActivity {
     private ArrayList<Mappa> listaMappe;
     private LinearLayout layout;
     private ImageButton bottone145, bottone150, bottone155;
+
+    public int convertDpToPixel(int dp){
+        Resources resources = getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        int px = dp * (int)((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
+    }
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -63,20 +77,15 @@ public class SelPiano extends AppCompatActivity {
         listaMappe = Controller.getMappe(getApplicationContext());
         layout = findViewById(R.id.buttons_layout);
 
-        ImageButton bottone145 = (ImageButton) findViewById(R.id.button145);
-        ImageButton bottone150 = (ImageButton) findViewById(R.id.button150);
-        ImageButton bottone155 = (ImageButton) findViewById(R.id.button155);
+        ImageButton bottone145 =  findViewById(R.id.button145);
+        ImageButton bottone150 =  findViewById(R.id.button150);
+        ImageButton bottone155 =  findViewById(R.id.button155);
 
 
         //bottone145.setOnClickListener();
         setOnClick(bottone145);
         setOnClick(bottone150);
         setOnClick(bottone155);
-
-
-
-
-
 
         if(!listaMappe.isEmpty()){
             for (Mappa i: listaMappe){
@@ -85,19 +94,20 @@ public class SelPiano extends AppCompatActivity {
                         FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.MATCH_PARENT
                 );
-                layoutParams.setMargins(5,5,5,5);
+                layoutParams.setMargins(convertDpToPixel(5),convertDpToPixel(5),convertDpToPixel(5),convertDpToPixel(5));
                 frame.setLayoutParams(layoutParams);
 
                 ImageButton btn = new ImageButton(this);
                 ViewGroup.LayoutParams btnParams = new ViewGroup.LayoutParams(
-                        320,
+                        convertDpToPixel(320),
                         ViewGroup.LayoutParams.MATCH_PARENT
                 );
                 btn.setLayoutParams(btnParams);
-                btn.setBackground(Drawable.createFromPath("@drawable/bottone_mappa"));
-                btn.setPadding(10,10,10,10);
+                btn.setBackground(getResources().getDrawable(R.drawable.bottone_mappa, getTheme()));
+                btn.setPadding(convertDpToPixel(10),convertDpToPixel(10),convertDpToPixel(10),convertDpToPixel(10));
                 btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                btn.setImageDrawable(Drawable.createFromPath(i.getUrlImmagine()));
+                btn.setImageDrawable(Drawable.createFromPath(Environment.getExternalStorageDirectory()
+                        + "/Breakout/ImmaginiMappe/" + i.getImmagine()));
                 btn.setFocusable(true);
 
                 TextView nome = new TextView(this);

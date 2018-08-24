@@ -150,4 +150,26 @@ public class BeaconManager {
         }
         return listaBeacon;
     }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ BeaconStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+ BeaconStrings.TBL_NAME+
+                    " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    BeaconStrings.FIELD_ID_PDI + " INTEGER," +
+                    BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
+                    BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
+                    BeaconStrings.FIELD_COORD_X +" REAL NOT NULL," +
+                    BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
+                    BeaconStrings.FIELD_LOS +" REAL NOT NULL, " +
+                    BeaconStrings.FIELD_RISK +" REAL NOT NULL);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
+    }
 }

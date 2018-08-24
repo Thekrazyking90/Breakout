@@ -99,7 +99,7 @@ public class MappaManager {
             mappa.setID_mappa(id);
             mappa.setID_piano(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID_PIANO)));
             mappa.setNome(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_NAME)));
-            mappa.setUrlImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
+            mappa.setImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
 
             return mappa;
         }
@@ -112,5 +112,23 @@ public class MappaManager {
             listaMappe.add(mappa);
         }
         return listaMappe;
+    }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ MappaStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+ MappaStrings.TBL_NAME+
+                    " (" + MappaStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    MappaStrings.FIELD_ID_PIANO + " INTEGER," +
+                    MappaStrings.FIELD_NAME +" TEXT NOT NULL," +
+                    MappaStrings.FIELD_IMG +" TEXT NOT NULL);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
     }
 }

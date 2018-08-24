@@ -5,7 +5,7 @@ public class Mappa {
     private Integer ID_piano;
 //    private Grafo grafo;
     private String nome;
-    private String urlImmagine;
+    private String immagine;
 
     public Mappa() {
     }
@@ -18,12 +18,12 @@ public class Mappa {
         this.nome = nome;
     }
 
-    public String getUrlImmagine() {
-        return urlImmagine;
+    public String getImmagine() {
+        return immagine;
     }
 
-    public void setUrlImmagine(String urlImmagine) {
-        this.urlImmagine = urlImmagine;
+    public void setImmagine(String immagine) {
+        this.immagine = immagine;
     }
 
     public Integer getID_mappa() {

@@ -116,7 +116,7 @@ public class Navigation1 extends AppCompatActivity {
         }else{
             Log.d("ERROR: ","Riconoscimento intent non riuscito");
         }
-        
+
     }
 
 

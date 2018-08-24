@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 
 import java.sql.Timestamp;
 
+import ids.univpm.breakout.model.Modifica;
 import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
@@ -30,7 +31,7 @@ public class ModificheManager {
         this.context = context;
     }
 
-    public void save(Integer id, Integer id_ogg_mod, String type, String table, int date)
+    public boolean save(Integer id, Integer id_ogg_mod, String type, String table, String date)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
@@ -41,14 +42,20 @@ public class ModificheManager {
         cv.put(ModificheStrings.FIELD_TYPE, type);
         cv.put(ModificheStrings.FIELD_TBL, table);
         cv.put(ModificheStrings.FIELD_ID_OGG_MOD, id_ogg_mod);
+
+        boolean flag=false;
+
         try
         {
-            db.insert(MappaStrings.TBL_NAME, null,cv);
+            db.insert(ModificheStrings.TBL_NAME, null,cv);
+            flag =true;
         }
         catch (SQLiteException sqle)
         {
-            // Gestione delle eccezioni
+            flag = false;
         }
+
+        return flag;
     }
 
     public boolean deleteByID(Integer id)
@@ -77,8 +84,54 @@ public class ModificheManager {
         }
         catch(SQLiteException sqle)
         {
-            return null;
+
         }
         return crs;
+    }
+
+    public Modifica findLast(){
+        Modifica mod = new Modifica();
+        Cursor crs=null;
+
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(ModificheStrings.TBL_NAME, null, null, null, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+            if(crs.moveToLast()){
+                mod.setID(crs.getInt(crs.getColumnIndex(ModificheStrings.FIELD_ID)));
+                mod.setData(crs.getString(crs.getColumnIndex(ModificheStrings.FIELD_DATE)));
+                mod.setTabella(crs.getString(crs.getColumnIndex(ModificheStrings.FIELD_TBL)));
+                mod.setTipo(crs.getString(crs.getColumnIndex(ModificheStrings.FIELD_TYPE)));
+                mod.setID_ogg_mod(crs.getInt(crs.getColumnIndex(ModificheStrings.FIELD_ID_OGG_MOD)));
+            }else{
+                mod = null;
+            }
+
+        return mod;
+    }
+
+    public boolean resetTable(){
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        try
+        {
+            db.execSQL("DROP TABLE "+ ModificheStrings.TBL_NAME+";");
+            db.execSQL("CREATE TABLE "+ ModificheStrings.TBL_NAME+
+                    " (" + ModificheStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    ModificheStrings.FIELD_DATE +" NUMERIC NOT NULL," +
+                    ModificheStrings.FIELD_ID_OGG_MOD +" INTEGER NOT NULL," +
+                    ModificheStrings.FIELD_TBL +" TEXT NOT NULL," +
+                    ModificheStrings.FIELD_TYPE +" TEXT NOT NULL);");
+            return true;
+        }
+        catch (SQLiteException sqle)
+        {
+            return false;
+        }
     }
 }
