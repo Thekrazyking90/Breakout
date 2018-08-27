@@ -1,8 +1,10 @@
 package ids.univpm.breakout.view;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +20,20 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.communication.Server;
+import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class Registra extends AppCompatActivity {
 
-    private TextView Username;
+    private EditText Username;
     private EditText Email;
     private EditText Password;
     private EditText PassCheck;
     private EditText Nome;
     private EditText Cognome;
+    private Button mInvia;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,62 @@ public class Registra extends AppCompatActivity {
         Nome= findViewById(R.id.name_txt);
         Cognome= findViewById(R.id.surname_txt);
 
+        mInvia = findViewById(R.id.profile_button);
 
+        mInvia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!Username.getText().toString().equals("") &&
+                        !Password.getText().toString().equals("") &&
+                        !Email.getText().toString().equals("") &&
+                        !Nome.getText().toString().equals("") &&
+                        !Cognome.getText().toString().equals("") &&
+                        !PassCheck.getText().toString().equals(""))
+                {
+                    HashMap<String, String> info = new HashMap<>();
+
+                    info.put("username", Username.getText().toString());
+                    info.put("password", Password.getText().toString());
+                    info.put("email", Email.getText().toString());
+                    info.put("nome", Nome.getText().toString());
+                    info.put("cognome", Cognome.getText().toString());
+                    if(!Password.getText().toString().equals(PassCheck.getText().toString())){
+                        Toast.makeText(getApplicationContext(), "Le password non corrispondono", Toast.LENGTH_LONG).show();
+                    }else if(Server.checkUsername(Username.getText().toString())){
+                        Toast.makeText(getApplicationContext(), "Username già in uso", Toast.LENGTH_LONG).show();
+                    }else{
+                        if(Server.registrazioneUtente(Username.getText().toString(),
+                                Password.getText().toString(),
+                                Email.getText().toString(),
+                                Nome.getText().toString(),
+                                Cognome.getText().toString())){
+                            Toast.makeText(getApplicationContext(), "Registrazione avvenuta con successo", Toast.LENGTH_LONG).show();
+
+                            UtenteManager utenteManager = new UtenteManager(Registra.this);
+                            utenteManager.save(null,
+                                    Email.getText().toString(),
+                                    Nome.getText().toString(),
+                                    Password.getText().toString(),
+                                    Cognome.getText().toString(),
+                                    Username.getText().toString(),
+                                    0);
+
+                            if(Controller.verificaAutenticazioneUtente(Username.getText().toString(), Password.getText().toString())){
+                                startActivity(new Intent(Registra.this, Navigation1.class));
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Accesso fallito, riprovare più tardi", Toast.LENGTH_LONG).show();
+                            }
+                        }else {
+                            Toast.makeText(getApplicationContext(), "Registrazione fallita", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "Completa i campi obbligatori", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 

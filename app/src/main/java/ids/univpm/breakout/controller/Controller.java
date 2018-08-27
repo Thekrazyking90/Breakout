@@ -160,10 +160,12 @@ public class Controller {
 
                 u_manager.updateIs_loggato(utente_log, true);
 
+                aggiornamentoMappe();
+
             } catch (Exception e) {
                 //gestire eccezioni
                 e.printStackTrace();
-
+                //TODO comunicazione dati errati
                 u_manager.updateIs_loggato(utente_log, false);
                 flag = false;
             }
@@ -194,6 +196,7 @@ public class Controller {
                 NodoManager nodoMng = new NodoManager(ctx);
                 PianoManager pianoMng = new PianoManager(ctx);
 
+                //TODO rivedere nomi tabelle
                 for (HashMap<String, String> modifica: listaModHash) {
                     switch (modifica.get("tabella")){
                         case "Mappe":{
@@ -323,10 +326,9 @@ public class Controller {
     }
 
 
-    //TODO potrebbe essere inutile questo metodo
-    public static Integer getPosizioneCorrente(String username, Context ctx) {
+    public static Integer getPosizioneCorrente(Context ctx) {
         UtenteManager utenteMng = new UtenteManager(ctx);
-        Utente utente = utenteMng.findByUser(username);
+        Utente utente = utenteMng.findByIsLoggato();
         Integer idbeacon = null;
         if(utente.getUltima_posizione() != null){
             idbeacon = utente.getUltima_posizione();

@@ -13,19 +13,20 @@ import java.util.concurrent.ExecutionException;
 
 import ids.univpm.breakout.communication.http.GetRequest;
 import ids.univpm.breakout.communication.http.PostRequest;
+import ids.univpm.breakout.communication.http.PutRequest;
 import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.communication.message.MessageParser;
 
 public class Server {
 
-    private static String ip = "192.168.1.40"; //TODO da inserire ip
+    private static String ip = "192.168.1.65"; //ip del server
     private static String hostMaster = "Breakout_server"; //= hostname;
     private static SQLiteDatabase db;
 
     public static boolean handShake() {
         boolean b;
         try {
-            String s = new GetRequest().execute(ip,"testconnection").get();
+            String s = new GetRequest().execute(ip,"resources/utility/testconnection").get();
             Log.i("s",s);
             b = Boolean.parseBoolean(s);
         } catch (Exception e) {
@@ -59,7 +60,7 @@ public class Server {
         boolean flag;
 
         try{
-            String s = new PostRequest().execute(ip,"user/login",mex).get();
+            String s = new PostRequest().execute(ip,"resources/user/login",mex).get();
             Log.i("s",s);
             flag = Boolean.parseBoolean(s);
         }catch (Exception e){
@@ -70,8 +71,39 @@ public class Server {
         return flag;
     }
 
-    public static void registrazioneUtente(){
+    public static boolean registrazioneUtente(String username,
+                                           String password,
+                                           String email,
+                                           String nome,
+                                           String cognome){
+        boolean flag;
 
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+
+        name.add("username");
+        name.add("password");
+        name.add("email");
+        name.add("nome");
+        name.add("cognome");
+
+        value.add(username);
+        value.add(password);
+        value.add(email);
+        value.add(nome);
+        value.add(cognome);
+
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
+
+        try{
+            String s = new PostRequest().execute(ip,"resources/utility/registraUser",mex).get();
+            Log.i("s",s);
+            flag = Boolean.parseBoolean(s);
+        }catch (Exception e){
+            flag = false;
+        }
+
+        return flag;
     }
 
     public static HashMap<String, String>[] downloadMappe(){
@@ -84,7 +116,7 @@ public class Server {
 
         HashMap<String,String>[] mappe = new HashMap[0];
         try {
-            mappe = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"maps").get(),keys,"mappe");
+            mappe = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/getmaps").get(),keys,"mappe");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -110,12 +142,12 @@ public class Server {
         keys.add("coordY");
         keys.add("fire");
         keys.add("smoke");
-        keys.add("LOS"); //TODO rivedere il discorso LOS
+        keys.add("NCD"); //TODO rivedere il discorso LOS
         keys.add("risk");
 
         HashMap<String,String>[] beacon = new HashMap[0];
         try {
-            beacon = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"beacon").get(),keys,"beacon");
+            beacon = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/beacon").get(),keys,"beacon");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -138,7 +170,7 @@ public class Server {
 
         HashMap<String,String>[] tronchi = new HashMap[0];
         try {
-            tronchi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"arcs").get(),keys,"tronchi");
+            tronchi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/arcs").get(),keys,"tronchi");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -165,7 +197,7 @@ public class Server {
 
         HashMap<String,String>[] nodi = new HashMap[0];
         try {
-            nodi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"nodes").get(),keys,"nodi");
+            nodi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/nodes").get(),keys,"nodi");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -185,7 +217,7 @@ public class Server {
 
         HashMap<String,String>[] piani = new HashMap[0];
         try {
-            piani = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"piani").get(),keys,"piani");
+            piani = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/floors").get(),keys,"piani");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -198,7 +230,13 @@ public class Server {
     }
 
     public static void logoutUtente(){
-
+        try {
+            new GetRequest().execute(ip,"resources/utility/logout").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean checkModifiche(String data){
@@ -214,7 +252,7 @@ public class Server {
         boolean flag;
 
         try{
-            String s = new PostRequest().execute(ip,"checkmodifiche",mex).get();
+            String s = new PostRequest().execute(ip,"resources/utility/checkmodifiche",mex).get();
             Log.i("s",s);
             flag = Boolean.parseBoolean(s);
         }catch (Exception e){
@@ -234,7 +272,7 @@ public class Server {
 
         HashMap<String,String>[] modifiche = new HashMap[0];
         try {
-            modifiche = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"modifiche/"+data).get(),keys,"modifiche");
+            modifiche = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/utility/getmodifiche/"+data).get(),keys,"modifiche");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -246,14 +284,47 @@ public class Server {
         return modifiche;
     }
 
-    //TODO metodo invio posizione utente
-    @SuppressLint("WrongConstant")
     public static void sendPosition(String mex) throws ExecutionException, InterruptedException {
-
+        new PutRequest().execute(hostMaster,"resources/utility/setposition",mex).get();
     }
 
-    //TODO metodo invio valori beacon
     public static void sendValue(String mex) throws ExecutionException, InterruptedException {
+        new PutRequest().execute(hostMaster,"resources/utility/beaconvalues",mex).get();
+    }
 
+    //metodo per controllare se lo username scritto sulla pagina di registrazione è già in uso
+    public static boolean checkUsername(String username) {
+        boolean flag;
+
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+
+        name.add("username");
+
+        value.add(username);
+
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
+
+        try{
+            String s = new PostRequest().execute(ip,"resources/utility/checkusername",mex).get();
+            Log.i("s",s);
+            flag = Boolean.parseBoolean(s);
+        }catch (Exception e){
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    public static boolean checkEmergenze() {
+        boolean b;
+        try {
+            String s = new GetRequest().execute(ip,"resources/utility/emergency").get();
+            Log.i("s",s);
+            b = Boolean.parseBoolean(s);
+        } catch (Exception e) {
+            b = false;
+        }
+        return b;
     }
 }

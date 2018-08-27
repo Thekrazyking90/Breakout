@@ -16,9 +16,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Pdi;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class RicercaPDI extends AppCompatActivity {
 
@@ -78,12 +81,23 @@ public class RicercaPDI extends AppCompatActivity {
         MenuItem pdi_menu= menu.findItem(R.id.pdi);
         pdi_menu.setVisible(false);
         //Se non loggato, cambia titolo in login nel menu(!)
+        UtenteManager utenteManager = new UtenteManager(RicercaPDI.this);
+
+        MenuItem mLogButton = menu.findItem(R.id.log_status);
+
+        if(utenteManager.AnyIsLoggato()){
+            String username = utenteManager.findByIsLoggato().getUsername();
+            mLogButton.setTitle("Logout " + username);
+        }else{
+            mLogButton.setTitle("Login");
+        }
 
         MenuItem item = menu.findItem(R.id.ricerca);
         SearchView searchView= (SearchView)item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 return false;
             }
 
@@ -115,9 +129,22 @@ public class RicercaPDI extends AppCompatActivity {
                 break;
 
             case R.id.log_status:
+                UtenteManager utenteManager = new UtenteManager(RicercaPDI.this);
 
-                //Inserire codice per LogOut se deve fare logout
-                Intent returnBtn = new Intent(getApplicationContext(), Welcome.class);
+                Intent returnBtn;
+
+                if(utenteManager.AnyIsLoggato()){
+                    Utente user = utenteManager.findByIsLoggato();
+                    utenteManager.updateIs_loggato(user ,false);
+
+                    Server.logoutUtente();
+
+                    returnBtn = new Intent(getApplicationContext(), Welcome.class);
+
+                }else{
+                    returnBtn = new Intent(getApplicationContext(), Login.class);
+                }
+
 
                 startActivity(returnBtn);
                 break;

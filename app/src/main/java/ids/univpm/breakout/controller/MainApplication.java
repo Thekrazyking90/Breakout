@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ids.univpm.breakout.communication.Emergenza.EmergenzaScanner;
 import ids.univpm.breakout.communication.beacon.BeaconScanner;
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Piano;
@@ -38,6 +39,8 @@ public class MainApplication {
         //scanner per ricercare i dispositivi beacon
     private static BeaconScanner scanner;
 
+    private static EmergenzaScanner emergencyScanner;
+
         //identifica la home
     private static Activity activity;
 
@@ -50,15 +53,14 @@ public class MainApplication {
         //costante usata per attivare il bluetooth
     private static final int REQUEST_ENABLE_BT = 1;
 
-    private static NotificationManager notificationManager;
         //filtro usato per discriminare quali messaggi deve ricevere MainApplication
     private static IntentFilter intentFilter;
         //identificativo del messaggio che si può ricevere
     public static final String TERMINATED_SCAN = "TerminatedScan";
         //modalità di funzionamento dell'applicazione (per gestire le comunicazioni col server)
-    private static boolean onlineMode = true; //TODO
+    private static boolean onlineMode = true;
         //parametri per la durata dello scan (presi dal server)
-    private static HashMap<String, Long> scanParameters; //TODO
+    private static HashMap<String, Long> scanParameters; //TODO controllare nell'app vecchia quando e se viene usato il setScanParameters
         //flag che indica quando l'applicazione sta per essere chiusa (passando dal backbutton)
     private static boolean isFinishing;
 
@@ -72,7 +74,9 @@ public class MainApplication {
         initializeFilter();
         emergency = false;
             //registrato il receiver
-        activity.getBaseContext().registerReceiver(broadcastReceiver,intentFilter);
+        //activity.getBaseContext().registerReceiver(broadcastReceiver,intentFilter);
+
+        initializeEmergencyScanner(activity);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             //attivazione del bluetooth (qualora non sia già funzionante)
@@ -95,6 +99,11 @@ public class MainApplication {
 
         isFinishing = false;
     }
+
+    private static void initializeEmergencyScanner(Activity a) {
+        emergencyScanner = new EmergenzaScanner(a);
+    }
+
     /**
      * Metodo per impostare la modalità di funzionamento dell'applicazione
      * @param b, valore che si vuole assegnare al flag per la modalità di funzionamento
@@ -144,7 +153,7 @@ public class MainApplication {
      * Metodo che restituisce l'istanza contenente le durata per le varie fasi dello scan, ricevute dal server
      * @return, hashmap (K: nome parametro, V:sua durata in millisecondi) contenente i valori per le varie fasi dello scan
      */
-    public static HashMap<String,Long> getScanParameters() {  //TODO da rivedere
+    public static HashMap<String,Long> getScanParameters() {
         return scanParameters;
     }
 
@@ -314,7 +323,7 @@ public class MainApplication {
     }*/
 
         //il broadcast receiver deputato alla ricezione dei messaggi
-    private static BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    /*private static BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
         Log.i("MESSAGE ARRIVED","ricevuto broadcast: " + intent.getAction());
@@ -340,7 +349,7 @@ public class MainApplication {
                         Utente user = new Utente();
                         if (utenteMng.AnyIsLoggato()) user = utenteMng.findByIsLoggato();
                         //presi i dati riferiti alla posizione per poter inizializzare l'activity Navigation1
-
+                        //TODO da rivedere
                         //viene messo come obiettivo da raggiungere la via di fuga nel piano
                         String mex = "beacon_ID = " + user.getUltima_posizione().toString().concat(";").concat("EMERGENCY");
                         Log.i("mex",mex);
@@ -386,7 +395,7 @@ public class MainApplication {
 
         }
         }
-    };
+    };*/
 
     /**
      * Metodo per costruire il filtro per i messaggi che può ricevere il broadcastReceiver
@@ -433,13 +442,6 @@ public class MainApplication {
         notificationManager.notify(0, n);
     }*/
 
-    /**
-     * Metodo per cancellare eventuali notifiche rimaste sul dispositivo dell'utente, nonostante
-     * l'emergenza sia terminata
-     */
-    public static void deleteNotification() {
-        if (notificationManager!=null) notificationManager.cancel(0);
-    }
 
     /**
      * Metodo all'interno del quale viene richiesta l'attivazione del bluetooth

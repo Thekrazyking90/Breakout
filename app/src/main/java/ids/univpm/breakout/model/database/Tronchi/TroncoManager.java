@@ -166,4 +166,34 @@ public class TroncoManager {
             return false;
         }
     }
+
+    public Scala findByIdBeacon(Integer id_beacon) {
+        Cursor crs=null;
+        Scala arc = new Scala();
+        String[] args = new String[] {Integer.toString(id_beacon)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(TroncoStrings.TBL_NAME, null, TroncoStrings.FIELD_ID_BEACON + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        arc.setID(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID)));
+        arc.setBeacon(getBeacon(id_beacon));
+
+        arc.setLarghezza_media(context);
+
+        arc.setCosto_totale_normalizzato();
+
+        Integer[] nodes = null;
+        nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+        nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+        arc.setNodi_Integer(nodes);
+
+        return arc;
+    }
 }

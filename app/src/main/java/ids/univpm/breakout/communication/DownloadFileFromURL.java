@@ -62,7 +62,7 @@ public class DownloadFileFromURL extends AsyncTask<String, String, String> {
             output.close();
             input.close();
 
-            Log.e("url", "http://" + f_url[0] + ":" + PORT + "/immagini/" + f_url[1]);
+            Log.e("url", "http://" + f_url[0] + ":" + PORT + "/images/" + f_url[1]);
 
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());

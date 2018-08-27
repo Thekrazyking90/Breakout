@@ -39,7 +39,6 @@ public class SelPiano extends AppCompatActivity {
     private TextView connection_status;
     private ArrayList<Mappa> listaMappe;
     private LinearLayout layout;
-    private ImageButton bottone145, bottone150, bottone155;
 
     public int convertDpToPixel(int dp){
         Resources resources = getResources();
@@ -77,15 +76,6 @@ public class SelPiano extends AppCompatActivity {
         listaMappe = Controller.getMappe(getApplicationContext());
         layout = findViewById(R.id.buttons_layout);
 
-        ImageButton bottone145 =  findViewById(R.id.button145);
-        ImageButton bottone150 =  findViewById(R.id.button150);
-        ImageButton bottone155 =  findViewById(R.id.button155);
-
-
-        //bottone145.setOnClickListener();
-        setOnClick(bottone145);
-        setOnClick(bottone150);
-        setOnClick(bottone155);
 
         if(!listaMappe.isEmpty()){
             for (Mappa i: listaMappe){
@@ -126,7 +116,8 @@ public class SelPiano extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(SelPiano.this, Navigation1.class);
-                        intent.putExtra("id_mappa", idmap);
+                        intent.putExtra("ID_Activity", "From_SelPiano");
+                        intent.putExtra("ID_Mappa", idmap);
                         startActivity(intent);
                     }
                 });
@@ -137,35 +128,6 @@ public class SelPiano extends AppCompatActivity {
             }
         }
 
-
     }
-
-    private void setOnClick(final ImageButton btn) {
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int btn_id = v.getId();
-                Intent intent = new Intent(SelPiano.this, Navigation1.class);
-
-                if (btn_id == R.id.button145) {
-                    intent.putExtra("ID_Activity", "From_SelPiano");
-                    intent.putExtra("Btn", "145");
-                    startActivity(intent);
-                } else if (btn_id == R.id.button150) {
-                    intent.putExtra("ID_Activity", "From_SelPiano");
-                    intent.putExtra("Btn", "150");
-                    startActivity(intent);
-                } else
-                //if (btn_id == R.id.button155)
-                {
-                    intent.putExtra("ID_Activity", "From_SelPiano");
-                    intent.putExtra("Btn", "155");
-                    startActivity(intent);
-                }
-            }
-        });
-    }
-
 
 }

@@ -9,7 +9,7 @@ import ids.univpm.breakout.controller.MainApplication;
     Classe utilizzata per gestire le modalità di scan per la ricerca di beacon
  */
 
-public class Setup {
+public class SetupB {
         //condizioni in cui può trovarsi lo scan (EMERGENCY, nel caso in cui si presenti un'emergenza,
         // SEARCHING, nel caso in cui si stia cercando una stanza, NORMAL in tutti gli altri casi
     public static final String normalCondition = "NORMAL";
@@ -38,7 +38,7 @@ public class Setup {
     /**
      * Costruttore il Setup per lo scan, con le impostazioni di default (NORMAL CONDITION)
      */
-    public Setup() {
+    public SetupB() {
         state = normalCondition;
         if (MainApplication.getOnlineMode() && MainApplication.getScanParameters()!=null) {
             SCAN_PERIOD = MainApplication.getScanParameters().get("scanPeriodNormal");
@@ -55,7 +55,7 @@ public class Setup {
      * Costruttore il Setup per lo scan, settando le impostazioni in base alle condition passate
      * @param condition, indica il tipo di setup con cui va creato lo scan
      */
-    public Setup(String condition) {
+    public SetupB(String condition) {
         switch (condition) {
             case ("NORMAL"):
                 state = normalCondition;

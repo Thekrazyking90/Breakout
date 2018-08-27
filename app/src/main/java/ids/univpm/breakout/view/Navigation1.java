@@ -1,6 +1,7 @@
 package ids.univpm.breakout.view;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -17,13 +19,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import ids.univpm.breakout.R;
+import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Mappa;
+import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Mappa.MappaManager;
+import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class Navigation1 extends AppCompatActivity {
 
@@ -31,14 +39,15 @@ public class Navigation1 extends AppCompatActivity {
     private ImageView non_connesso;
     private ImageView connesso;
 
+    private int backpress;
+
+
     // inserire check per la connessione al server --> sotto icona rossa oppure verde se connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 4403);
 
         MainApplication.setCurrentActivity(this);
         setContentView(R.layout.navigation1);
@@ -64,8 +73,13 @@ public class Navigation1 extends AppCompatActivity {
         //ottiene l'oggetto Intent dall'activity che lo richiama
         Intent intent = this.getIntent();
 
+        if(MainApplication.getEmergency()) {
+            MainApplication.initializeScanner(this,"EMERGENCY");
+        }
+        else {
+            MainApplication.initializeScanner(this,"SEARCHING");
+        }
 
-//TODO caricamento mappa
         if(intent != null){
 
             Integer ID_Notifica= intent.getExtras().getInt("ID_Notifica");
@@ -80,37 +94,35 @@ public class Navigation1 extends AppCompatActivity {
 
             String fromActivity = intent.getExtras().getString("ID_Activity");
 
-            if(fromActivity.equals("From_Login")) {
-                //get id mappa from intent
-                disegnoMappa();
+            switch (fromActivity){
+                case "From_Login":{
+                    //get id mappa from intent
+                    disegnoMappa();
 
-            }
-            // Se la chiamata arriva da SelPiano, si apre la schermata con la sola visualizzazione
-            // della mappa zoomabile dei piani. Per 150 si possono lasciare anche i pallini dei nodi,
-            // ma di 145 e 155 lascerei la visualizzazione così
-
-            else if (fromActivity.equals("From_SelPiano")) {
-                String piano = intent.getExtras().getString("Btn");
-
-                //Preparazione Bitmap
-                BitmapFactory.Options opt = new BitmapFactory.Options();
-                opt.inScaled = false;
-
-                Bitmap workingBitmap;
-                
-                if (piano.equals("145")) {
-                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q145_color, opt);
-
-                } else if (piano.equals("150")) {
-                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q150_color, opt);
-                } else { //so gia che è 155
-                    workingBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q155_color, opt);
                 }
+                // Se la chiamata arriva da SelPiano, si apre la schermata con la sola visualizzazione
+                // della mappa zoomabile dei piani. Per 150 si possono lasciare anche i pallini dei nodi,
+                // ma di 145 e 155 lascerei la visualizzazione così
+                case "From_SelPiano":{
+                    Integer idMappa = intent.getExtras().getInt("ID_Mappa");
 
-                Bitmap bitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
-                imageView.setImage(ImageSource.bitmap(bitmap));
+                    MappaManager mappaManager = new MappaManager(Navigation1.this);
+                    Mappa map = mappaManager.findByID(idMappa);
 
+                    //Preparazione Bitmap
+                    BitmapFactory.Options opt = new BitmapFactory.Options();
+                    opt.inScaled = false;
+
+                    Bitmap workingBitmap;
+
+                    workingBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()
+                            + "/Breakout/ImmaginiMappe/" + map.getImmagine());
+
+                    Bitmap bitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
+                    imageView.setImage(ImageSource.bitmap(bitmap));
+
+                }
             }
 
         }else{
@@ -121,9 +133,8 @@ public class Navigation1 extends AppCompatActivity {
 
 
 
-
+    //TODO da mettere in MainApplication
     public void disegnoMappa() {
-        //TODO: Questo metodo si può mettere anche su Controller, se lo si preferisce
 
         //Preparazione Bitmap
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -225,6 +236,16 @@ public class Navigation1 extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.navigation_menu, menu);
         //Se non loggato, cambia titolo in login nel menu(!)
+        UtenteManager utenteManager = new UtenteManager(Navigation1.this);
+
+        MenuItem mLogButton = menu.findItem(R.id.log_status);
+
+        if(utenteManager.AnyIsLoggato()){
+            String username = utenteManager.findByIsLoggato().getUsername();
+            mLogButton.setTitle("Logout " + username);
+        }else{
+            mLogButton.setTitle("Login");
+        }
 
         MenuItem item = menu.findItem(R.id.ricerca);
         SearchView searchView = (SearchView) item.getActionView();
@@ -268,8 +289,20 @@ public class Navigation1 extends AppCompatActivity {
 
             case R.id.log_status:
 
-                //Inserire codice per LogOut se deve fare logout
-                Intent returnBtn = new Intent(getApplicationContext(), Welcome.class);
+                UtenteManager utenteManager = new UtenteManager(Navigation1.this);
+
+                Intent returnBtn;
+                if(utenteManager.AnyIsLoggato()){
+                    Utente user = utenteManager.findByIsLoggato();
+                    utenteManager.updateIs_loggato(user ,false);
+
+                    Server.logoutUtente();
+
+                    returnBtn = new Intent(getApplicationContext(), Welcome.class);
+
+                }else{
+                    returnBtn = new Intent(getApplicationContext(), Login.class);
+                }
 
                 startActivity(returnBtn);
                 break;
@@ -277,6 +310,21 @@ public class Navigation1 extends AppCompatActivity {
         }
         return false;
         //return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!MainApplication.getEmergency()) {
+            backpress = (backpress + 1);
+            Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
+
+            if (backpress>1) {
+                MainApplication.getScanner().suspendScan();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), " C'è un'emergenza in corso ", Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

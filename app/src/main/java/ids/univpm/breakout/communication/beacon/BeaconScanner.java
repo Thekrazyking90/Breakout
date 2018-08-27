@@ -36,7 +36,7 @@ import ids.univpm.breakout.model.database.Utente.UtenteManager;
 public class BeaconScanner extends StateMachine implements DataListener {
 
         //contiene le caratteristiche legate allo scan, in riferimento alla configurazione settata
-    private Setup setup;
+    private SetupB setup;
 
         //alcuni possibili messaggi che può ricevere lo scan (vengono utilizzati come parametri per l'intenFilter)
     public static final String SCAN_PHASE_FINISHED = "ScanPhaseFinished";
@@ -85,7 +85,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
 
         activity = a;
         //inizializza il contenitore
-        setup = new Setup();
+        setup = new SetupB();
         //mette in funzione la state machine
         running = true;
         //inizializzati i componenti del bluetooth
@@ -126,7 +126,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         super();
         activity = a;
         //inizializza il contenitore
-        setup = new Setup(set);
+        setup = new SetupB(set);
         //mette in funzione la state machine
         running = true;
         //inizializzati i componenti del bluetooth
@@ -248,7 +248,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
 
     public BeaconConnection getConnection() { return connection; }
 
-    public Setup getSetup() {
+    public SetupB getSetup() {
         return setup;
     }
 
@@ -269,7 +269,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         switch(currentState) {
             case(0):
                 if (!running) next = 3;
-                else if (running && mLeDeviceListAdapter.getCurrentBeacon()!=null && setup.mustAnalyze()) next = 1;
+                else if (running && mLeDeviceListAdapter.getCurrentBeacon()!=null && setup.  mustAnalyze()) next = 1;
                 else next = 2;
                 break;
             case(1):
@@ -288,10 +288,8 @@ public class BeaconScanner extends StateMachine implements DataListener {
     }
 
     /**
-     * Metodo per impacchettare il messaggio da inviare al server
+     * Metodo che costruisce il messaggio contenente la posizione dell'utente da inviare al server
      */
-
-    //TODO metodo che costruisce il messaggio contenente la posizione dell'utente da inviare al server
     public String packingMessage() {
         UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
         Utente user = new Utente();
@@ -506,21 +504,24 @@ public class BeaconScanner extends StateMachine implements DataListener {
 
     };
 
+    /**
+     * Metodo per aggiornare la posizione dell'utente e per notificarla al server qualora collegato
+     */
     @Override
-    public void update() {  //TODO metodo per aggiornare la posizione dell'utente e per notificarla al server qualora collegato
+    public void update() {
         String mex = packingMessage();
 //        if(MainApplication.getFloors()!=null) {
                 //viene aggiornato il beacon a cui si è collegato l'utente
             String cod = currentBeacon.getAddress();
 
-            Log.e("get","BeaconAddress " + cod);
+            Log.e("get","BeaconAddress: " + cod);
 
                 //viene aggiornato il piano in cui si trova l'utente e le sue coordinate x,y
       //      Data.getUserPosition().setFloor(beacon.getFloor());
        //     Data.getUserPosition().setPosition(beacon.getCoords());
 
             UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
-            Utente user = new Utente();
+            Utente user;
         if (utenteMng.AnyIsLoggato()) {
             user = utenteMng.findByIsLoggato();
             utenteMng.updatePosition(user, cod);

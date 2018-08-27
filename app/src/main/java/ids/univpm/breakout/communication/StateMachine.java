@@ -10,7 +10,7 @@ public abstract class StateMachine {
     protected int currentState;
         //stato immediatamente precedente
     protected int previousState;
-        //indica che la state machine è in funzione o meno
+        //indica se la state machine è in funzione o meno
     protected boolean running;
 
     /**
