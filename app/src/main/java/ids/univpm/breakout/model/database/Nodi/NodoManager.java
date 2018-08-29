@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
 
+import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
@@ -63,9 +64,7 @@ public class NodoManager{
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         try
         {
-            if (db.delete(NodoStrings.TBL_NAME, NodoStrings.FIELD_ID+"=?", new String[]{Integer.toString(id)})>0)
-                return true;
-            return false;
+            return db.delete(NodoStrings.TBL_NAME, NodoStrings.FIELD_ID + "=?", new String[]{Integer.toString(id)}) > 0;
         }
         catch (SQLiteException sqle)
         {
@@ -185,5 +184,10 @@ public class NodoManager{
         {
             return false;
         }
+    }
+
+    public ArrayList<Nodo> findAllByIdMap(Integer idMap) {
+
+
     }
 }

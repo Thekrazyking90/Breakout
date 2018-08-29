@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import java.util.ArrayList;
+
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Scala;
 import ids.univpm.breakout.model.Tronco;
@@ -114,9 +116,9 @@ public class TroncoManager {
         return beaconMng.findById(id_beacon);
     }
 
-    public Scala findByIdGeneric(Integer arcId) {
+    public Tronco findByIdGeneric(Integer arcId) {
         Cursor crs=null;
-        Scala arc = new Scala();
+        Tronco arc = new Tronco();
         String[] args = new String[] {Integer.toString(arcId)};
         try
         {
@@ -167,9 +169,9 @@ public class TroncoManager {
         }
     }
 
-    public Scala findByIdBeacon(Integer id_beacon) {
+    public Tronco findByIdBeacon(Integer id_beacon) {
         Cursor crs=null;
-        Scala arc = new Scala();
+        Tronco arc = new Tronco();
         String[] args = new String[] {Integer.toString(id_beacon)};
         try
         {
@@ -195,5 +197,9 @@ public class TroncoManager {
         arc.setNodi_Integer(nodes);
 
         return arc;
+    }
+
+    public ArrayList<Tronco> findByIdMapAndRoute(Integer idMap, ArrayList<Integer> cammino) {
+
     }
 }

@@ -8,8 +8,11 @@ import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
 
+import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
@@ -116,7 +119,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
@@ -143,7 +146,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
@@ -170,7 +173,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;

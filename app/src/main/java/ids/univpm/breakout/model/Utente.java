@@ -7,7 +7,7 @@ public class Utente {
     private String email;
     private String nome;
     private String cognome;
-    private Integer ultima_posizione;
+    private String ultima_posizione;
     private int is_logged;
     private String token;
 
@@ -70,11 +70,11 @@ public class Utente {
         this.cognome = cognome;
     }
 
-    public Integer getUltima_posizione() {
+    public String getUltima_posizione() {
         return ultima_posizione;
     }
 
-    public void setUltima_posizione(Integer ultima_posizione) {
+    public void setUltima_posizione(String ultima_posizione) {
         this.ultima_posizione = ultima_posizione;
     }
 

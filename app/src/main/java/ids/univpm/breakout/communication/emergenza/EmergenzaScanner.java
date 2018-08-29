@@ -1,4 +1,4 @@
-package ids.univpm.breakout.communication.Emergenza;
+package ids.univpm.breakout.communication.emergenza;
 
 import android.app.Activity;
 import android.content.Intent;

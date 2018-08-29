@@ -30,7 +30,7 @@ public class CamminoMinimo {
      * @param startPdiId : ID del punto di interesse di partenza
      * @return : Integer[] contenente tutti gli ID dei tronchi che descrivono il cammino minimo
      */
-    public Integer[] Dijkstra_PDI (Integer destNodeId, Integer startPdiId){
+    public ArrayList<Integer> Dijkstra_PDI (Integer destNodeId, Integer startPdiId){
 
         HashMap<Integer,Costo_e_Cammino> dijkstraTemp = new HashMap<>(); // insieme temporaneo dei cammini minimi
         HashMap<Integer,Costo_e_Cammino> dijkstraDef = new HashMap<>(); // insieme definitivo dei cammini minimi
@@ -39,7 +39,7 @@ public class CamminoMinimo {
         cost_camm_dest.setCosto(0.0f); //Inizializzo il costo del nodo di destinazione (che è ovviamente 0)
 
         Integer nodoTempId;
-        Integer[] camminoMinimo;
+        ArrayList<Integer> camminoMinimo;
 
         dijkstraDef.put(destNodeId, cost_camm_dest); //Inserisco il nodo di destinazione nell'insieme definitivo
         dijkstraTemp = impostaCostoECammino(dijkstraTemp, dijkstraDef, destNodeId); //Inserisco nell'insieme temporaneo i nodi adiacenti alla destinazione
@@ -68,7 +68,7 @@ public class CamminoMinimo {
      * @param startArcId : ID del tronco di partenza
      * @return : Integer[] contenente tutti gli ID dei tronchi che descrivono il cammino minimo
      */
-    public Integer[] Dijkstra_Tronco (Integer destNodeCode, Integer startArcId){
+    public ArrayList<Integer> Dijkstra_Tronco (Integer destNodeCode, Integer startArcId){
 
         HashMap<Integer,Costo_e_Cammino> dijkstraTemp = new HashMap<>(); // insieme temporaneo dei cammini minimi
         HashMap<Integer,Costo_e_Cammino> dijkstraDef = new HashMap<>(); // insieme definitivo dei cammini minimi
@@ -77,7 +77,7 @@ public class CamminoMinimo {
         cost_camm_dest.setCosto(0.0f); //Inizializzo il costo del nodo di destinazione (che è ovviamente 0)
 
         Integer nodoTempId;
-        Integer[] camminoMinimo;
+        ArrayList<Integer> camminoMinimo;
 
         dijkstraDef.put(destNodeCode, cost_camm_dest);//Inserisco il nodo di destinazione nell'insieme definitivo
         dijkstraTemp = impostaCostoECammino(dijkstraTemp, dijkstraDef, destNodeCode); //Inserisco nell'insieme temporaneo i nodi adiacenti alla destinazione
@@ -129,13 +129,13 @@ public class CamminoMinimo {
             Integer otherNodeId;
             otherNodeId = i.otherNode(nodoId);
             if (!dijkstraTemp.containsKey(otherNodeId) && !dijkstraDef.containsKey(otherNodeId)) {
-                Integer[] cammino;
+                ArrayList<Integer> cammino;
                 Costo_e_Cammino cost_camm = new Costo_e_Cammino();
                 Float costo;
 
                 cammino = dijkstraDef.get(nodoId).getCammino();
 
-                cammino[cammino.length] = i.getID(); //TODO verificare se è giusto
+                cammino.add(i.getID());
 
                 costo= i.getCosto_totale_normalizzato()+dijkstraDef.get(nodoId).getCosto();
 
@@ -167,10 +167,11 @@ public class CamminoMinimo {
 
 
 class Costo_e_Cammino {
-    Float costo;
-    Integer[] cammino;
+    private Float costo;
+    private ArrayList<Integer> cammino;
 
     public Costo_e_Cammino() {
+        cammino = new ArrayList<Integer>();
     }
 
     public Float getCosto() {
@@ -181,11 +182,11 @@ class Costo_e_Cammino {
         this.costo = costo;
     }
 
-    public Integer[] getCammino() {
+    public ArrayList<Integer> getCammino() {
         return cammino;
     }
 
-    public void setCammino(Integer[] cammino) {
+    public void setCammino(ArrayList<Integer> cammino) {
         this.cammino = cammino;
     }
 }

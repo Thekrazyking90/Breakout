@@ -24,56 +24,58 @@ import ids.univpm.breakout.communication.DataListener;
 import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.communication.StateMachine;
 import ids.univpm.breakout.communication.message.MessageBuilder;
+import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.utility.Percorso;
 
 
 /**
-    Classe utilizzata per gestire lo scan dei beacon in prossimità dell'utente
+ Classe utilizzata per gestire lo scan dei beacon in prossimità dell'utente
  */
 
 public class BeaconScanner extends StateMachine implements DataListener {
 
-        //contiene le caratteristiche legate allo scan, in riferimento alla configurazione settata
+    //contiene le caratteristiche legate allo scan, in riferimento alla configurazione settata
     private SetupB setup;
 
-        //alcuni possibili messaggi che può ricevere lo scan (vengono utilizzati come parametri per l'intenFilter)
+    //alcuni possibili messaggi che può ricevere lo scan (vengono utilizzati come parametri per l'intenFilter)
     public static final String SCAN_PHASE_FINISHED = "ScanPhaseFinished";
     public static final String SUSPEND_SCAN = "SuspendScan";
     public static final String EMERGENCY = "EMERGENCY";
 
     private static final String TAG = "BeaconRESPONSE";
 
-        //adapter per interpretare ciò che viene trovato nello scan
+    //adapter per interpretare ciò che viene trovato nello scan
     private LeDeviceListAdapter mLeDeviceListAdapter;
-        //activity in cui viene fatto partire lo scan, in modo da poterne ricavare il context
+    //activity in cui viene fatto partire lo scan, in modo da poterne ricavare il context
     private Activity activity;
 
-        //rappresenta il beacon più vicino, con cui si deve effettuare il collegamento
+    //rappresenta il beacon più vicino, con cui si deve effettuare il collegamento
     private BluetoothDevice currentBeacon;
-        //rappresenta il beacon trovato dallo scan
+    //rappresenta il beacon trovato dallo scan
     private BluetoothDevice selectedBeacon;
 
-        //uuid dei sensortag utilizzati
+    //uuid dei sensortag utilizzati
     private static final String beaconUUID = "0000aa80-0000-1000-8000-00805f9b34fb";
 
-        //maschera di UUID, serve per filtrare i dispositivi bluetooth da analizzare
+    //maschera di UUID, serve per filtrare i dispositivi bluetooth da analizzare
     private UUID[] uuids;
-        //handler utilizzato per lanciare le varie Runnable (start,stop,wait)
+    //handler utilizzato per lanciare le varie Runnable (start,stop,wait)
     private Handler scanHandler;
-        //filtro dei messaggi per il broadcast receiver
+    //filtro dei messaggi per il broadcast receiver
     private IntentFilter intentFilter;
-        //connessione con un determinato sensortag, per leggere i dati dai sensori
+    //connessione con un determinato sensortag, per leggere i dati dai sensori
     private BeaconConnection connection;
 
-        //elementi necessari per effettuare lo scan
+    //elementi necessari per effettuare lo scan
     private ScanFilter scanFilter;
     private ScanSettings scanSettings;
     private List<ScanFilter> scanFilters;
-        //numero massimo di scan senza che venga mandata la posizione al server
+    //numero massimo di scan senza che venga mandata la posizione al server
     private static final int maxNoUpdate = 5;
-        //conta quante volte consecutive non si invia la propria posizione al server
+    //conta quante volte consecutive non si invia la propria posizione al server
     private int cont;
 
     /**
@@ -96,24 +98,24 @@ public class BeaconScanner extends StateMachine implements DataListener {
 
         cont = 0;
 
-            //insieme di UUID riconosciuti dallo scan e relativa inizializzazione
+        //insieme di UUID riconosciuti dallo scan e relativa inizializzazione
         uuids = new UUID[1];
         uuids[0] = UUID.fromString(beaconUUID);
-            //inizializzati gli elementi per lo scan
+        //inizializzati gli elementi per lo scan
         scanFilter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(UUID.fromString(beaconUUID))).build();
 
         scanFilters = new ArrayList<>();
         scanFilters.add(scanFilter);
         scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
 
-            //inizializzazione del filtro per i messaggi e registrazione del broadcast receiver
+        //inizializzazione del filtro per i messaggi e registrazione del broadcast receiver
         initializeFilter();
-            //viene registrato il receiver, in modo che possa ricevere messaggi e possa leggere
-            //quelli la cui intestazione si trova nell'intentFilter
+        //viene registrato il receiver, in modo che possa ricevere messaggi e possa leggere
+        //quelli la cui intestazione si trova nell'intentFilter
         activity.getBaseContext().registerReceiver(broadcastReceiver,intentFilter);
-            //viene inizializzato l'handler
+        //viene inizializzato l'handler
         scanHandler = new Handler();
-            //viene eseguito lo scan corrente
+        //viene eseguito lo scan corrente
         executeState();
     }
 
@@ -176,15 +178,15 @@ public class BeaconScanner extends StateMachine implements DataListener {
      */
     private void messageHandler(Intent intent) {
         switch (intent.getAction()) {
-                //ricevuto quando è terminata la connessione al beacon
+            //ricevuto quando è terminata la connessione al beacon
             case (SCAN_PHASE_FINISHED):
                 connection = null;
-                    //finita l'esecuzione dello stato richiama
+                //finita l'esecuzione dello stato richiama
                 int next = nextState();
                 changeState(next);
                 executeState();
                 break;
-                //ricevuto quando deve essere sospeso lo scan
+            //ricevuto quando deve essere sospeso lo scan
             case (SUSPEND_SCAN):
                 suspendScan();
                 break;
@@ -201,13 +203,13 @@ public class BeaconScanner extends StateMachine implements DataListener {
         Log.i("SUSPENDSCAN","suspend scan");
         running = false;
 
-            //nel caso in cui si stiano leggendo i dati dai sensori, viene interrotta la procedura
-            //fermando la macchina a stati che se ne occupa
+        //nel caso in cui si stiano leggendo i dati dai sensori, viene interrotta la procedura
+        //fermando la macchina a stati che se ne occupa
         if(currentState==1) {
             activity.getBaseContext().sendBroadcast(new Intent(BeaconConnection.STOP_CONNECTION));
         }
-            //se si sta aspettando per un nuovo scan, viene abortito il processo di attesa
-            //e si passa allo stato successivo (gestione della chiusura dello scan)
+        //se si sta aspettando per un nuovo scan, viene abortito il processo di attesa
+        //e si passa allo stato successivo (gestione della chiusura dello scan)
         else if(currentState==2) {
             scanHandler.removeCallbacks(wait);
             int next = nextState();
@@ -216,7 +218,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         }
     }
 
-        //il broadcast receiver deputato alla ricezione dei messaggi
+    //il broadcast receiver deputato alla ricezione dei messaggi
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -257,7 +259,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
      */
 
     private void discoverBLEDevices() {
-            //parte il thread deputato allo scan dei bluetooth LE
+        //parte il thread deputato allo scan dei bluetooth LE
         startScan.run();
 
         Log.e("BLE_Scanner", "DiscoverBLE, in " + setup.getState() + " condition");
@@ -296,25 +298,25 @@ public class BeaconScanner extends StateMachine implements DataListener {
         if (utenteMng.AnyIsLoggato()) user = utenteMng.findByIsLoggato();
 
         String mex;
-            //arraylist delle chiavi per creare il JSON
+        //arraylist delle chiavi per creare il JSON
         ArrayList<String> keys = new ArrayList<>();
-            //arraylist dei valori per creare il JSON
+        //arraylist dei valori per creare il JSON
         ArrayList<String> values = new ArrayList<>();
-            //create le chiavi per il documento
+        //create le chiavi per il documento
         keys.add("beacon_address");
         keys.add("user_ID");
         keys.add("nome");
         keys.add("cognome");
 
-            //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
+        //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
         values.add(currentBeacon.getAddress());
         values.add(user.getID_utente().toString());
-            //nel caso in cui l'utente sia loggato vengono messi anche i suoi dati nel messaggio
+        //nel caso in cui l'utente sia loggato vengono messi anche i suoi dati nel messaggio
         if(user.getIs_logged()==1){
             values.add(user.getNome());
             values.add(user.getCognome());
         }
-            //se l'utente non è loggato vengono aggiunti dati di default al messaggio
+        //se l'utente non è loggato vengono aggiunti dati di default al messaggio
         else {
             values.add("Guest");
             values.add("Guest");
@@ -339,21 +341,21 @@ public class BeaconScanner extends StateMachine implements DataListener {
     protected void executeState() {
         Log.i("State","execute scan state " + getState());
         switch(currentState) {
-                //in questo stato viene effettuato lo scan dei beacon
+            //in questo stato viene effettuato lo scan dei beacon
             case(0):
                 discoverBLEDevices();
                 break;
-                //in questo stato viene effettuata la connessione al beacon
+            //in questo stato viene effettuata la connessione al beacon
             case(1):
                 connection = new BeaconConnection(activity, currentBeacon);
                 connection.start();
                 break;
-                //in questo stato si attende un certo periodo prima di effettuare un altro scan
+            //in questo stato si attende un certo periodo prima di effettuare un altro scan
             case (2):
                 if (currentBeacon==null) closeConnection();
                 waiting();
                 break;
-                //in questo stato si gestisce lo spegnimento della macchina a stati
+            //in questo stato si gestisce lo spegnimento della macchina a stati
             case (3):
                 activity.getBaseContext().sendBroadcast(new Intent("TerminatedScan"));
                 break;
@@ -368,16 +370,16 @@ public class BeaconScanner extends StateMachine implements DataListener {
         connection = null;
     }
 
-        //thread che si occupa di far partire lo scan in cerca dei beacon
+    //thread che si occupa di far partire lo scan in cerca dei beacon
     private Runnable startScan = new Runnable() {
         @Override
         public void run() {
-                //cancella la lista di sensortag precedentemente trovati
+            //cancella la lista di sensortag precedentemente trovati
             mLeDeviceListAdapter.clear();
             mLeDeviceListAdapter.setCurrentBeacon(null);
 
             Log.e(TAG, "Start Scan");
-                //parte effettivamente la ricerca dei sensortag
+            //parte effettivamente la ricerca dei sensortag
             if (MainApplication.getmBluetoothAdapter() != null) {
                 try {
                     MainApplication.getmBluetoothAdapter().getBluetoothLeScanner()
@@ -395,7 +397,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         }
     };
 
-        //thread per mettere in pausa lo scan ed eventualmente elaborare i dati
+    //thread per mettere in pausa lo scan ed eventualmente elaborare i dati
     private Runnable stopScan = new Runnable() {
         @Override
         public void run() {
@@ -433,7 +435,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
                 }
             }
 
-                //finita l'esecuzione dello stato richiama
+            //finita l'esecuzione dello stato richiama
             int next = nextState();
             changeState(next);
             executeState();
@@ -442,7 +444,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         }
     };
 
-        //thread per gestire l'attesa fra due scan consecutivi
+    //thread per gestire l'attesa fra due scan consecutivi
     private Runnable wait = new Runnable() {
         @Override
         public void run() {
@@ -461,7 +463,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
         if(broadcastReceiver!=null) activity.getBaseContext().unregisterReceiver(broadcastReceiver);
     }
 
-        //callback utilizzata per trovare dispositivi nel raggio d'azione
+    //callback utilizzata per trovare dispositivi nel raggio d'azione
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
                 @Override
@@ -478,7 +480,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
             };
 
 
-        //callback utilizzata per trovare dispositivi nel raggio d'azione
+    //callback utilizzata per trovare dispositivi nel raggio d'azione
     private ScanCallback mScanCallback = new ScanCallback() {
 
         @Override
@@ -510,27 +512,21 @@ public class BeaconScanner extends StateMachine implements DataListener {
     @Override
     public void update() {
         String mex = packingMessage();
-//        if(MainApplication.getFloors()!=null) {
-                //viene aggiornato il beacon a cui si è collegato l'utente
-            String cod = currentBeacon.getAddress();
+        //viene aggiornato il beacon a cui si è collegato l'utente
+        String cod = currentBeacon.getAddress();
 
-            Log.e("get","BeaconAddress: " + cod);
+        Log.e("get","BeaconAddress: " + cod);
 
-                //viene aggiornato il piano in cui si trova l'utente e le sue coordinate x,y
-      //      Data.getUserPosition().setFloor(beacon.getFloor());
-       //     Data.getUserPosition().setPosition(beacon.getCoords());
 
-            UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
-            Utente user;
-        if (utenteMng.AnyIsLoggato()) {
-            user = utenteMng.findByIsLoggato();
-            utenteMng.updatePosition(user, cod);
+        Controller.aggiornaPosizioneUtente(cod, MainApplication.getCurrentActivity().getApplicationContext());
+
+        if(Percorso.isGestionePercorso()){
+            Controller.gestisciPercorso();
         }
-
-            //Data.getUserPosition().updateInformation();
+        //TODO aggiungere(se possibile) condizione per inviare la posizione solo quando cambia
         if(MainApplication.getOnlineMode()) {
             try {
-                    //inviato un messaggio con la posizione dell'utente
+                //inviato un messaggio con la posizione dell'utente
                 Server.sendPosition(mex);
             } catch (ExecutionException e) {
                 e.printStackTrace();

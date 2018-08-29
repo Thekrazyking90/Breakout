@@ -70,13 +70,13 @@ public class DBHelper extends SQLiteOpenHelper{
                 MappaStrings.FIELD_IMG +" TEXT NOT NULL);";
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
-                " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +//TODO aggiungere campo Codice
+                " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +//TODO aggiungere campo Indirizzo
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
                 BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_X +" REAL NOT NULL," +
                 BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
-                BeaconStrings.FIELD_LOS +" REAL NOT NULL, " +
+                BeaconStrings.FIELD_NDC +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_RISK +" REAL NOT NULL);";
 
         db.execSQL(q1);

@@ -12,14 +12,21 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
+import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Modifica;
+import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
+import ids.univpm.breakout.model.Scala;
+import ids.univpm.breakout.model.Tronco;
 import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.Mappa.MappaManager;
@@ -28,13 +35,13 @@ import ids.univpm.breakout.model.database.Nodi.NodoManager;
 import ids.univpm.breakout.model.database.Piano.PianoManager;
 import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.utility.CamminoMinimo;
+import ids.univpm.breakout.utility.Percorso;
 import ids.univpm.breakout.view.Navigation1;
 
 import static android.graphics.Color.RED;
 
 public class Controller {
-
-
 
     public static void displayNotifica(int ID_Notifica, Context context) {
         //TODO: questo metodo va richiamato solo in caso di emergenza, quindi SE comunicato dal server
@@ -98,7 +105,7 @@ public class Controller {
     }
 
     public static ArrayList<Utente> getUtenti(Context ctx){
-        ArrayList<Utente> utenti = new ArrayList<>();
+        ArrayList<Utente> utenti;
         UtenteManager utentiMng = new UtenteManager(ctx);
         utenti = utentiMng.findAll();
         return utenti;
@@ -331,7 +338,10 @@ public class Controller {
         Utente utente = utenteMng.findByIsLoggato();
         Integer idbeacon = null;
         if(utente.getUltima_posizione() != null){
-            idbeacon = utente.getUltima_posizione();
+            BeaconManager beaconManager = new BeaconManager(MainApplication.getCurrentActivity().getApplicationContext());
+            Beacon beacon = beaconManager.findByAddress(utente.getUltima_posizione());
+
+            idbeacon = beacon.getID_beacon();
         }
 
         return idbeacon;
@@ -343,5 +353,51 @@ public class Controller {
         listaPdi = nodoMng.findAllPdi();
 
         return listaPdi;
+    }
+
+    public static void aggiornaPosizioneUtente(String cod, Context ctx) {
+        UtenteManager utenteManager = new UtenteManager(ctx);
+        Utente user;
+
+        if (utenteManager.AnyIsLoggato()) {
+            user = utenteManager.findByIsLoggato();
+            utenteManager.updatePosition(user, cod);
+        }
+    }
+
+
+    public static void gestisciPercorso(){
+        Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
+        BeaconManager beaconManager = new BeaconManager(ctx);
+        Beacon beaconPosizione = beaconManager.findById(getPosizioneCorrente(ctx));
+        CamminoMinimo camminoMinimo = new CamminoMinimo(ctx);
+
+        if(beaconPosizione.getID_pdi() != null){
+            TroncoManager troncoManager = new TroncoManager(ctx);
+            List<Integer> stellaPdi = Arrays.asList(troncoManager.getArcsByNode_Integer(beaconPosizione.getID_pdi()));
+
+            if(stellaPdi.contains(Percorso.cammino.get(0))){
+                Percorso.setGestionePercorso(false);
+                Percorso.cammino.clear();
+                //TODO inserire codice per indicare arrivo
+            }else{
+                Percorso.cammino = camminoMinimo.Dijkstra_PDI(Percorso.cammino.get(0), beaconPosizione.getID_pdi());
+                //TODO implementare da qui il disegno e l'aggiornamento della mappa
+            }
+        }else{
+            TroncoManager troncoManager = new TroncoManager(ctx);
+            Tronco arcPosizione = troncoManager.findByIdBeacon(beaconPosizione.getID_beacon());
+
+            if(Percorso.cammino.contains(arcPosizione.getID())){
+                if(arcPosizione.getID() != Percorso.cammino.get(Percorso.cammino.size() - 1)){
+                    Percorso.cammino = (ArrayList<Integer>) Percorso.cammino.subList(0, Percorso.cammino.indexOf(arcPosizione.getID()) + 1);
+                    //TODO implementare da qui il disegno e l'aggiornamento della mappa
+                }
+            }else{
+                Percorso.cammino = camminoMinimo.Dijkstra_Tronco(Percorso.cammino.get(0), arcPosizione.getID());
+                //TODO implementare da qui il disegno e l'aggiornamento della mappa
+            }
+        }
+
     }
 }

@@ -1,10 +1,7 @@
 package ids.univpm.breakout.controller;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
@@ -12,14 +9,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ids.univpm.breakout.communication.Emergenza.EmergenzaScanner;
+import ids.univpm.breakout.communication.emergenza.EmergenzaScanner;
 import ids.univpm.breakout.communication.beacon.BeaconScanner;
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Piano;
-import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
-import ids.univpm.breakout.model.database.Utente.UtenteManager;
-import ids.univpm.breakout.view.Navigation1;
 
 /**
  * Questa classe gestisce alcuni elementi riguarda la logica dell'applicazione.

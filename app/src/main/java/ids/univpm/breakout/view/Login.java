@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
                 String pass = mPasswordView.getText().toString();
                 if(Controller.verificaAutenticazioneUtente(user, pass)){
                     Intent intent = new Intent(Login.this, Navigation1.class);
-                    intent.putExtra("ID_Activity", "From_SelPiano");
+                    intent.putExtra("ID_Activity", "From_Login");
                     intent.putExtra("ID_Mappa", getIdMappaPosizioneCorrente());
 
                     startActivity(intent);
@@ -76,27 +76,33 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public int getIdMappaPosizioneCorrente(){
-        int ID_map;
+    public Integer getIdMappaPosizioneCorrente(){
+        Integer ID_map;
 
         BeaconManager beaconManager = new BeaconManager(Login.this);
-        Beacon beacon_current_position = beaconManager.findById(Controller.getPosizioneCorrente(Login.this));
-        if(beacon_current_position.getID_pdi() == null) {
-            TroncoManager troncoManager = new TroncoManager(Login.this);
-            Scala tronco = troncoManager.findByIdBeacon(beacon_current_position.getID_beacon());
+        if(Controller.getPosizioneCorrente(Login.this) != null){
+            Beacon beacon_current_position = beaconManager.findById(Controller.getPosizioneCorrente(Login.this));
+            if(beacon_current_position.getID_pdi() == null) {
+                TroncoManager troncoManager = new TroncoManager(Login.this);
+                Scala tronco = troncoManager.findByIdBeacon(beacon_current_position.getID_beacon());
 
-            NodoManager nodoManager = new NodoManager(Login.this);
-            Nodo nodo = nodoManager.findById(tronco.getNodi_Integer()[0]);
+                NodoManager nodoManager = new NodoManager(Login.this);
+                Nodo nodo = nodoManager.findById(tronco.getNodi_Integer()[0]);
 
-            ID_map = nodo.getID_mappa();
+                ID_map = nodo.getID_mappa();
+            }else{
+                NodoManager nodoManager = new NodoManager(Login.this);
+                Nodo nodo = nodoManager.findById(beacon_current_position.getID_pdi());
+
+                ID_map = nodo.getID_mappa();
+            }
         }else{
-            NodoManager nodoManager = new NodoManager(Login.this);
-            Nodo nodo = nodoManager.findById(beacon_current_position.getID_pdi());
-
-            ID_map = nodo.getID_mappa();
+            ID_map = null;
         }
 
         return ID_map;
+
+
     }
 }
 
