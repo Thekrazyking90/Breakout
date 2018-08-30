@@ -101,6 +101,8 @@ public class MappaManager {
             mappa.setNome(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_NAME)));
             mappa.setImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
 
+            crs.close();
+
             return mappa;
         }
 
@@ -111,6 +113,9 @@ public class MappaManager {
             Mappa mappa = findByID(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID)));
             listaMappe.add(mappa);
         }
+
+        crs.close();
+
         return listaMappe;
     }
 

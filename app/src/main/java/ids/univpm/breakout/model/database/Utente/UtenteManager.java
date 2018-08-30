@@ -8,13 +8,8 @@ import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
 
-import ids.univpm.breakout.controller.MainApplication;
-import ids.univpm.breakout.model.Beacon;
-import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Utente;
-import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.DBHelper;
-import ids.univpm.breakout.model.database.Mappa.MappaStrings;
 
 public class UtenteManager {
 
@@ -46,7 +41,7 @@ public class UtenteManager {
         cv.put(UtenteStrings.FIELD_SURNAME, surname);
         cv.put(UtenteStrings.FIELD_USER, username);
         cv.put(UtenteStrings.FIELD_IS_LOGGED, is_logged);
-        cv.put(UtenteStrings.FIELD_LAST_POSITION, last_position);
+        cv.put(UtenteStrings.FIELD_ID_BEACON, last_position);
         try
         {
             db.insert(UtenteStrings.TBL_NAME, null,cv);
@@ -119,7 +114,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
@@ -146,7 +141,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
@@ -173,7 +168,7 @@ public class UtenteManager {
         utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
         utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
         utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-        utente.setUltima_posizione(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_LAST_POSITION)));
+        utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
         return utente;
@@ -212,7 +207,7 @@ public class UtenteManager {
         args[0]= user.getID_utente().toString();
 
         ContentValues cv=new ContentValues();
-        cv.put(UtenteStrings.FIELD_LAST_POSITION, cod);
+        cv.put(UtenteStrings.FIELD_ID_BEACON, cod);
         try
         {
             db.update(UtenteStrings.TBL_NAME,cv,UtenteStrings.FIELD_ID + "= ?", args);
@@ -253,8 +248,7 @@ public class UtenteManager {
                     UtenteStrings.FIELD_PSW+" TEXT NOT NULL," +
                     UtenteStrings.FIELD_EMAIL+" TEXT NOT NULL UNIQUE," +
                     UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
-                    UtenteStrings.FIELD_LAST_POSITION+" INTEGER," +
-                    UtenteStrings.FIELD_TOKEN+" TEXT NOT NULL," +
+                    UtenteStrings.FIELD_ID_BEACON +" INTEGER," +
                     UtenteStrings.FIELD_IS_LOGGED+" INTEGER NOT NULL DEFAULT 0," +
                     UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);");
             return true;

@@ -9,6 +9,8 @@ public class BeaconStrings {
     public static final String FIELD_COORD_Y="coord_Y";
     public static final String FIELD_FIRE="fuoco";
     public static final String FIELD_SMOKE="fumo";
-    public static final String FIELD_NDC ="LOS";
+    public static final String FIELD_NCD ="NCD";
     public static final String FIELD_RISK="rischio";
+    public static final String FIELD_ID_MAP="ID_mappa";
+    public static final String FIELD_ID_FLOOR="ID_piano";
 }

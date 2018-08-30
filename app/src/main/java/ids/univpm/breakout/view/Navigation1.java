@@ -1,5 +1,6 @@
 package ids.univpm.breakout.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -53,7 +54,7 @@ public class Navigation1 extends AppCompatActivity {
 
     private int backpress;
 
-    private static Bitmap bitmap;
+    public static Bitmap bitmap;
 
     // inserire check per la connessione al server --> sotto icona rossa oppure verde se connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
@@ -171,6 +172,13 @@ public class Navigation1 extends AppCompatActivity {
         SubsamplingScaleImageView imageView = findViewById(R.id.immagine);
         imageView.setImage(ImageSource.bitmap(bitmap));
 
+    }
+
+    public static void aggiornaMappa(){
+        Activity activity = MainApplication.getCurrentActivity();
+
+        SubsamplingScaleImageView imageView = activity.findViewById(R.id.immagine);
+        imageView.setImage(ImageSource.bitmap(bitmap));
     }
 
     public static Bitmap disegnoMappa(Integer idMap) {

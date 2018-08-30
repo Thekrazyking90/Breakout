@@ -1,5 +1,6 @@
 package ids.univpm.breakout.controller;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -270,16 +271,18 @@ public class Controller {
 
         for (HashMap<String, String> record: Beacon) {
             Integer ID = Integer.getInteger(record.get("ID"));
+            Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
+            Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
             String address = record.get("address");
             Integer ID_PDI = Integer.getInteger(record.get("ID_PDI"));
             Float coordx = Float.valueOf(record.get("coordX"));
             Float coordy = Float.valueOf(record.get("coordY"));
             Float fire = Float.valueOf(record.get("fire"));
             Float smoke = Float.valueOf(record.get("smoke"));
-            Float los = Float.valueOf(record.get("LOS"));
+            Float ncd = Float.valueOf(record.get("NCD"));
             Float risk = Float.valueOf(record.get("risk"));
 
-            beaconMng.save(ID, address, ID_PDI, coordx, coordy, fire, smoke, los, risk);
+            beaconMng.save(ID, IDMap, IDPiano, address, ID_PDI, coordx, coordy, fire, smoke, ncd, risk);
         }
     }
 
@@ -290,12 +293,14 @@ public class Controller {
 
         for (HashMap<String, String> record: Tronchi) {
             Integer ID = Integer.getInteger(record.get("ID"));
+            Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
+            Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
             Integer node1 = Integer.getInteger(record.get("nodo1"));
             Integer node2 = Integer.getInteger(record.get("nodo2"));
             Integer beacon = Integer.getInteger(record.get("beacon"));
             Float length = Float.valueOf(record.get("lunghezza"));
 
-            troncoMng.save(ID,node1,node2,beacon,length);
+            troncoMng.save(ID,IDMap, IDPiano, node1,node2,beacon,length);
         }
     }
 
@@ -337,11 +342,9 @@ public class Controller {
         UtenteManager utenteMng = new UtenteManager(ctx);
         Utente utente = utenteMng.findByIsLoggato();
         Integer idbeacon = null;
-        if(utente.getUltima_posizione() != null){
-            BeaconManager beaconManager = new BeaconManager(MainApplication.getCurrentActivity().getApplicationContext());
-            Beacon beacon = beaconManager.findByAddress(utente.getUltima_posizione());
+        if(utente.getID_beacon() != null){
 
-            idbeacon = beacon.getID_beacon();
+            idbeacon = utente.getID_beacon();
         }
 
         return idbeacon;
@@ -379,10 +382,18 @@ public class Controller {
             if(stellaPdi.contains(Percorso.cammino.get(0))){
                 Percorso.setGestionePercorso(false);
                 Percorso.cammino.clear();
-                //TODO inserire codice per indicare arrivo
+
+                AlertDialog.Builder alertArrivo = new AlertDialog.Builder(MainApplication.getCurrentActivity().getApplicationContext());
+                alertArrivo.setTitle("Arrivo");
+                alertArrivo.setMessage("Sei arrivato a destinazione");
+                AlertDialog alert = alertArrivo.create();
+                alert.show();
+
             }else{
                 Percorso.cammino = camminoMinimo.Dijkstra_PDI(Percorso.cammino.get(0), beaconPosizione.getID_pdi());
-                //TODO implementare da qui il disegno e l'aggiornamento della mappa
+
+                Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
+                Navigation1.aggiornaMappa();
             }
         }else{
             TroncoManager troncoManager = new TroncoManager(ctx);
@@ -391,11 +402,15 @@ public class Controller {
             if(Percorso.cammino.contains(arcPosizione.getID())){
                 if(arcPosizione.getID() != Percorso.cammino.get(Percorso.cammino.size() - 1)){
                     Percorso.cammino = (ArrayList<Integer>) Percorso.cammino.subList(0, Percorso.cammino.indexOf(arcPosizione.getID()) + 1);
-                    //TODO implementare da qui il disegno e l'aggiornamento della mappa
+
+                    Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
+                    Navigation1.aggiornaMappa();
                 }
             }else{
                 Percorso.cammino = camminoMinimo.Dijkstra_Tronco(Percorso.cammino.get(0), arcPosizione.getID());
-                //TODO implementare da qui il disegno e l'aggiornamento della mappa
+
+                Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
+                Navigation1.aggiornaMappa();
             }
         }
 

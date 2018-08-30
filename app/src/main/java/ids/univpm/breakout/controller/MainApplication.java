@@ -328,7 +328,7 @@ public class MainApplication {
                 if(broadcastReceiver!=null) activity.unregisterReceiver(broadcastReceiver);
                 scanner.closeScan();
                 scanner = null;
-//                activity.getBaseContext().unregisterReceiver(broadcastReceiver);
+//              activity.getBaseContext().unregisterReceiver(broadcastReceiver);
                 activity.finish();
             }
             else {

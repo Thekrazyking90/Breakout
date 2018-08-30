@@ -14,6 +14,7 @@ import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
+import ids.univpm.breakout.model.database.Tronchi.TroncoStrings;
 
 public class NodoManager{
 
@@ -160,6 +161,8 @@ public class NodoManager{
         nodo.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
         nodo.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
 
+        crs.close();
+
         return nodo;
     }
 
@@ -187,7 +190,28 @@ public class NodoManager{
     }
 
     public ArrayList<Nodo> findAllByIdMap(Integer idMap) {
+        Cursor crs;
+        Nodo nodo;
+        ArrayList<Nodo> listaNodi = new ArrayList<>();
+        String[] args = new String[] {Integer.toString(idMap)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(NodoStrings.TBL_NAME, null, NodoStrings.FIELD_ID_MAPPA + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
 
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+                nodo = findById(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
+                listaNodi.add(nodo);
+        }
+
+        crs.close();
+
+        return listaNodi;
 
     }
 }

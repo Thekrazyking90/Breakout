@@ -7,4 +7,6 @@ public class TroncoStrings {
     public static final String FIELD_ID_NODE2="ID_nodo2";
     public static final String FIELD_ID_BEACON="ID_beacon";
     public static final String FIELD_LENGTH="lunghezza";
+    public static final String FIELD_ID_MAP="ID_mappa";
+    public static final String FIELD_ID_FLOOR="ID_piano";
 }

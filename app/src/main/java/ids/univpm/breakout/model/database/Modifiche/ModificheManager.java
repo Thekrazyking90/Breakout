@@ -113,6 +113,8 @@ public class ModificheManager {
                 mod = null;
             }
 
+        crs.close();
+
         return mod;
     }
 

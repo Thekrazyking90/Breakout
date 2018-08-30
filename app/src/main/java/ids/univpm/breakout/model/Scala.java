@@ -104,7 +104,7 @@ public class Scala {
     public void setCosto_totale_normalizzato() { //TODO da rivedere
 
         if (MainApplication.getScanner().getSetup().getState().equals("EMERGENCY")) {
-            double LOS = beacon.getInd_NDC() / larghezza_media * lunghezza;
+            double LOS = beacon.getInd_NCD() / larghezza_media * lunghezza;
             costo_totale_normalizzato = (float) ((LOS * 0.7) + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
         }else{
             costo_totale_normalizzato = (float) lunghezza;

@@ -3,16 +3,34 @@ package ids.univpm.breakout.model;
 public class Beacon {
 
     private Integer ID_beacon;
+    private Integer ID_map;
+    private Integer ID_floor;
     private String address;
     private float coord_X;
     private float coord_Y;
     private float ind_fuoco;
     private float ind_fumi;
-    private float ind_NDC;
+    private float ind_NCD;
     private float ind_rischio;
     private Integer ID_pdi;
 
     public Beacon() {
+    }
+
+    public Integer getID_map() {
+        return ID_map;
+    }
+
+    public void setID_map(Integer ID_map) {
+        this.ID_map = ID_map;
+    }
+
+    public Integer getID_floor() {
+        return ID_floor;
+    }
+
+    public void setID_floor(Integer ID_floor) {
+        this.ID_floor = ID_floor;
     }
 
     public String getAddress() {
@@ -71,12 +89,12 @@ public class Beacon {
         this.ind_fumi = ind_fumi;
     }
 
-    public float getInd_NDC() {
-        return ind_NDC;
+    public float getInd_NCD() {
+        return ind_NCD;
     }
 
-    public void setInd_NDC(float ind_NDC) {
-        this.ind_NDC = ind_NDC;
+    public void setInd_NCD(float ind_NCD) {
+        this.ind_NCD = ind_NCD;
     }
 
     public float getInd_rischio() {

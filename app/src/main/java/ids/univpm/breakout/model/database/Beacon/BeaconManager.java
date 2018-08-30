@@ -30,20 +30,22 @@ public class BeaconManager {
         this.context = context;
     }
 
-    public void save(Integer id, String address, Integer pdi, float coordx, float coordy, float fire, float smoke, float los, float risk)
+    public void save(Integer id, Integer idMap, Integer idFloor, String address, Integer pdi, float coordx, float coordy, float fire, float smoke, float ncd, float risk)
         {
             SQLiteDatabase db= dbHelper.getWritableDatabase();
             dbHelper.getWritableDatabase();
 
             ContentValues cv=new ContentValues();
             cv.put(BeaconStrings.FIELD_ID, id);
+            cv.put(BeaconStrings.FIELD_ID_MAP, idMap);
+            cv.put(BeaconStrings.FIELD_ID_FLOOR, idFloor);
             cv.put(BeaconStrings.FIELD_ADDRESS, address);
             cv.put(BeaconStrings.FIELD_ID_PDI, pdi);
             cv.put(BeaconStrings.FIELD_COORD_X, coordx);
             cv.put(BeaconStrings.FIELD_COORD_Y, coordy);
             cv.put(BeaconStrings.FIELD_FIRE, fire);
             cv.put(BeaconStrings.FIELD_SMOKE, smoke);
-            cv.put(BeaconStrings.FIELD_NDC, los);
+            cv.put(BeaconStrings.FIELD_NCD, ncd);
             cv.put(BeaconStrings.FIELD_RISK, risk);
             try
             {
@@ -108,6 +110,8 @@ public class BeaconManager {
             i++;
         }
 
+        crs.close();
+
         return listaBeacon;
     }
 
@@ -131,10 +135,14 @@ public class BeaconManager {
         beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
         beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
         beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+        beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
+        beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
         beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
         beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
         beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
-        beacon.setInd_NDC(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NDC)));
+        beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
+
+        crs.close();
 
         return beacon;
     }
@@ -146,6 +154,8 @@ public class BeaconManager {
             Beacon beacon = findById(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
             listaBeacon.add(beacon);
         }
+        crs.close();
+
         return listaBeacon;
     }
 
@@ -156,12 +166,15 @@ public class BeaconManager {
             db.execSQL("DROP TABLE "+ BeaconStrings.TBL_NAME+";");
             db.execSQL("CREATE TABLE "+ BeaconStrings.TBL_NAME+
                     " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
+                    BeaconStrings.FIELD_ADDRESS + "TEXT NOT NULL UNIQUE," +
                     BeaconStrings.FIELD_ID_PDI + " INTEGER," +
+                    BeaconStrings.FIELD_ID_MAP +" INTEGER," +
+                    BeaconStrings.FIELD_ID_FLOOR +" INTEGER," +
                     BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
                     BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
                     BeaconStrings.FIELD_COORD_X +" REAL NOT NULL," +
                     BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
-                    BeaconStrings.FIELD_NDC +" REAL NOT NULL, " +
+                    BeaconStrings.FIELD_NCD +" REAL NOT NULL, " +
                     BeaconStrings.FIELD_RISK +" REAL NOT NULL);");
             return true;
         }
@@ -190,18 +203,42 @@ public class BeaconManager {
         beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
         beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
         beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+        beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
+        beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
         beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
         beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
         beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
-        beacon.setInd_NDC(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NDC)));
+        beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
+
+        crs.close();
 
         return beacon;
 
     }
 
     public ArrayList<Beacon> findAllByIdMap(Integer idMap) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        
+        Cursor crs;
+        Beacon beacon;
+        ArrayList<Beacon> listaBeacon = new ArrayList<>();
+        String[] args = new String[] {Integer.toString(idMap)};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(BeaconStrings.TBL_NAME, null, BeaconStrings.FIELD_ID_MAP + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
 
+        for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
+            beacon = findById(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
+            listaBeacon.add(beacon);
+        }
+
+        crs.close();
+
+        return listaBeacon;
     }
+
 }

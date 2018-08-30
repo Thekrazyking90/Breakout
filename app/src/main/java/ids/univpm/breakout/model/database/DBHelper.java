@@ -29,16 +29,17 @@ public class DBHelper extends SQLiteOpenHelper{
                 UtenteStrings.FIELD_PSW+" TEXT NOT NULL," +
                 UtenteStrings.FIELD_EMAIL+" TEXT NOT NULL UNIQUE," +
                 UtenteStrings.FIELD_NAME+" TEXT NOT NULL," +
-                UtenteStrings.FIELD_LAST_POSITION+" INTEGER," +
-                UtenteStrings.FIELD_TOKEN+" TEXT NOT NULL," +
+                UtenteStrings.FIELD_ID_BEACON +" INTEGER," +
                 UtenteStrings.FIELD_IS_LOGGED+" INTEGER NOT NULL DEFAULT 0," +
                 UtenteStrings.FIELD_SURNAME+" TEXT NOT NULL);";
 
         String q2="CREATE TABLE "+ TroncoStrings.TBL_NAME+
                 " (" + TroncoStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
-                TroncoStrings.FIELD_ID_NODE1 +" TEXT NOT NULL UNIQUE," +
-                TroncoStrings.FIELD_ID_BEACON +" REAL NOT NULL," +
-                TroncoStrings.FIELD_ID_NODE2 +" REAL NOT NULL," +
+                TroncoStrings.FIELD_ID_NODE1 +" INTEGER," +
+                TroncoStrings.FIELD_ID_BEACON +" INTEGER," +
+                TroncoStrings.FIELD_ID_MAP +" INTEGER," +
+                TroncoStrings.FIELD_ID_FLOOR +" INTEGER," +
+                TroncoStrings.FIELD_ID_NODE2 +" INTEGER," +
                 TroncoStrings.FIELD_LENGTH +" REAL NOT NULL);";
 
         String q3="CREATE TABLE "+ ModificheStrings.TBL_NAME+
@@ -71,12 +72,15 @@ public class DBHelper extends SQLiteOpenHelper{
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
                 " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +//TODO aggiungere campo Indirizzo
+                BeaconStrings.FIELD_ADDRESS + "TEXT NOT NULL UNIQUE," +
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
+                BeaconStrings.FIELD_ID_MAP +" INTEGER," +
+                BeaconStrings.FIELD_ID_FLOOR +" INTEGER," +
                 BeaconStrings.FIELD_FIRE +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_Y +" REAL NOT NULL," +
                 BeaconStrings.FIELD_COORD_X +" REAL NOT NULL," +
                 BeaconStrings.FIELD_SMOKE +" REAL NOT NULL, " +
-                BeaconStrings.FIELD_NDC +" REAL NOT NULL, " +
+                BeaconStrings.FIELD_NCD +" REAL NOT NULL, " +
                 BeaconStrings.FIELD_RISK +" REAL NOT NULL);";
 
         db.execSQL(q1);

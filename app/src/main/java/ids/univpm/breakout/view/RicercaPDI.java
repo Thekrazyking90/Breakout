@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,7 +39,7 @@ public class RicercaPDI extends AppCompatActivity {
 
         setContentView(R.layout.ricerca_pdi);
 
-        ListView lv= findViewById(R.id.lista_pdi);
+        ListView listaRicerca= findViewById(R.id.lista_pdi);
         ArrayList<Pdi> listaPdi;
         listaPdi = Controller.getPDIs(RicercaPDI.this);
 
@@ -48,7 +49,14 @@ public class RicercaPDI extends AppCompatActivity {
         }
 
         adapter=new ArrayAdapter<>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdiStrings);
-        lv.setAdapter(adapter);
+        listaRicerca.setAdapter(adapter);
+
+        listaRicerca.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String value = (String)adapter.getItemAtPosition(position);//TODO da finire
+            }
+        });
 
         //Check connessione: di default disconnesso
         //se non connesso: Server connection: disconnected, simbolo X
@@ -67,6 +75,7 @@ public class RicercaPDI extends AppCompatActivity {
             non_connesso.setVisibility(View.VISIBLE);
             connection_status.setText("Disconnected");
         }
+
 
     }
 
@@ -113,7 +122,6 @@ public class RicercaPDI extends AppCompatActivity {
         return true;
         //return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
