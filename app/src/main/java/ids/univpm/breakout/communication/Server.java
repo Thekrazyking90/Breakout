@@ -142,8 +142,11 @@ public class Server {
         keys.add("coordY");
         keys.add("fire");
         keys.add("smoke");
-        keys.add("NCD"); //TODO rivedere il discorso LOS
+        keys.add("NCD");
         keys.add("risk");
+        keys.add("ID_mappa");
+        keys.add("ID_piano");
+
 
         HashMap<String,String>[] beacon = new HashMap[0];
         try {
@@ -167,6 +170,8 @@ public class Server {
         keys.add("nodo2");
         keys.add("beacon");
         keys.add("lunghezza");
+        keys.add("ID_mappa");
+        keys.add("ID_piano");
 
         HashMap<String,String>[] tronchi = new HashMap[0];
         try {
@@ -186,7 +191,7 @@ public class Server {
         ArrayList<String> keys = new ArrayList<>();
         //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
         keys.add("ID");
-        keys.add("ID_piano");
+        keys.add("ID_mappa");
         keys.add("coordX");
         keys.add("coordY");
         keys.add("codice");

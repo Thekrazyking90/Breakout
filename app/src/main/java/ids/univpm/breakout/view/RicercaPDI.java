@@ -20,8 +20,10 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Nodi.NodoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
 
 public class RicercaPDI extends AppCompatActivity {
@@ -40,7 +42,7 @@ public class RicercaPDI extends AppCompatActivity {
         setContentView(R.layout.ricerca_pdi);
 
         ListView listaRicerca= findViewById(R.id.lista_pdi);
-        ArrayList<Pdi> listaPdi;
+        final ArrayList<Pdi> listaPdi;
         listaPdi = Controller.getPDIs(RicercaPDI.this);
 
         ArrayList<String> listaPdiStrings= new ArrayList<>();
@@ -54,7 +56,18 @@ public class RicercaPDI extends AppCompatActivity {
         listaRicerca.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String)adapter.getItemAtPosition(position);//TODO da finire
+                String value = (String)parent.getItemAtPosition(position);
+                NodoManager nodoManager = new NodoManager(RicercaPDI.this);
+                Pdi pdi = nodoManager.findByTipo(value);
+
+                Navigation1.idSelectedPdi = pdi.getID();
+
+                Intent intent = new Intent(RicercaPDI.this, Navigation1.class);
+                intent.putExtra("ID_Activity", "From_RicercaPDI");
+                intent.putExtra("ID_Mappa", pdi.getID_mappa());
+                intent.putExtra("ID_PDI", pdi.getID());
+
+                startActivity(intent);
             }
         });
 

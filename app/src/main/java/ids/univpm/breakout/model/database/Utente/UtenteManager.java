@@ -199,7 +199,7 @@ public class UtenteManager {
         return flag;
     }
 
-    public void updatePosition(Utente user, String cod) {
+    public void updatePosition(Utente user, Integer idBeacon) {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
 
@@ -207,7 +207,7 @@ public class UtenteManager {
         args[0]= user.getID_utente().toString();
 
         ContentValues cv=new ContentValues();
-        cv.put(UtenteStrings.FIELD_ID_BEACON, cod);
+        cv.put(UtenteStrings.FIELD_ID_BEACON, idBeacon);
         try
         {
             db.update(UtenteStrings.TBL_NAME,cv,UtenteStrings.FIELD_ID + "= ?", args);

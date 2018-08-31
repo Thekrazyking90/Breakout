@@ -231,6 +231,8 @@ public class Controller {
                     }
 
                 }
+
+                modificheMng.save(null,null,null,null, String.valueOf(System.currentTimeMillis()));
             }
         }else{
             saveDB(ctx);
@@ -311,7 +313,7 @@ public class Controller {
 
         for (HashMap<String, String> record: Nodi) {
             Integer ID = Integer.getInteger(record.get("ID"));
-            Integer ID_piano = Integer.getInteger(record.get("ID_piano"));
+            Integer ID_mappa = Integer.getInteger(record.get("ID_mappa"));
             Float coordx = Float.valueOf(record.get("coordX"));
             Float coordy = Float.valueOf(record.get("coordY"));
             String code = record.get("codice");
@@ -320,7 +322,7 @@ public class Controller {
             Boolean is_pdi = Boolean.parseBoolean(record.get("is_pdi"));
             String type = record.get("tipo");
 
-            nodoMng.save(ID,ID_piano,coordx,coordy,code,width,length,is_pdi,type);
+            nodoMng.save(ID,ID_mappa,coordx,coordy,code,width,length,is_pdi,type);
         }
     }
 
@@ -363,9 +365,46 @@ public class Controller {
         Utente user;
 
         if (utenteManager.AnyIsLoggato()) {
+            BeaconManager beaconManager = new BeaconManager(ctx);
+            Beacon beacon = beaconManager.findByAddress(cod);
             user = utenteManager.findByIsLoggato();
-            utenteManager.updatePosition(user, cod);
+            utenteManager.updatePosition(user, beacon.getID_beacon());
         }
+    }
+
+    public static Pdi findNearestExit(Context ctx){
+        BeaconManager beaconManager = new BeaconManager(ctx);
+        Beacon beaconPosizione = beaconManager.findById(Controller.getPosizioneCorrente(ctx));
+        Integer idMap = beaconPosizione.getID_map();
+        NodoManager nodoManager = new NodoManager(ctx);
+        ArrayList<Pdi> listaPdi = nodoManager.findAllPdi();
+
+        ArrayList<Pdi> listaUsciteVicine = new ArrayList<>();
+        for (Pdi pdi: listaPdi) {
+            if(pdi.getTipo().contains("emergen") && pdi.getID_mappa()==idMap){
+                listaUsciteVicine.add(pdi);
+            }
+        }
+
+        Pdi uscitaVicina = null;
+
+        for (Pdi uscita: listaUsciteVicine) {
+            if(uscitaVicina != null){
+                Double distUscita;
+                Double distUscitaVicina;
+                distUscita = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscita.getCoord_X()), (double) 2) +
+                        Math.pow((double) (beaconPosizione.getCoord_Y() - uscita.getCoord_Y()), (double) 2));
+                distUscitaVicina = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscitaVicina.getCoord_X()), (double) 2) +
+                        Math.pow((double) (beaconPosizione.getCoord_Y() - uscitaVicina.getCoord_Y()), (double) 2));
+                if(distUscita < distUscitaVicina){
+                    uscitaVicina = uscita;
+                }
+            }else{
+                uscitaVicina = uscita;
+            }
+        }
+
+        return uscitaVicina;
     }
 
 
@@ -388,6 +427,8 @@ public class Controller {
                 alertArrivo.setMessage("Sei arrivato a destinazione");
                 AlertDialog alert = alertArrivo.create();
                 alert.show();
+
+                Navigation1.idSelectedPdi = null;
 
             }else{
                 Percorso.cammino = camminoMinimo.Dijkstra_PDI(Percorso.cammino.get(0), beaconPosizione.getID_pdi());

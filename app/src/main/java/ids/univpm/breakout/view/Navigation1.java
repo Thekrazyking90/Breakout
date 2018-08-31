@@ -35,6 +35,7 @@ import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Nodo;
+import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Scala;
 import ids.univpm.breakout.model.Tronco;
 import ids.univpm.breakout.model.Utente;
@@ -55,6 +56,8 @@ public class Navigation1 extends AppCompatActivity {
     private int backpress;
 
     public static Bitmap bitmap;
+
+    public static Integer idSelectedPdi;
 
     // inserire check per la connessione al server --> sotto icona rossa oppure verde se connesso
     // far si che appaia la mappa del piano in cui mi trovo, in base al beacon a cui sono connesso
@@ -131,6 +134,8 @@ public class Navigation1 extends AppCompatActivity {
                 case "From_RicercaPDI":{
                     Integer idMappa = intent.getExtras().getInt("ID_Mappa");
                     Integer idPDISelezionato = intent.getExtras().getInt("ID_PDI");
+
+                    idSelectedPdi = idPDISelezionato;
 
                     if(Controller.getPosizioneCorrente(Navigation1.this) != null){
                         BeaconManager beaconManager = new BeaconManager(Navigation1.this);
@@ -215,8 +220,8 @@ public class Navigation1 extends AppCompatActivity {
         int coordy;
 
         for (Beacon beacon: listaBeacon) {
-            coordx = (int) beacon.getCoord_X();
-            coordy = (int) beacon.getCoord_Y();
+            coordx = (int) beacon.getCoord_X() * 115/18;
+            coordy = (int) beacon.getCoord_Y() * 115/18;
 
             canvas.drawCircle(coordx, coordy, 8, paintBeacon);
         }
@@ -225,8 +230,8 @@ public class Navigation1 extends AppCompatActivity {
         ArrayList<Nodo> listaNodi = nodoManager.findAllByIdMap(idMap);
 
         for (Nodo nodo: listaNodi) {
-            coordx = (int) nodo.getCoord_X();
-            coordy = (int) nodo.getCoord_Y();
+            coordx = (int) nodo.getCoord_X() * 115/18;
+            coordy = (int) nodo.getCoord_Y() * 115/18;
 
             canvas.drawCircle(coordx, coordy, 8, paintNodi);
         }
@@ -238,7 +243,7 @@ public class Navigation1 extends AppCompatActivity {
             paintPercorso.setColor(Color.GREEN);
             paintPercorso.setStrokeWidth(5);
 
-            ArrayList<Tronco> listaTronchi = new ArrayList<>();
+            ArrayList<Tronco> listaTronchi;
             TroncoManager troncoManager = new TroncoManager(ctx);
 
             listaTronchi = troncoManager.findByIdMapAndRoute(idMap, Percorso.cammino);
@@ -247,10 +252,10 @@ public class Navigation1 extends AppCompatActivity {
                 Nodo nodo1 = nodoManager.findById(tronco.getNodi_Integer()[0]);
                 Nodo nodo2 = nodoManager.findById(tronco.getNodi_Integer()[1]);
 
-                canvas.drawLine(nodo1.getCoord_X(),
-                        nodo1.getCoord_Y(),
-                        nodo2.getCoord_X(),
-                        nodo2.getCoord_Y(),
+                canvas.drawLine(nodo1.getCoord_X() * 115/18,
+                        nodo1.getCoord_Y() * 115/18,
+                        nodo2.getCoord_X() * 115/18,
+                        nodo2.getCoord_Y() * 115/18,
                         paintPercorso);
             }
         }
@@ -264,10 +269,21 @@ public class Navigation1 extends AppCompatActivity {
             Bitmap gps_pic = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.gps, opt);
             Bitmap gps = Bitmap.createScaledBitmap(gps_pic, gps_pic.getWidth() / 20, gps_pic.getHeight() / 20, true);
 
-            int gps_x = (int) beaconPosizione.getCoord_X();
-            int gps_y = (int) beaconPosizione.getCoord_Y();
+            int gps_x = (int) beaconPosizione.getCoord_X() * 115/18;
+            int gps_y = (int) beaconPosizione.getCoord_Y() * 115/18;
 
             canvas.drawBitmap(gps, gps_x - (gps.getWidth() / 2), gps_y - (gps.getHeight()), null);
+        }
+
+        if(idSelectedPdi != null) {
+            Pdi pdi = nodoManager.findPdiByID(idSelectedPdi);
+            Bitmap flag_pic = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.flag, opt);
+            Bitmap flag = Bitmap.createScaledBitmap(flag_pic, flag_pic.getWidth() / 11, flag_pic.getHeight() / 11, true);
+
+            int flag_x = (int) pdi.getCoord_X() * 115/18;
+            int flag_y = (int) pdi.getCoord_Y() * 115/18;
+
+            canvas.drawBitmap(flag, flag_x - (flag.getWidth() / 2), flag_y - (flag.getHeight()), null);
         }
 
         return bitmapDisegnata;

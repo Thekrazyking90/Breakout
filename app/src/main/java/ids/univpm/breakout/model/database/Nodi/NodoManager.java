@@ -35,14 +35,14 @@ public class NodoManager{
         this.context = context;
     }
 
-    public void save(Integer id, Integer piano, float coordx, float coordy, String code, float width, float length, boolean is_pdi, String type)
+    public void save(Integer id, Integer idMappa, float coordx, float coordy, String code, float width, float length, boolean is_pdi, String type)
     {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
 
         ContentValues cv=new ContentValues();
         cv.put(NodoStrings.FIELD_ID, id);
-        cv.put(NodoStrings.FIELD_ID_MAPPA, piano);
+        cv.put(NodoStrings.FIELD_ID_MAPPA, idMappa);
         cv.put(NodoStrings.FIELD_COORD_X, coordx);
         cv.put(NodoStrings.FIELD_COORD_Y, coordy);
         cv.put(NodoStrings.FIELD_CODE, code);
@@ -99,7 +99,7 @@ public class NodoManager{
         return listaPdi;
     }
 
-    private Pdi findPdiByID(Integer id_pdi) {
+    public Pdi findPdiByID(Integer id_pdi) {
         Cursor crs=null;
         Pdi pdi = new Pdi();
         String[] args = new String[] {Integer.toString(id_pdi)};
@@ -213,5 +213,34 @@ public class NodoManager{
 
         return listaNodi;
 
+    }
+
+    public Pdi findByTipo(String value) {
+        Cursor crs;
+        Pdi pdi = new Pdi();
+        String[] args = new String[] {value};
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(NodoStrings.TBL_NAME, null, NodoStrings.FIELD_TYPE + " = ?", args, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
+        crs.moveToFirst();
+        pdi.setID(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
+        pdi.setBeacon_Integer(getBeacons_Integer(pdi.getID()));
+        pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
+        pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
+        pdi.setTronchi_stella_Integer(getStar_Integer(pdi.getID()));
+        pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
+        pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
+        pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
+        pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
+        pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+
+        return pdi;
     }
 }

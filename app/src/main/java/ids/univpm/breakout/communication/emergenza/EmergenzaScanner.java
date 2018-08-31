@@ -1,20 +1,32 @@
 package ids.univpm.breakout.communication.emergenza;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.communication.StateMachine;
+import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Beacon;
+import ids.univpm.breakout.model.Pdi;
+import ids.univpm.breakout.model.Scala;
+import ids.univpm.breakout.model.database.Beacon.BeaconManager;
+import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
+import ids.univpm.breakout.utility.CamminoMinimo;
+import ids.univpm.breakout.utility.Percorso;
+import ids.univpm.breakout.view.Navigation1;
 
 public class EmergenzaScanner extends StateMachine {
     private SetupE setup;
     private Handler scanHandler;
     private Activity activity;
 
-    private boolean emergency = false;
+    public static boolean emergency = false;
 
     private Runnable wait = new Runnable() {
         @Override
@@ -89,7 +101,38 @@ public class EmergenzaScanner extends StateMachine {
     private void setEmergenza() {
         MainApplication.setEmergency(emergency);
         if(emergency){
+            Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
             MainApplication.initializeScanner(MainApplication.getCurrentActivity(), "EMERGENCY");
+
+            Pdi uscita = Controller.findNearestExit(ctx);
+            Navigation1.idSelectedPdi = uscita.getID();
+
+            if(Controller.getPosizioneCorrente(ctx) != null){
+                BeaconManager beaconManager = new BeaconManager(ctx);
+                Beacon beacon = beaconManager.findById(Controller.getPosizioneCorrente(ctx));
+
+                if (beacon.getID_pdi() == null){
+                    TroncoManager troncoManager = new TroncoManager(ctx);
+                    Scala tronco = troncoManager.findByIdBeacon(beacon.getID_beacon());
+
+                    CamminoMinimo camminoMinimo = new CamminoMinimo(ctx);
+                    ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(Navigation1.idSelectedPdi,tronco.getID());
+
+                    Percorso.setGestionePercorso(true);
+                    Percorso.cammino = percorso;
+
+                    Controller.gestisciPercorso();
+                }else{
+                    CamminoMinimo camminoMinimo = new CamminoMinimo(ctx);
+                    ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(Navigation1.idSelectedPdi,beacon.getID_pdi());
+
+                    Percorso.setGestionePercorso(true);
+                    Percorso.cammino = percorso;
+
+                    Controller.gestisciPercorso();
+                }
+
+            }
         } else {
             MainApplication.initializeScanner(MainApplication.getCurrentActivity());
         }
