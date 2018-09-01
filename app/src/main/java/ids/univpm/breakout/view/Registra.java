@@ -1,23 +1,12 @@
 package ids.univpm.breakout.view;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Calendar;
-import java.util.HashMap;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
@@ -33,7 +22,6 @@ public class Registra extends AppCompatActivity {
     private EditText PassCheck;
     private EditText Nome;
     private EditText Cognome;
-    private Button mInvia;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +36,7 @@ public class Registra extends AppCompatActivity {
         Nome= findViewById(R.id.name_txt);
         Cognome= findViewById(R.id.surname_txt);
 
-        mInvia = findViewById(R.id.profile_button);
+        Button mInvia = findViewById(R.id.profile_button);
 
         mInvia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +49,7 @@ public class Registra extends AppCompatActivity {
                         !Cognome.getText().toString().equals("") &&
                         !PassCheck.getText().toString().equals(""))
                 {
-                    HashMap<String, String> info = new HashMap<>();
 
-                    info.put("username", Username.getText().toString());
-                    info.put("password", Password.getText().toString());
-                    info.put("email", Email.getText().toString());
-                    info.put("nome", Nome.getText().toString());
-                    info.put("cognome", Cognome.getText().toString());
                     if(!Password.getText().toString().equals(PassCheck.getText().toString())){
                         Toast.makeText(getApplicationContext(), "Le password non corrispondono", Toast.LENGTH_LONG).show();
                     }else if(Server.checkUsername(Username.getText().toString())){

@@ -43,7 +43,7 @@ public class ModificheManager {
         cv.put(ModificheStrings.FIELD_TBL, table);
         cv.put(ModificheStrings.FIELD_ID_OGG_MOD, id_ogg_mod);
 
-        boolean flag=false;
+        boolean flag;
 
         try
         {
@@ -91,7 +91,7 @@ public class ModificheManager {
 
     public Modifica findLast(){
         Modifica mod = new Modifica();
-        Cursor crs=null;
+        Cursor crs;
 
         try
         {

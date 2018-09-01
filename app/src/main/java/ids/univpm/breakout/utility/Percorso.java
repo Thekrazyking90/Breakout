@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Percorso {
     private static boolean gestionePercorso;
-    public static ArrayList<Integer> cammino = new ArrayList<Integer>();
+    public static ArrayList<Integer> cammino = new ArrayList<>();
 
     public static boolean isGestionePercorso() {
         return gestionePercorso;

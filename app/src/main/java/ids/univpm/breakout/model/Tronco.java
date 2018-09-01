@@ -6,7 +6,7 @@ public class Tronco extends Collegamento{
 
 
     public Tronco(){
-    };
+    }
 
     public Integer getID_mappa() {
         return ID_mappa;

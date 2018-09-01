@@ -63,7 +63,7 @@ public class PianoManager {
 
     public Cursor query()
     {
-        Cursor crs=null;
+        Cursor crs;
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();

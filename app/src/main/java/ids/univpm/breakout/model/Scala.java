@@ -24,7 +24,7 @@ public class Scala {
     }
 
     public Integer otherNode (Integer id){
-        Integer other = null;
+        Integer other;
         Integer[] nodi = this.getNodi_Integer();
         if (id==nodi[0]){
             other=nodi[1];

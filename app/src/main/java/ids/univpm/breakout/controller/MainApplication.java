@@ -138,14 +138,14 @@ public class MainApplication {
     }
     /**
      * Metodo che restituisce la visibilità dell'applicazione
-     * @return, visibilità dell'applicazione
+     * @return visible, visibilità dell'applicazione
      */
     public static boolean getVisible() {
         return visible;
     }
     /**
      * Metodo che restituisce l'istanza contenente le durata per le varie fasi dello scan, ricevute dal server
-     * @return, hashmap (K: nome parametro, V:sua durata in millisecondi) contenente i valori per le varie fasi dello scan
+     * @return scanParameters, hashmap (K: nome parametro, V:sua durata in millisecondi) contenente i valori per le varie fasi dello scan
      */
     public static HashMap<String,Long> getScanParameters() {
         return scanParameters;
@@ -169,14 +169,14 @@ public class MainApplication {
 
     /**
      * Metodo che restituisce la struttura dati in cui sono memorizzati i beacon
-     * @return, struttura dati contenente i beacon
+     * @return sensors, struttura dati contenente i beacon
      */
     public static HashMap<String,Beacon> getSensors() {
         return sensors;
     }
     /**
      * Metodo che restituisce l'adapter necessario per la comunicazione bluetooth
-     * @return, adapter per la comunicazione bluetooth
+     * @return mBluetoothAdapter, adapter per la comunicazione bluetooth
      */
     public static BluetoothAdapter getmBluetoothAdapter() {
         return mBluetoothAdapter;
@@ -184,14 +184,14 @@ public class MainApplication {
 
     /**
      * Metodo che restituisce la struttura dati in cui sono memorizzati i piani di un edificio
-     * @return, struttura dati contenente i piani di un edificio
+     * @return floors, struttura dati contenente i piani di un edificio
      */
     public static HashMap<String,Piano> getFloors(){
         return floors;
     }
     /**
      * Metodo che indica se sia presente o meno un'emergenza nell'edificio
-     * @return, presenza o meno di un'emergenza
+     * @return emergency, presenza o meno di un'emergenza
      */
     public static boolean getEmergency() {
         return emergency;
@@ -208,14 +208,14 @@ public class MainApplication {
 
     /**
      * Metodo che restituisce l'oggetto utilizzato per lo scan dei sensori
-     * @return, scanner dei sensori
+     * @return scanner, scanner dei sensori
      */
     public static BeaconScanner getScanner() {
         return scanner;
     }
     /**
      * Metodo che restituisce l'attributo activity
-     * @return, attributo activity
+     * @return activity, attributo activity
      */
     public static Activity getActivity() {
         return activity;
@@ -253,10 +253,7 @@ public class MainApplication {
 
     }
 
-    /**
-     * Metodo per caricare nella struttura dati delle stanze, i valori passati come parametro
-     * @param b, i valori delle stanze da caricare in memoria
-     */
+
     /*private static void loadRooms(ArrayList<String[]> b) {  TODO credo non serva questo metodo, però teniamolo e rivediamolo in caso dovesse servire
 
         int[] coords = new int[2];

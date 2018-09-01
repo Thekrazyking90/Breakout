@@ -51,13 +51,11 @@ public class MessageParser {
      *  del JSON.
      * @param s
      * @param keys
-     * @param name
      * @return
      * @throws JSONException
      */
-    public static HashMap<String,String>[] analyzeMessageArray(String s, ArrayList<String> keys, String name) throws JSONException {
-        JSONObject json = new JSONObject(s);
-        JSONArray jsonArray = json.getJSONArray(name);
+    public static HashMap<String,String>[] analyzeMessageArray(String s, ArrayList<String> keys) throws JSONException {
+        JSONArray jsonArray = new JSONArray(s);
         array = new HashMap[jsonArray.length()];
 
         JSONObject jsonobject;

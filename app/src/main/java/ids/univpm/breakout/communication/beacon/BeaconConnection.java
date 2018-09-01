@@ -367,7 +367,7 @@ public class BeaconConnection extends StateMachine {
             //controllo sul contatore, per verificare che ancora ci siano servizi non analizzati
         if (cont<services.size()) {
                 //fra la lista dei servizi cerca currentService
-            while(i<findServices.size() && b==false) {
+            while(i<findServices.size() && !b) {
                     //controlla che il currentService sia fra quelli disponibili
                 if (findServices.get(i).getUuid().equals(currentService.getService())) {
                     b = true;

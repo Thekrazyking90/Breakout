@@ -113,10 +113,11 @@ public class Navigation1 extends AppCompatActivity {
 
             switch (fromActivity){
                 case "From_Login":{
-                    Integer idMappa = intent.getExtras().getInt("ID_Mappa");
-                    if(idMappa == null ){
+                    String idMappaString = intent.getExtras().getString("ID_Mappa");
+                    if(idMappaString == "" ){
                         startActivity(new Intent(Navigation1.this, SelPiano.class));
                     }else {
+                        Integer idMappa = Integer.valueOf(idMappaString);
                         bitmap = disegnoMappa(idMappa);
                     }
                     //get id mappa from intent

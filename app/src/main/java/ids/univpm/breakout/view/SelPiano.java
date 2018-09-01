@@ -1,16 +1,10 @@
 package ids.univpm.breakout.view;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.CornerPathEffect;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +24,6 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Mappa;
-import ids.univpm.breakout.model.database.Mappa.MappaManager;
 
 public class SelPiano extends AppCompatActivity {
 

@@ -76,8 +76,8 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public Integer getIdMappaPosizioneCorrente(){
-        Integer ID_map;
+    public String getIdMappaPosizioneCorrente(){
+        String ID_map;
 
         BeaconManager beaconManager = new BeaconManager(Login.this);
         if(Controller.getPosizioneCorrente(Login.this) != null){
@@ -89,15 +89,15 @@ public class Login extends AppCompatActivity {
                 NodoManager nodoManager = new NodoManager(Login.this);
                 Nodo nodo = nodoManager.findById(tronco.getNodi_Integer()[0]);
 
-                ID_map = nodo.getID_mappa();
+                ID_map = nodo.getID_mappa().toString();
             }else{
                 NodoManager nodoManager = new NodoManager(Login.this);
                 Nodo nodo = nodoManager.findById(beacon_current_position.getID_pdi());
 
-                ID_map = nodo.getID_mappa();
+                ID_map = nodo.getID_mappa().toString();
             }
         }else{
-            ID_map = null;
+            ID_map = "";
         }
 
         return ID_map;

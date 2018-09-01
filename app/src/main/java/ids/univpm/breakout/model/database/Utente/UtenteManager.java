@@ -70,7 +70,7 @@ public class UtenteManager {
 
     public Cursor query()
     {
-        Cursor crs=null;
+        Cursor crs;
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -94,7 +94,7 @@ public class UtenteManager {
     }
 
     public Utente findByUser (String user){
-        Cursor crs=null;
+        Cursor crs;
         Utente utente = new Utente();
         String[] args = new String[] {user};
         try
@@ -117,11 +117,13 @@ public class UtenteManager {
         utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
+        crs.close();
+
         return utente;
     }
 
     public Utente findByID (Integer id){
-        Cursor crs=null;
+        Cursor crs;
         Utente utente = new Utente();
         String[] args = new String[] {Integer.toString(id)};
         try
@@ -144,11 +146,13 @@ public class UtenteManager {
         utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
+        crs.close();
+
         return utente;
     }
 
     public Utente findByIsLoggato (){
-        Cursor crs=null;
+        Cursor crs;
         Utente utente = new Utente();
         String[] args = new String[] {Integer.toString(1)};
         try
@@ -171,13 +175,14 @@ public class UtenteManager {
         utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
         utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
 
+        crs.close();
+
         return utente;
     }
 
 
     public boolean AnyIsLoggato() {
-        Cursor crs=null;
-        Utente utente = new Utente();
+        Cursor crs;
         String[] args = new String[] {Integer.toString(1)};
 
         boolean flag = false;
@@ -194,7 +199,11 @@ public class UtenteManager {
 
         if(crs.getCount()>=1){
             flag=true;
+        }else{
+            flag=false;
         }
+
+        crs.close();
 
         return flag;
     }
@@ -203,7 +212,7 @@ public class UtenteManager {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
 
-        String[] args = null;
+        String[] args = new String[1];
         args[0]= user.getID_utente().toString();
 
         ContentValues cv=new ContentValues();
@@ -222,7 +231,7 @@ public class UtenteManager {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         dbHelper.getWritableDatabase();
 
-        String[] args = null;
+        String[] args = new String[1];
         args[0]= user.getID_utente().toString();
 
         ContentValues cv=new ContentValues();

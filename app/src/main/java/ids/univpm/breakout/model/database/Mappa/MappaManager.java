@@ -68,7 +68,7 @@ public class MappaManager {
 
         public Cursor query()
         {
-            Cursor crs=null;
+            Cursor crs;
             try
             {
                 SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -82,7 +82,7 @@ public class MappaManager {
         }
 
         public Mappa findByID (Integer id){
-            Cursor crs=null;
+            Cursor crs;
             Mappa mappa = new Mappa();
             String[] args = new String[] {Integer.toString(id)};
             try

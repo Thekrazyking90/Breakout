@@ -76,7 +76,7 @@ public class TroncoManager {
 
     public Cursor query()
     {
-        Cursor crs=null;
+        Cursor crs;
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -90,8 +90,8 @@ public class TroncoManager {
     }
 
 
-    public Integer[] getArcsByNode_Integer(Integer id_nodo) {
-        Cursor crs=null;
+    public ArrayList<Integer> getArcsByNode_Integer(Integer id_nodo) {
+        Cursor crs;
         String[] args = new String[] {Integer.toString(id_nodo), Integer.toString(id_nodo)};
         try
         {
@@ -103,12 +103,10 @@ public class TroncoManager {
             return null;
         }
 
-        Integer[] listaTronchi = null;
-        int i = 0;
+        ArrayList<Integer> listaTronchi = new ArrayList<>();
 
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            listaTronchi[i] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID));
-            i++;
+            listaTronchi.add(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID)));
         }
 
         crs.close();
@@ -122,7 +120,7 @@ public class TroncoManager {
     }
 
     public Tronco findByIdGeneric(Integer arcId) {
-        Cursor crs=null;
+        Cursor crs;
         Tronco arc = new Tronco();
         String[] args = new String[] {Integer.toString(arcId)};
         try
@@ -147,7 +145,7 @@ public class TroncoManager {
 
         arc.setCosto_totale_normalizzato();
 
-        Integer[] nodes = null;
+        Integer[] nodes = new Integer[2];
         nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
         nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
         arc.setNodi_Integer(nodes);
@@ -157,9 +155,6 @@ public class TroncoManager {
         return arc;
     }
 
-    public Scala getByBeaconID(Integer id_beacon) {
-        return null;
-    }
 
     public boolean resetTable(){
         SQLiteDatabase db= dbHelper.getWritableDatabase();
@@ -183,7 +178,7 @@ public class TroncoManager {
     }
 
     public Tronco findByIdBeacon(Integer id_beacon) {
-        Cursor crs=null;
+        Cursor crs;
         Tronco arc = new Tronco();
         String[] args = new String[] {Integer.toString(id_beacon)};
         try
@@ -208,7 +203,7 @@ public class TroncoManager {
 
         arc.setCosto_totale_normalizzato();
 
-        Integer[] nodes = null;
+        Integer[] nodes = new Integer[2];
         nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
         nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
         arc.setNodi_Integer(nodes);

@@ -76,7 +76,7 @@ public class NodoManager{
 
     public Cursor query()
     {
-        Cursor crs=null;
+        Cursor crs;
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -100,7 +100,7 @@ public class NodoManager{
     }
 
     public Pdi findPdiByID(Integer id_pdi) {
-        Cursor crs=null;
+        Cursor crs;
         Pdi pdi = new Pdi();
         String[] args = new String[] {Integer.toString(id_pdi)};
         try
@@ -125,21 +125,45 @@ public class NodoManager{
         pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
         pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
 
+        crs.close();
+
         return pdi;
     }
 
     private Integer[] getStar_Integer(Integer id_pdi) {
         TroncoManager troncoMng = new TroncoManager(context);
-        return troncoMng.getArcsByNode_Integer(id_pdi);
+        ArrayList<Integer> listaId = troncoMng.getArcsByNode_Integer(id_pdi);
+
+        Integer[] arrayId = new Integer[listaId.size()];
+
+        int i = 0;
+
+        for (Integer id: listaId) {
+            arrayId[i] = id;
+            i++;
+        }
+
+        return arrayId;
     }
 
     private Integer[] getBeacons_Integer(Integer id_pdi) {
         BeaconManager beaconMng = new BeaconManager(context);
-        return beaconMng.getBeaconsByPdi_Integer(id_pdi);
+        ArrayList<Integer> listaId = beaconMng.getBeaconsByPdi_Integer(id_pdi);
+
+        Integer[] arrayId = new Integer[listaId.size()];
+
+        int i = 0;
+
+        for (Integer id: listaId) {
+            arrayId[i] = id;
+            i++;
+        }
+
+        return arrayId;
     }
 
     public Nodo findById(Integer id) {
-        Cursor crs=null;
+        Cursor crs;
         Nodo nodo = new Nodo();
         String[] args = new String[] {Integer.toString(id)};
         try
@@ -240,6 +264,8 @@ public class NodoManager{
         pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
         pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
         pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+
+        crs.close();
 
         return pdi;
     }

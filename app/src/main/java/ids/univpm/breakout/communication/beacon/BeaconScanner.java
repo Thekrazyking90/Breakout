@@ -330,7 +330,7 @@ public class BeaconScanner extends StateMachine implements DataListener {
 
     /**
      * Metodo per attendere il tempo necessario fra due scan consecutivi
-     * @return beacon più vicino rispetto all'utente
+     *
      */
     private void waiting() {
         Log.i("WAITING","waiting for " + setup.getPeriodBetweenScan()/1000 + " seconds for new Scan ");

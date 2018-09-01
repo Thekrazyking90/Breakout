@@ -75,7 +75,7 @@ public class BeaconManager {
 
         public Cursor query()
         {
-            Cursor crs=null;
+            Cursor crs;
             try
             {
                 SQLiteDatabase db= dbHelper.getReadableDatabase();
@@ -89,8 +89,8 @@ public class BeaconManager {
         }
 
 
-    public Integer[] getBeaconsByPdi_Integer(Integer id_pdi) {
-        Cursor crs=null;
+    public ArrayList<Integer> getBeaconsByPdi_Integer(Integer id_pdi) {
+        Cursor crs;
         String[] args = new String[] {Integer.toString(id_pdi)};
         try
         {
@@ -102,12 +102,10 @@ public class BeaconManager {
             return null;
         }
 
-        Integer[] listaBeacon = null;
-        int i = 0;
+        ArrayList<Integer> listaBeacon = new ArrayList<>();
 
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
-            listaBeacon[i] = crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID));
-            i++;
+            listaBeacon.add(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
         }
 
         crs.close();
@@ -116,7 +114,7 @@ public class BeaconManager {
     }
 
     public Beacon findById(Integer id) {
-        Cursor crs=null;
+        Cursor crs;
         Beacon beacon = new Beacon();
         String[] args = new String[] {Integer.toString(id)};
         try
@@ -184,7 +182,8 @@ public class BeaconManager {
         }
     }
 
-    public Beacon findByAddress(String address) {Cursor crs=null;
+    public Beacon findByAddress(String address) {
+        Cursor crs;
         Beacon beacon = new Beacon();
         String[] args = new String[] {address};
         try

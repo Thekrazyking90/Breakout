@@ -20,7 +20,6 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
-import ids.univpm.breakout.model.Nodo;
 import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Nodi.NodoManager;

@@ -108,15 +108,15 @@ public class Server {
 
     public static HashMap<String, String>[] downloadMappe(){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
-        keys.add("ID");
-        keys.add("piano");
+
+        keys.add("ID_mappa");
+        keys.add("ID_piano");
         keys.add("immagine");
         keys.add("nome");
 
-        HashMap<String,String>[] mappe = new HashMap[0];
+        HashMap<String,String>[] mappe = null;
         try {
-            mappe = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/getmaps").get(),keys,"mappe");
+            mappe = MessageParser.analyzeMessageArray(new GetRequest().execute(ip,"resources/maps/getmaps").get(),keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -134,23 +134,23 @@ public class Server {
 
     public static HashMap<String, String>[] downloadBeacon(){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
-        keys.add("ID");
+
+        keys.add("ID_beacon");
         keys.add("address");
-        keys.add("ID_PDI");
-        keys.add("coordX");
-        keys.add("coordY");
-        keys.add("fire");
-        keys.add("smoke");
-        keys.add("NCD");
-        keys.add("risk");
+        keys.add("ID_pdi");
+        keys.add("coord_X");
+        keys.add("coord_Y");
+        keys.add("ind_fuoco");
+        keys.add("ind_fumi");
+        keys.add("ind_NCD");
+        keys.add("ind_rischio");
         keys.add("ID_mappa");
         keys.add("ID_piano");
 
 
-        HashMap<String,String>[] beacon = new HashMap[0];
+        HashMap<String,String>[] beacon = null;
         try {
-            beacon = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/beacon").get(),keys,"beacon");
+            beacon = MessageParser.analyzeMessageArray(new GetRequest().execute(ip,"resources/maps/beacon").get(),keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -164,18 +164,19 @@ public class Server {
 
     public static HashMap<String, String>[] downloadTronchi(){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
+
         keys.add("ID");
-        keys.add("nodo1");
-        keys.add("nodo2");
-        keys.add("beacon");
+        //keys.add("nodo1");
+        //keys.add("nodo2");
+        keys.add("nodi_int");
+        keys.add("ID_beacon");
         keys.add("lunghezza");
         keys.add("ID_mappa");
         keys.add("ID_piano");
 
-        HashMap<String,String>[] tronchi = new HashMap[0];
+        HashMap<String,String>[] tronchi = null;
         try {
-            tronchi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/arcs").get(),keys,"tronchi");
+            tronchi = MessageParser.analyzeMessageArray(new GetRequest().execute(ip,"resources/maps/arcs").get(),keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -189,20 +190,20 @@ public class Server {
 
     public static HashMap<String, String>[] downloadNodi(){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
+
         keys.add("ID");
         keys.add("ID_mappa");
-        keys.add("coordX");
-        keys.add("coordY");
+        keys.add("coord_X");
+        keys.add("coord_Y");
         keys.add("codice");
         keys.add("larghezza");
         keys.add("lunghezza");
-        keys.add("is_pdi");
+        keys.add("isPdi");
         keys.add("tipo");
 
-        HashMap<String,String>[] nodi = new HashMap[0];
+        HashMap<String,String>[] nodi = null;
         try {
-            nodi = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/nodes").get(),keys,"nodi");
+            nodi = MessageParser.analyzeMessageArray(new GetRequest().execute(ip,"resources/maps/nodes").get(),keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -216,13 +217,13 @@ public class Server {
 
     public static HashMap<String, String>[] downloadPiani(){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
-        keys.add("ID");
-        keys.add("nome");
 
-        HashMap<String,String>[] piani = new HashMap[0];
+        keys.add("ID_piano");
+        keys.add("quota");
+
+        HashMap<String,String>[] piani = null;
         try {
-            piani = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/maps/floors").get(),keys,"piani");
+            piani = MessageParser.analyzeMessageArray(new GetRequest().execute(ip,"resources/maps/floors").get(),keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -234,14 +235,29 @@ public class Server {
         return piani;
     }
 
-    public static void logoutUtente(){
-        try {
-            new GetRequest().execute(ip,"resources/utility/logout").get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    public static void logoutUtente(String user){
+    	ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+
+        name.add("username");
+
+        value.add(user);
+
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
+
+        boolean flag;
+
+        try{
+            String s = new PostRequest().execute(ip,"resources/user/logout",mex).get();
+            Log.i("s",s);
+            flag = Boolean.parseBoolean(s);
+        }catch (Exception e){
+            flag = false;
         }
+
+
+        return flag;
+        //TODO modificare chi utilizza questo metodo
     }
 
     public static boolean checkModifiche(String data){
@@ -252,7 +268,7 @@ public class Server {
 
         value.add(data);
 
-        String mex = MessageBuilder.builder(name,value,value.size(),0);//dopo la richiesta post io devo far processare il risultato ottenendo un json object e prendere il valore booleano (restituito dal db server)di tale object e metterlo nell if
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
 
         boolean flag;
 
@@ -270,14 +286,22 @@ public class Server {
 
     public static HashMap<String, String>[] downloadModifiche(String data){
         ArrayList<String> keys = new ArrayList<>();
-        //TODO controllare ordine chiavi confrontandole con con il json inviato dal server
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+
+        name.add("data");
+
+        value.add(data);
+        
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
+
         keys.add("tabella");
         keys.add("tipo");
         keys.add("ID_oggetto");
 
-        HashMap<String,String>[] modifiche = new HashMap[0];
+        HashMap<String,String>[] modifiche = null;
         try {
-            modifiche = MessageParser.analyzeMessageArray(new GetRequest().execute(hostMaster,"resources/utility/getmodifiche/"+data).get(),keys,"modifiche");
+            modifiche = MessageParser.analyzeMessageArray(new PostRequest().execute(ip,"resources/utility/getmodifiche", mex).get(), keys);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -290,11 +314,11 @@ public class Server {
     }
 
     public static void sendPosition(String mex) throws ExecutionException, InterruptedException {
-        new PutRequest().execute(hostMaster,"resources/utility/setposition",mex).get();
+        new PutRequest().execute(ip,"resources/utility/setposition",mex).get();
     }
 
     public static void sendValue(String mex) throws ExecutionException, InterruptedException {
-        new PutRequest().execute(hostMaster,"resources/utility/beaconvalues",mex).get();
+        new PutRequest().execute(ip,"resources/utility/beaconvalues",mex).get();
     }
 
     //metodo per controllare se lo username scritto sulla pagina di registrazione è già in uso

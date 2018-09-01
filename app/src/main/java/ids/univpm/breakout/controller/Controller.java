@@ -173,7 +173,7 @@ public class Controller {
             } catch (Exception e) {
                 //gestire eccezioni
                 e.printStackTrace();
-                //TODO comunicazione dati errati
+                //TODO comunicazione "dati errati"
                 u_manager.updateIs_loggato(utente_log, false);
                 flag = false;
             }
@@ -416,7 +416,7 @@ public class Controller {
 
         if(beaconPosizione.getID_pdi() != null){
             TroncoManager troncoManager = new TroncoManager(ctx);
-            List<Integer> stellaPdi = Arrays.asList(troncoManager.getArcsByNode_Integer(beaconPosizione.getID_pdi()));
+            ArrayList<Integer> stellaPdi = troncoManager.getArcsByNode_Integer(beaconPosizione.getID_pdi());
 
             if(stellaPdi.contains(Percorso.cammino.get(0))){
                 Percorso.setGestionePercorso(false);
