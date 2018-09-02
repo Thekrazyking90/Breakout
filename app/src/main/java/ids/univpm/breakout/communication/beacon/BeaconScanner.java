@@ -26,7 +26,9 @@ import ids.univpm.breakout.communication.StateMachine;
 import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
+import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.Beacon.BeaconManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
 import ids.univpm.breakout.utility.Percorso;
 
@@ -294,7 +296,9 @@ public class BeaconScanner extends StateMachine implements DataListener {
      */
     public String packingMessage() {
         UtenteManager utenteMng = new UtenteManager(MainApplication.getCurrentActivity().getBaseContext());
+        BeaconManager beaconMng = new BeaconManager(MainApplication.getCurrentActivity().getBaseContext());
         Utente user = new Utente();
+        Beacon beacon = beaconMng.findByAddress(currentBeacon.getAddress());
         if (utenteMng.AnyIsLoggato()) user = utenteMng.findByIsLoggato();
 
         String mex;
@@ -303,13 +307,13 @@ public class BeaconScanner extends StateMachine implements DataListener {
         //arraylist dei valori per creare il JSON
         ArrayList<String> values = new ArrayList<>();
         //create le chiavi per il documento
-        keys.add("beacon_address");
-        keys.add("user_ID");
+        keys.add("ID_beacon");
+        keys.add("ID_utente");
         keys.add("nome");
         keys.add("cognome");
 
         //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
-        values.add(currentBeacon.getAddress());
+        values.add(beacon.getID_beacon().toString());
         values.add(user.getID_utente().toString());
         //nel caso in cui l'utente sia loggato vengono messi anche i suoi dati nel messaggio
         if(user.getIs_logged()==1){

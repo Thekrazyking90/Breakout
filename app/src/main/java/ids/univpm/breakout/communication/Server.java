@@ -235,7 +235,7 @@ public class Server {
         return piani;
     }
 
-    public static void logoutUtente(String user){
+    public static boolean logoutUtente(String user){
     	ArrayList<String> name = new ArrayList<>();
         ArrayList<String> value = new ArrayList<>();
 

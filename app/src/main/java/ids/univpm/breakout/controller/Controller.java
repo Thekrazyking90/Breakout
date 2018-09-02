@@ -207,24 +207,24 @@ public class Controller {
                 //TODO rivedere nomi tabelle
                 for (HashMap<String, String> modifica: listaModHash) {
                     switch (modifica.get("tabella")){
-                        case "Mappe":{
+                        case "mappa":{
                             mappaMng.resetTable();
                             saveMappe(ctx);
                             downloadAllImgMappa(mappaMng.findAll());
                         }
-                        case "Beacon":{
+                        case "beacon":{
                             beaconMng.resetTable();
                             saveBeacon(ctx);
                         }
-                        case "Tronchi":{
+                        case "tronco":{
                             troncoMng.resetTable();
                             saveTronchi(ctx);
                         }
-                        case "Nodi":{
+                        case "nodo":{
                             nodoMng.resetTable();
                             saveNodi(ctx);
                         }
-                        case "Piani":{
+                        case "piano":{
                             pianoMng.resetTable();
                             savePiani(ctx);
                         }

@@ -157,7 +157,7 @@ public class RicercaPDI extends AppCompatActivity {
                     Utente user = utenteManager.findByIsLoggato();
                     utenteManager.updateIs_loggato(user ,false);
 
-                    Server.logoutUtente();
+                    Server.logoutUtente(user.getUsername());
 
                     returnBtn = new Intent(getApplicationContext(), Welcome.class);
 
