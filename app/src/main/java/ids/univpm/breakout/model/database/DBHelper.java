@@ -72,7 +72,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
         String q8="CREATE TABLE "+ BeaconStrings.TBL_NAME+
                 " (" + BeaconStrings.FIELD_ID + " INTEGER PRIMARY KEY," +
-                BeaconStrings.FIELD_ADDRESS + "TEXT NOT NULL UNIQUE," +
+                BeaconStrings.FIELD_ADDRESS + " TEXT NOT NULL UNIQUE," +
                 BeaconStrings.FIELD_ID_PDI + " INTEGER," +
                 BeaconStrings.FIELD_ID_MAP +" INTEGER," +
                 BeaconStrings.FIELD_ID_FLOOR +" INTEGER," +

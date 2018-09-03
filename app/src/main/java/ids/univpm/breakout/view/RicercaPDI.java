@@ -34,6 +34,7 @@ public class RicercaPDI extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         MainApplication.setCurrentActivity(this);
@@ -49,7 +50,7 @@ public class RicercaPDI extends AppCompatActivity {
             listaPdiStrings.add(i.getTipo());
         }
 
-        adapter=new ArrayAdapter<>(RicercaPDI.this, android.R.layout.simple_list_item_1, listaPdiStrings);
+        adapter=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listaPdiStrings);
         listaRicerca.setAdapter(adapter);
 
         listaRicerca.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,6 +132,11 @@ public class RicercaPDI extends AppCompatActivity {
             }
         });
 
+        Intent intent = this.getIntent();
+        if(intent.hasExtra("value")){
+            searchView.setQuery(intent.getExtras().getCharSequence("value"), false);
+        }
+
         return true;
         //return super.onCreateOptionsMenu(menu);
     }
@@ -158,6 +164,8 @@ public class RicercaPDI extends AppCompatActivity {
                     utenteManager.updateIs_loggato(user ,false);
 
                     Server.logoutUtente(user.getUsername());
+                    MainApplication.getScanner().suspendScan();
+                    MainApplication.getEmergencyScanner().suspendScan();
 
                     returnBtn = new Intent(getApplicationContext(), Welcome.class);
 
@@ -174,6 +182,12 @@ public class RicercaPDI extends AppCompatActivity {
         //return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        Controller.sendNullPosition();
+    }
 
 
 }

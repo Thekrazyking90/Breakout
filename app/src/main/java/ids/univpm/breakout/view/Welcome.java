@@ -62,8 +62,13 @@ public class Welcome extends AppCompatActivity {
                     UtenteManager utenteMng = new UtenteManager(Welcome.this);
                     Utente user = utenteMng.findByIsLoggato();
 
-                    if (Controller.verificaAutenticazioneUtente(user.getUsername(), user.getPassword()))
-                        startActivity(new Intent(Welcome.this, Navigation1.class));
+                    if (Controller.verificaAutenticazioneUtente(user.getUsername(), user.getPassword())){
+                        Intent intent = new Intent(Welcome.this, Navigation1.class);
+                        intent.putExtra("ID_Activity", "From_Welcome");
+                        intent.putExtra("ID_Mappa", Controller.getIdMappaPosizioneCorrente());
+
+                        startActivity(intent);
+                    }
                     else {
                         Toast.makeText(getApplicationContext(), "Errore nell'autenticazione, riprova", Toast.LENGTH_LONG).show();
                     }
@@ -78,6 +83,13 @@ public class Welcome extends AppCompatActivity {
         //Server.downloadImgMappa("8755576_xl.jpg");
 
         //CODICE DI TEST
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        Controller.sendNullPosition();
     }
 
 }

@@ -133,7 +133,11 @@ public class BeaconManager {
             beacon.setAddress(crs.getString(crs.getColumnIndex(BeaconStrings.FIELD_ADDRESS)));
             beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
             beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
-            beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+            if(crs.isNull(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI))){
+                beacon.setID_pdi(null);
+            }else {
+                beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+            }
             beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
             beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
             beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));

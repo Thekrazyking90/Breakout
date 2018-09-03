@@ -308,23 +308,12 @@ public class BeaconScanner extends StateMachine implements DataListener {
         ArrayList<String> values = new ArrayList<>();
         //create le chiavi per il documento
         keys.add("ID_beacon");
-        keys.add("ID_utente");
-        keys.add("nome");
-        keys.add("cognome");
+        keys.add("username");
 
         //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
         values.add(beacon.getID_beacon().toString());
-        values.add(user.getID_utente().toString());
-        //nel caso in cui l'utente sia loggato vengono messi anche i suoi dati nel messaggio
-        if(user.getIs_logged()==1){
-            values.add(user.getNome());
-            values.add(user.getCognome());
-        }
-        //se l'utente non è loggato vengono aggiunti dati di default al messaggio
-        else {
-            values.add("Guest");
-            values.add("Guest");
-        }
+        values.add(user.getUsername());
+
 
         mex = MessageBuilder.builder(keys,values,keys.size(),0);
         Log.i("mex",mex);

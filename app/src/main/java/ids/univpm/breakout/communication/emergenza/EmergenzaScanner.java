@@ -149,4 +149,18 @@ public class EmergenzaScanner extends StateMachine {
         changeState(next);
         executeState();
     }
+
+    public void suspendScan() {
+        Log.i("SUSPENDEMERGENCYSCAN","suspend scan");
+        running = false;
+
+        //se si sta aspettando per un nuovo scan, viene abortito il processo di attesa
+        //e si passa allo stato successivo (gestione della chiusura dello scan)
+        if(currentState==2) {
+            scanHandler.removeCallbacks(wait);
+            int next = nextState();
+            changeState(next);
+            executeState();
+        }
+    }
 }

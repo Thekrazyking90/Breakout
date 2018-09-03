@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
+import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.model.Beacon;
 import ids.univpm.breakout.model.Mappa;
 import ids.univpm.breakout.model.Modifica;
@@ -39,6 +41,7 @@ import ids.univpm.breakout.model.database.Tronchi.TroncoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
 import ids.univpm.breakout.utility.CamminoMinimo;
 import ids.univpm.breakout.utility.Percorso;
+import ids.univpm.breakout.view.Login;
 import ids.univpm.breakout.view.Navigation1;
 
 import static android.graphics.Color.RED;
@@ -165,7 +168,8 @@ public class Controller {
         if(utente_log!=null && utente_log.getPassword()!=null && utente_log.getPassword().equals(pass)) {
 
             try {
-                if(Server.autenticazioneUtente(user, pass)){
+                String s = Server.autenticazioneUtente(user, pass);
+                if(Boolean.parseBoolean(s)){
                     u_manager.updateIs_loggato(utente_log, true);
 
                     aggiornamentoMappe();
@@ -173,6 +177,7 @@ public class Controller {
                     flag = true;
                 }else{
                     flag = false;
+                    Toast.makeText(MainApplication.getCurrentActivity().getApplicationContext(), s, Toast.LENGTH_LONG).show();
                 }
 
 
@@ -180,9 +185,11 @@ public class Controller {
             } catch (Exception e) {
 
                 e.printStackTrace();
-
+                Toast.makeText(MainApplication.getCurrentActivity().getApplicationContext(), "Invio della richiesta di login fallito", Toast.LENGTH_LONG).show();
                 flag = false;
             }
+        }else{
+            Toast.makeText(MainApplication.getCurrentActivity().getApplicationContext(), "Dati errati", Toast.LENGTH_LONG).show();
         }
 
         return flag;
@@ -265,8 +272,8 @@ public class Controller {
         MappaManager mappaMng = new MappaManager(ctx);
 
         for (HashMap<String, String> record: Mappe) {
-            Integer ID = Integer.getInteger(record.get("ID_mappa"));
-            Integer ID_piano = Integer.getInteger(record.get("ID_piano"));
+            Integer ID = Integer.parseInt(record.get("ID_mappa"));
+            Integer ID_piano = Integer.parseInt(record.get("ID_piano"));
             String img = record.get("immagine");
             String nome = record.get("nome");
 
@@ -282,11 +289,16 @@ public class Controller {
         BeaconManager beaconMng = new BeaconManager(ctx);
 
         for (HashMap<String, String> record: Beacon) {
-            Integer ID = Integer.getInteger(record.get("ID_beacon"));
-            Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
-            Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
+            Integer ID = Integer.parseInt(record.get("ID_beacon"));
+            Integer IDMap = Integer.parseInt(record.get("ID_mappa"));
+            Integer IDPiano = Integer.parseInt(record.get("ID_piano"));
             String address = record.get("address");
-            Integer ID_PDI = Integer.getInteger(record.get("ID_pdi"));
+            Integer ID_PDI;
+            if(record.get("ID_pdi")==null){
+                ID_PDI = null;
+            }else {
+                ID_PDI = Integer.parseInt(record.get("ID_pdi"));
+            }
             Float coordx = Float.parseFloat(record.get("coord_X"));
             Float coordy = Float.parseFloat(record.get("coord_Y"));
             Float fire = Float.parseFloat(record.get("ind_fuoco"));
@@ -304,12 +316,12 @@ public class Controller {
         TroncoManager troncoMng = new TroncoManager(ctx);
 
         for (HashMap<String, String> record: Tronchi) {
-            Integer ID = Integer.getInteger(record.get("ID"));
-            Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
-            Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
-            Integer node1 = Integer.getInteger(record.get("ID_nodo1"));
-            Integer node2 = Integer.getInteger(record.get("ID_nodo2"));
-            Integer beacon = Integer.getInteger(record.get("ID_beacon"));
+            Integer ID = Integer.parseInt(record.get("ID"));
+            Integer IDMap = Integer.parseInt(record.get("ID_mappa"));
+            Integer IDPiano = Integer.parseInt(record.get("ID_piano"));
+            Integer node1 = Integer.parseInt(record.get("ID_nodo1"));
+            Integer node2 = Integer.parseInt(record.get("ID_nodo2"));
+            Integer beacon = Integer.parseInt(record.get("ID_beacon"));
             Float length = Float.parseFloat(record.get("lunghezza"));
 
             troncoMng.save(ID,IDMap, IDPiano, node1,node2,beacon,length);
@@ -322,8 +334,8 @@ public class Controller {
         NodoManager nodoMng = new NodoManager(ctx);
 
         for (HashMap<String, String> record: Nodi) {
-            Integer ID = Integer.getInteger(record.get("ID"));
-            Integer ID_mappa = Integer.getInteger(record.get("ID_mappa"));
+            Integer ID = Integer.parseInt(record.get("ID"));
+            Integer ID_mappa = Integer.parseInt(record.get("ID_mappa"));
             Float coordx = Float.parseFloat(record.get("coord_X"));
             Float coordy = Float.parseFloat(record.get("coord_Y"));
             String code = record.get("codice");
@@ -342,7 +354,7 @@ public class Controller {
         PianoManager pianoMng = new PianoManager(ctx);
 
         for (HashMap<String, String> record: Piani) {
-            Integer ID = Integer.getInteger(record.get("ID_piano"));
+            Integer ID = Integer.parseInt(record.get("ID_piano"));
             String name = record.get("quota");
 
             pianoMng.save(ID, name);
@@ -446,7 +458,8 @@ public class Controller {
                 Percorso.cammino = camminoMinimo.Dijkstra_PDI(Percorso.cammino.get(0), beaconPosizione.getID_pdi());
 
                 Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
-                Navigation1.aggiornaMappa();
+
+                Navigation1.aggiornaMappa(beaconPosizione.getID_map());
             }
         }else{
             TroncoManager troncoManager = new TroncoManager(ctx);
@@ -457,15 +470,75 @@ public class Controller {
                     Percorso.cammino = (ArrayList<Integer>) Percorso.cammino.subList(0, Percorso.cammino.indexOf(arcPosizione.getID()) + 1);
 
                     Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
-                    Navigation1.aggiornaMappa();
+                    Navigation1.aggiornaMappa(beaconPosizione.getID_map());
                 }
             }else{
                 Percorso.cammino = camminoMinimo.Dijkstra_Tronco(Percorso.cammino.get(0), arcPosizione.getID());
 
                 Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
-                Navigation1.aggiornaMappa();
+                Navigation1.aggiornaMappa(beaconPosizione.getID_map());
             }
         }
 
+    }
+
+    public static String getIdMappaPosizioneCorrente(){
+        String ID_map;
+
+        Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
+
+        BeaconManager beaconManager = new BeaconManager(ctx);
+        if(Controller.getPosizioneCorrente(ctx) != null){
+            Beacon beacon_current_position = beaconManager.findById(Controller.getPosizioneCorrente(ctx));
+            if(beacon_current_position.getID_pdi() == null) {
+                TroncoManager troncoManager = new TroncoManager(ctx);
+                Scala tronco = troncoManager.findByIdBeacon(beacon_current_position.getID_beacon());
+
+                NodoManager nodoManager = new NodoManager(ctx);
+                Nodo nodo = nodoManager.findById(tronco.getNodi_Integer()[0]);
+
+                ID_map = nodo.getID_mappa().toString();
+            }else{
+                NodoManager nodoManager = new NodoManager(ctx);
+                Nodo nodo = nodoManager.findById(beacon_current_position.getID_pdi());
+
+                ID_map = nodo.getID_mappa().toString();
+            }
+        }else{
+            ID_map = "null";
+        }
+
+        return ID_map;
+
+
+    }
+
+    public static void sendNullPosition() {
+        UtenteManager utenteManager = new UtenteManager(MainApplication.getCurrentActivity().getApplicationContext());
+        Utente utente = utenteManager.findByIsLoggato();
+        utente.setID_beacon(null);
+
+        String mex;
+        //arraylist delle chiavi per creare il JSON
+        ArrayList<String> keys = new ArrayList<>();
+        //arraylist dei valori per creare il JSON
+        ArrayList<String> values = new ArrayList<>();
+        //create le chiavi per il documento
+        keys.add("username");
+        if(utente.getUsername() != null) {
+            //aggiunti i valori al documento riferiti ai metadati (beacon selezionato, indirizzo ip)
+            values.add(utente.getUsername());
+
+
+            mex = MessageBuilder.builder(keys, values, keys.size(), 0);
+
+            try {
+                Server.sendPosition(mex);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

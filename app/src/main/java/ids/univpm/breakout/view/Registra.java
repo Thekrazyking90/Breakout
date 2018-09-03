@@ -73,7 +73,10 @@ public class Registra extends AppCompatActivity {
                                         0);
 
                                 if(Controller.verificaAutenticazioneUtente(Username.getText().toString(), Password.getText().toString())){
-                                    startActivity(new Intent(Registra.this, Navigation1.class));
+                                    Intent intent = new Intent(Registra.this, Navigation1.class);
+                                    intent.putExtra("ID_Activity", "From_Registra");
+                                    intent.putExtra("ID_Mappa", Controller.getIdMappaPosizioneCorrente());
+                                    startActivity(intent);
                                 }else{
                                     Toast.makeText(getApplicationContext(), "Accesso fallito, riprovare più tardi", Toast.LENGTH_LONG).show();
                                 }
@@ -92,6 +95,12 @@ public class Registra extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        Controller.sendNullPosition();
+    }
 
 
 }

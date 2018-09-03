@@ -27,9 +27,11 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ids.univpm.breakout.R;
 import ids.univpm.breakout.communication.Server;
+import ids.univpm.breakout.communication.message.MessageBuilder;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Beacon;
@@ -90,6 +92,7 @@ public class Navigation1 extends AppCompatActivity {
         //ottiene l'oggetto Intent dall'activity che lo richiama
         Intent intent = this.getIntent();
 
+
         if(MainApplication.getEmergency()) {
             MainApplication.initializeScanner(this,"EMERGENCY");
         }
@@ -97,7 +100,7 @@ public class Navigation1 extends AppCompatActivity {
             MainApplication.initializeScanner(this,"SEARCHING");
         }
 
-        if(intent != null){
+        if(intent.hasExtra("ID_Activity") || intent.hasExtra("ID_Notifica")){
 
             Integer ID_Notifica= intent.getExtras().getInt("ID_Notifica");
             if (ID_Notifica != null) {
@@ -112,12 +115,28 @@ public class Navigation1 extends AppCompatActivity {
             String fromActivity = intent.getExtras().getString("ID_Activity");
 
             switch (fromActivity){
-                case "From_Login":{
+                case "From_Welcome" : {
                     String idMappaString = intent.getExtras().getString("ID_Mappa");
-                    if(idMappaString == "" ){
+                    if(idMappaString.equals("null")){
                         startActivity(new Intent(Navigation1.this, SelPiano.class));
                     }else {
-                        Integer idMappa = Integer.valueOf(idMappaString);
+                        Integer idMappa = Integer.parseInt(idMappaString);
+                        MappaManager mappaManager = new MappaManager(Navigation1.this);
+                        Mappa mappa = mappaManager.findByID(idMappa);
+                        setTitle("Mappa : " + mappa.getNome());
+                        bitmap = disegnoMappa(idMappa);
+                    }
+                    break;
+                }
+                case "From_Login":{
+                    String idMappaString = intent.getExtras().getString("ID_Mappa");
+                    if(idMappaString.equals("null" )){
+                        startActivity(new Intent(Navigation1.this, SelPiano.class));
+                    }else {
+                        Integer idMappa = Integer.parseInt(idMappaString);
+                        MappaManager mappaManager = new MappaManager(Navigation1.this);
+                        Mappa mappa = mappaManager.findByID(idMappa);
+                        setTitle("Mappa : " + mappa.getNome());
                         bitmap = disegnoMappa(idMappa);
                     }
                     break;
@@ -129,8 +148,24 @@ public class Navigation1 extends AppCompatActivity {
                 // ma di 145 e 155 lascerei la visualizzazione così
                 case "From_SelPiano":{
                     Integer idMappa = intent.getExtras().getInt("ID_Mappa");
-
+                    MappaManager mappaManager = new MappaManager(Navigation1.this);
+                    Mappa mappa = mappaManager.findByID(idMappa);
+                    setTitle("Mappa : " + mappa.getNome());
                     bitmap = disegnoMappa(idMappa);
+                    break;
+                }
+                case "From_Registra":{
+                    String idMappaString = intent.getExtras().getString("ID_Mappa");
+                    if(idMappaString.equals("null")){
+                        startActivity(new Intent(Navigation1.this, SelPiano.class));
+                    }else {
+                        Integer idMappa = Integer.parseInt(idMappaString);
+                        MappaManager mappaManager = new MappaManager(Navigation1.this);
+                        Mappa mappa = mappaManager.findByID(idMappa);
+                        setTitle("Mappa : " + mappa.getNome());
+                        bitmap = disegnoMappa(idMappa);
+                    }
+
                     break;
                 }
                 case "From_RicercaPDI": {
@@ -152,7 +187,9 @@ public class Navigation1 extends AppCompatActivity {
 
                             Percorso.setGestionePercorso(true);
                             Percorso.cammino = percorso;
-
+                            MappaManager mappaManager = new MappaManager(Navigation1.this);
+                            Mappa mappa = mappaManager.findByID(idMappa);
+                            setTitle("Mappa : " + mappa.getNome());
                             bitmap = disegnoMappa(idMappa);
                         } else {
                             CamminoMinimo camminoMinimo = new CamminoMinimo(Navigation1.this);
@@ -160,12 +197,16 @@ public class Navigation1 extends AppCompatActivity {
 
                             Percorso.setGestionePercorso(true);
                             Percorso.cammino = percorso;
-
+                            MappaManager mappaManager = new MappaManager(Navigation1.this);
+                            Mappa mappa = mappaManager.findByID(idMappa);
+                            setTitle("Mappa : " + mappa.getNome());
                             bitmap = disegnoMappa(idMappa);
                         }
 
                     } else {
-
+                        MappaManager mappaManager = new MappaManager(Navigation1.this);
+                        Mappa mappa = mappaManager.findByID(idMappa);
+                        setTitle("Mappa : " + mappa.getNome());
                         bitmap = disegnoMappa(idMappa);
                     }
                     break;
@@ -182,17 +223,25 @@ public class Navigation1 extends AppCompatActivity {
 
     }
 
-    public static void aggiornaMappa(){
+    public static void aggiornaMappa(Integer idMappa){
         Activity activity = MainApplication.getCurrentActivity();
 
-        SubsamplingScaleImageView imageView = activity.findViewById(R.id.immagine);
-        imageView.setImage(ImageSource.bitmap(bitmap));
+        if(activity.getTitle().toString().contains("Mappa")){
+            MappaManager mappaManager = new MappaManager(activity.getApplicationContext());
+            Mappa mappa = mappaManager.findByID(idMappa);
+            activity.setTitle("Mappa : " + mappa.getNome());
+
+            SubsamplingScaleImageView imageView = activity.findViewById(R.id.immagine);
+            imageView.setImage(ImageSource.bitmap(bitmap));
+        }
     }
 
     public static Bitmap disegnoMappa(Integer idMap) {
         Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
         MappaManager mappaManager = new MappaManager(ctx);
         Mappa mappa = mappaManager.findByID(idMap);
+
+
 
         //Preparazione Bitmap
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -283,13 +332,14 @@ public class Navigation1 extends AppCompatActivity {
         if(idSelectedPdi != null) {
             Pdi pdi = nodoManager.findPdiByID(idSelectedPdi);
             Bitmap flag_pic = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.flag, opt);
-            Bitmap flag = Bitmap.createScaledBitmap(flag_pic, flag_pic.getWidth() / 11, flag_pic.getHeight() / 11, true);
+            Bitmap flag = Bitmap.createScaledBitmap(flag_pic, flag_pic.getWidth() / 18, flag_pic.getHeight() / 18, true);
 
             int flag_x = (int) pdi.getCoord_X() * 115/18;
             int flag_y = (int) pdi.getCoord_Y() * 115/18;
 
-            canvas.drawBitmap(flag, flag_x - (flag.getWidth() / 2), flag_y - (flag.getHeight()), null);
+            canvas.drawBitmap(flag, flag_x, flag_y - (flag.getHeight() * 2), null);
         }
+
 
         return bitmapDisegnata;
     }
@@ -316,8 +366,9 @@ public class Navigation1 extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                startActivity(new Intent(Navigation1.this, RicercaPDI.class));
+                Intent intent = new Intent(Navigation1.this, RicercaPDI.class);
+                intent.putExtra("value" , query);
+                startActivity(intent);
 
                 return false;
             }
@@ -372,8 +423,8 @@ public class Navigation1 extends AppCompatActivity {
                 break;
 
         }
+
         return false;
-        //return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -384,12 +435,26 @@ public class Navigation1 extends AppCompatActivity {
 
             if (backpress>1) {
                 MainApplication.getScanner().suspendScan();
+                MainApplication.getEmergencyScanner().suspendScan();
+
+                UtenteManager utenteManager = new UtenteManager(Navigation1.this);
+                if(utenteManager.AnyIsLoggato()) {
+                    Utente user = utenteManager.findByIsLoggato();
+                    Server.logoutUtente(user.getUsername());
+                }
                 MainApplication.getCurrentActivity().moveTaskToBack(true);
             }
         }
         else {
             Toast.makeText(getApplicationContext(), " C'è un'emergenza in corso ", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        Controller.sendNullPosition();
     }
 }
 

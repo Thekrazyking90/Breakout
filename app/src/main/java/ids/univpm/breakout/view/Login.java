@@ -64,11 +64,9 @@ public class Login extends AppCompatActivity {
                 if(Controller.verificaAutenticazioneUtente(user, pass)){
                     Intent intent = new Intent(Login.this, Navigation1.class);
                     intent.putExtra("ID_Activity", "From_Login");
-                    intent.putExtra("ID_Mappa", getIdMappaPosizioneCorrente());
+                    intent.putExtra("ID_Mappa", Controller.getIdMappaPosizioneCorrente());
 
                     startActivity(intent);
-                }else{
-                    mErroreDati.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -76,33 +74,12 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public String getIdMappaPosizioneCorrente(){
-        String ID_map;
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
 
-        BeaconManager beaconManager = new BeaconManager(Login.this);
-        if(Controller.getPosizioneCorrente(Login.this) != null){
-            Beacon beacon_current_position = beaconManager.findById(Controller.getPosizioneCorrente(Login.this));
-            if(beacon_current_position.getID_pdi() == null) {
-                TroncoManager troncoManager = new TroncoManager(Login.this);
-                Scala tronco = troncoManager.findByIdBeacon(beacon_current_position.getID_beacon());
-
-                NodoManager nodoManager = new NodoManager(Login.this);
-                Nodo nodo = nodoManager.findById(tronco.getNodi_Integer()[0]);
-
-                ID_map = nodo.getID_mappa().toString();
-            }else{
-                NodoManager nodoManager = new NodoManager(Login.this);
-                Nodo nodo = nodoManager.findById(beacon_current_position.getID_pdi());
-
-                ID_map = nodo.getID_mappa().toString();
-            }
-        }else{
-            ID_map = "";
-        }
-
-        return ID_map;
-
-
+        Controller.sendNullPosition();
     }
+
 }
 

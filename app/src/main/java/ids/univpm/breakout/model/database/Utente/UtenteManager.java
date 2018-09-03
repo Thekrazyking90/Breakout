@@ -110,13 +110,18 @@ public class UtenteManager {
         }
 
         if(crs.moveToFirst()) {
+
             utente.setID_utente(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID)));
             utente.setNome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_NAME)));
             utente.setCognome(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_SURNAME)));
             utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
             utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
             utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-            utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            if(crs.isNull(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON))){
+                utente.setID_beacon(null);
+            }else {
+                utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            }
             utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
         }
         crs.close();
@@ -145,7 +150,11 @@ public class UtenteManager {
             utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
             utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
             utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-            utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            if(crs.isNull(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON))){
+                utente.setID_beacon(null);
+            }else {
+                utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            }
             utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
         }
         crs.close();
@@ -174,7 +183,11 @@ public class UtenteManager {
             utente.setEmail(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_EMAIL)));
             utente.setIs_logged(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_IS_LOGGED)));
             utente.setPassword(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_PSW)));
-            utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            if(crs.isNull(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON))){
+                utente.setID_beacon(null);
+            }else {
+                utente.setID_beacon(crs.getInt(crs.getColumnIndex(UtenteStrings.FIELD_ID_BEACON)));
+            }
             utente.setUsername(crs.getString(crs.getColumnIndex(UtenteStrings.FIELD_USER)));
         }
         crs.close();

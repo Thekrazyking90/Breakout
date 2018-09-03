@@ -1,8 +1,6 @@
 package ids.univpm.breakout.communication;
 
 
-import android.annotation.SuppressLint;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -19,9 +17,8 @@ import ids.univpm.breakout.communication.message.MessageParser;
 
 public class Server {
 
-    private static String ip = "192.168.1.81"; //ip del server
+    private static String ip = "192.168.1.9"; //ip del server
     private static String hostMaster = "Breakout_server"; //= hostname;
-    private static SQLiteDatabase db;
 
     public static boolean handShake() {
         boolean b;
@@ -35,17 +32,7 @@ public class Server {
         return b;
     }
 
-    private static final ArrayList<String> userProfileKeys = new ArrayList<String>(){{
-        add("ID_utente");
-        add("username");
-        add("email");
-        add("password");
-        add("nome");
-        add("cognome");
-        add("ultima_pos");
-    }};
-
-    public static boolean autenticazioneUtente(String user, String pw) throws ExecutionException, InterruptedException {
+    public static String autenticazioneUtente(String user, String pw) {
         ArrayList<String> name = new ArrayList<>();
         ArrayList<String> value = new ArrayList<>();
 
@@ -55,20 +42,19 @@ public class Server {
         value.add(user);
         value.add(pw);
 
-        String mex = MessageBuilder.builder(name,value,value.size(),0);//dopo la richiesta post io devo far processare il risultato ottenendo un json object e prendere il valore booleano (restituito dal db server)di tale object e metterlo nell if
+        String mex = MessageBuilder.builder(name,value,value.size(),0);
 
-        boolean flag;
+        String s;
 
         try{
-            String s = new PostRequest().execute(ip,"resources/user/login",mex).get();
+            s = new PostRequest().execute(ip,"resources/user/login",mex).get();
             Log.i("s",s);
-            flag = Boolean.parseBoolean(s);
         }catch (Exception e){
-            flag = false;
+            s = "Invio della richiesta di login fallito";
         }
 
 
-        return flag;
+        return s;
     }
 
     public static boolean registrazioneUtente(String username,

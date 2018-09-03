@@ -123,4 +123,11 @@ public class SelPiano extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        Controller.sendNullPosition();
+    }
+
 }

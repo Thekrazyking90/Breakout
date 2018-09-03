@@ -92,8 +92,18 @@ public class NodoManager{
     }
 
     public ArrayList<Pdi> findAllPdi() {
+        Cursor crs;
         ArrayList<Pdi> listaPdi = new ArrayList<>();
-        Cursor crs = query();
+        try
+        {
+            SQLiteDatabase db= dbHelper.getReadableDatabase();
+            crs=db.query(NodoStrings.TBL_NAME, null, NodoStrings.FIELD_TYPE+ " is not null", null, null, null, null, null);
+        }
+        catch(SQLiteException sqle)
+        {
+            return null;
+        }
+
         for(crs.moveToFirst(); !crs.isAfterLast(); crs.moveToNext()) {
             Pdi pdi = findPdiByID(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
             listaPdi.add(pdi);

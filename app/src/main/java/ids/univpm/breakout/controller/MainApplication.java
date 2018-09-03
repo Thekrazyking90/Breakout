@@ -35,7 +35,11 @@ public class MainApplication {
 
     private static EmergenzaScanner emergencyScanner;
 
-        //identifica la home
+    public static EmergenzaScanner getEmergencyScanner() {
+        return emergencyScanner;
+    }
+
+    //identifica la home
     private static Activity activity;
 
         //identifica l'activity corrente dell'app
