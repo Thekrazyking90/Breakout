@@ -54,6 +54,7 @@ public class ModificheManager {
         {
             flag = false;
         }
+        db.close();
 
         return flag;
     }

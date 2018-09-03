@@ -2,6 +2,7 @@ package ids.univpm.breakout.view;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,7 +13,9 @@ import ids.univpm.breakout.R;
 import ids.univpm.breakout.controller.Controller;
 import ids.univpm.breakout.controller.MainApplication;
 import ids.univpm.breakout.model.Utente;
+import ids.univpm.breakout.model.database.DBHelper;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.model.database.Utente.UtenteStrings;
 
 public class Welcome extends AppCompatActivity {
 
@@ -23,7 +26,13 @@ public class Welcome extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainApplication.setCurrentActivity(this);
+
+        if(!Controller.checkMappe(Welcome.this)) {
+            UtenteManager utenteManager = new UtenteManager(Welcome.this);
+            utenteManager.save(null,"guest@guest.com","guest","guest","guest","guest",0);
+        }
+
+            MainApplication.setCurrentActivity(this);
 
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
@@ -50,7 +59,7 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Controller.checkLog(Welcome.this)==1){
-                    UtenteManager utenteMng = new UtenteManager(getApplicationContext());
+                    UtenteManager utenteMng = new UtenteManager(Welcome.this);
                     Utente user = utenteMng.findByIsLoggato();
 
                     if (Controller.verificaAutenticazioneUtente(user.getUsername(), user.getPassword()))

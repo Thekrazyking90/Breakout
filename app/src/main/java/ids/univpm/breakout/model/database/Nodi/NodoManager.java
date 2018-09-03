@@ -58,6 +58,8 @@ public class NodoManager{
         {
             // Gestione delle eccezioni
         }
+        db.close();
+
     }
 
     public boolean deleteByID(Integer id)
@@ -113,18 +115,18 @@ public class NodoManager{
             return null;
         }
 
-        crs.moveToFirst();
-        pdi.setID(id_pdi);
-        pdi.setBeacon_Integer(getBeacons_Integer(id_pdi));
-        pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
-        pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
-        pdi.setTronchi_stella_Integer(getStar_Integer(id_pdi));
-        pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
-        pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
-        pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
-        pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
-        pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
-
+        if(crs.moveToFirst()) {
+            pdi.setID(id_pdi);
+            pdi.setBeacon_Integer(getBeacons_Integer(id_pdi));
+            pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
+            pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
+            pdi.setTronchi_stella_Integer(getStar_Integer(id_pdi));
+            pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
+            pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
+            pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
+            pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
+            pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+        }
         crs.close();
 
         return pdi;
@@ -176,15 +178,15 @@ public class NodoManager{
             return null;
         }
 
-        crs.moveToFirst();
-        nodo.setID(id);
-        nodo.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
-        nodo.setTronchi_stella_Integer(getStar_Integer(id));
-        nodo.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
-        nodo.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
-        nodo.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
-        nodo.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
-
+        if(crs.moveToFirst()) {
+            nodo.setID(id);
+            nodo.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
+            nodo.setTronchi_stella_Integer(getStar_Integer(id));
+            nodo.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
+            nodo.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
+            nodo.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
+            nodo.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+        }
         crs.close();
 
         return nodo;
@@ -253,18 +255,18 @@ public class NodoManager{
             return null;
         }
 
-        crs.moveToFirst();
-        pdi.setID(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
-        pdi.setBeacon_Integer(getBeacons_Integer(pdi.getID()));
-        pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
-        pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
-        pdi.setTronchi_stella_Integer(getStar_Integer(pdi.getID()));
-        pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
-        pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
-        pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
-        pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
-        pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
-
+        if(crs.moveToFirst()) {
+            pdi.setID(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID)));
+            pdi.setBeacon_Integer(getBeacons_Integer(pdi.getID()));
+            pdi.setLunghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_LENGTH)));
+            pdi.setLarghezza(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_WIDTH)));
+            pdi.setTronchi_stella_Integer(getStar_Integer(pdi.getID()));
+            pdi.setTipo(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_TYPE)));
+            pdi.setCodice(crs.getString(crs.getColumnIndex(NodoStrings.FIELD_CODE)));
+            pdi.setCoord_X(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_X)));
+            pdi.setCoord_Y(crs.getFloat(crs.getColumnIndex(NodoStrings.FIELD_COORD_Y)));
+            pdi.setID_mappa(crs.getInt(crs.getColumnIndex(NodoStrings.FIELD_ID_MAPPA)));
+        }
         crs.close();
 
         return pdi;

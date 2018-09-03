@@ -55,6 +55,7 @@ public class BeaconManager {
             {
                 // Gestione delle eccezioni
             }
+            db.close();
         }
 
         public boolean deleteByID(Integer id)
@@ -127,19 +128,19 @@ public class BeaconManager {
             return null;
         }
 
-        crs.moveToFirst();
-        beacon.setID_beacon(id);
-        beacon.setAddress(crs.getString(crs.getColumnIndex(BeaconStrings.FIELD_ADDRESS)));
-        beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
-        beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
-        beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
-        beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
-        beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
-        beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
-        beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
-        beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
-        beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
-
+        if(crs.moveToFirst()) {
+            beacon.setID_beacon(id);
+            beacon.setAddress(crs.getString(crs.getColumnIndex(BeaconStrings.FIELD_ADDRESS)));
+            beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
+            beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
+            beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+            beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
+            beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
+            beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
+            beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
+            beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
+            beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
+        }
         crs.close();
 
         return beacon;
@@ -196,19 +197,19 @@ public class BeaconManager {
             return null;
         }
 
-        crs.moveToFirst();
-        beacon.setID_beacon(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
-        beacon.setAddress(address);
-        beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
-        beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
-        beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
-        beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
-        beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
-        beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
-        beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
-        beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
-        beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
-
+        if(crs.moveToFirst()) {
+            beacon.setID_beacon(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID)));
+            beacon.setAddress(address);
+            beacon.setCoord_X(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_X)));
+            beacon.setCoord_Y(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_COORD_Y)));
+            beacon.setID_pdi(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_PDI)));
+            beacon.setID_map(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_MAP)));
+            beacon.setID_floor(crs.getInt(crs.getColumnIndex(BeaconStrings.FIELD_ID_FLOOR)));
+            beacon.setInd_fumi(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_SMOKE)));
+            beacon.setInd_fuoco(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_FIRE)));
+            beacon.setInd_rischio(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_RISK)));
+            beacon.setInd_NCD(crs.getFloat(crs.getColumnIndex(BeaconStrings.FIELD_NCD)));
+        }
         crs.close();
 
         return beacon;

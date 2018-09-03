@@ -19,7 +19,7 @@ import ids.univpm.breakout.communication.message.MessageParser;
 
 public class Server {
 
-    private static String ip = "192.168.1.65"; //ip del server
+    private static String ip = "192.168.1.81"; //ip del server
     private static String hostMaster = "Breakout_server"; //= hostname;
     private static SQLiteDatabase db;
 
@@ -166,9 +166,8 @@ public class Server {
         ArrayList<String> keys = new ArrayList<>();
 
         keys.add("ID");
-        //keys.add("nodo1");
-        //keys.add("nodo2");
-        keys.add("nodi_int");
+        keys.add("ID_nodo1");
+        keys.add("ID_nodo2");
         keys.add("ID_beacon");
         keys.add("lunghezza");
         keys.add("ID_mappa");

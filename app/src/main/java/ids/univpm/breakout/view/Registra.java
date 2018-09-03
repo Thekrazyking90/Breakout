@@ -52,33 +52,37 @@ public class Registra extends AppCompatActivity {
 
                     if(!Password.getText().toString().equals(PassCheck.getText().toString())){
                         Toast.makeText(getApplicationContext(), "Le password non corrispondono", Toast.LENGTH_LONG).show();
-                    }else if(Server.checkUsername(Username.getText().toString())){
-                        Toast.makeText(getApplicationContext(), "Username già in uso", Toast.LENGTH_LONG).show();
-                    }else{
-                        if(Server.registrazioneUtente(Username.getText().toString(),
-                                Password.getText().toString(),
-                                Email.getText().toString(),
-                                Nome.getText().toString(),
-                                Cognome.getText().toString())){
-                            Toast.makeText(getApplicationContext(), "Registrazione avvenuta con successo", Toast.LENGTH_LONG).show();
-
-                            UtenteManager utenteManager = new UtenteManager(Registra.this);
-                            utenteManager.save(null,
+                    }else if(Server.handShake()){
+                        if(Server.checkUsername(Username.getText().toString())){
+                            Toast.makeText(getApplicationContext(), "Username già in uso", Toast.LENGTH_LONG).show();
+                        }else{
+                            if(Server.registrazioneUtente(Username.getText().toString(),
+                                    Password.getText().toString(),
                                     Email.getText().toString(),
                                     Nome.getText().toString(),
-                                    Password.getText().toString(),
-                                    Cognome.getText().toString(),
-                                    Username.getText().toString(),
-                                    0);
+                                    Cognome.getText().toString())){
+                                Toast.makeText(getApplicationContext(), "Registrazione avvenuta con successo", Toast.LENGTH_LONG).show();
 
-                            if(Controller.verificaAutenticazioneUtente(Username.getText().toString(), Password.getText().toString())){
-                                startActivity(new Intent(Registra.this, Navigation1.class));
-                            }else{
-                                Toast.makeText(getApplicationContext(), "Accesso fallito, riprovare più tardi", Toast.LENGTH_LONG).show();
+                                UtenteManager utenteManager = new UtenteManager(Registra.this);
+                                utenteManager.save(null,
+                                        Email.getText().toString(),
+                                        Nome.getText().toString(),
+                                        Password.getText().toString(),
+                                        Cognome.getText().toString(),
+                                        Username.getText().toString(),
+                                        0);
+
+                                if(Controller.verificaAutenticazioneUtente(Username.getText().toString(), Password.getText().toString())){
+                                    startActivity(new Intent(Registra.this, Navigation1.class));
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Accesso fallito, riprovare più tardi", Toast.LENGTH_LONG).show();
+                                }
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Registrazione fallita", Toast.LENGTH_LONG).show();
                             }
-                        }else {
-                            Toast.makeText(getApplicationContext(), "Registrazione fallita", Toast.LENGTH_LONG).show();
                         }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Non sei connesso alla rete, connettiti o riprova più tardi", Toast.LENGTH_LONG).show();
                     }
 
                 }else{

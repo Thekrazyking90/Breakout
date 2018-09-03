@@ -70,13 +70,15 @@ public class MainApplication {
             //registrato il receiver
         //activity.getBaseContext().registerReceiver(broadcastReceiver,intentFilter);
 
-        initializeEmergencyScanner(activity);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             //attivazione del bluetooth (qualora non sia già funzionante)
         if(!controlBluetooth()) activateBluetooth();
             //creazione dello scanner
-        if(mBluetoothAdapter!=null) initializeScanner(activity);
+        if(mBluetoothAdapter!=null){
+            initializeScanner(activity);
+            initializeEmergencyScanner(activity);
+        }
             //inizializzata la struttura dati legata all'utente
 //TODO studiare e modificare        UserHandler.init();
             //creata struttura dati legata ai beacon nell'edificio, leggendo dal file salvato in memoria intera

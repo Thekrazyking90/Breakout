@@ -25,7 +25,7 @@ public class DownloadFileFromURL extends AsyncTask<String, String, String> {
     protected String doInBackground(String... f_url) {
         int count;
         try {
-            URL url = new URL("http://" + f_url[0] + ":" + PORT + "/immagini/" + f_url[1]);
+            URL url = new URL("http://" + f_url[0] + ":" + PORT + "/" + SERVER_ID + "/images/" + f_url[1]);
             URLConnection connection = url.openConnection();
             connection.connect();
 
@@ -35,7 +35,7 @@ public class DownloadFileFromURL extends AsyncTask<String, String, String> {
                     8192);
 
             //creazione directory
-            File directory = new File(Environment.getExternalStorageDirectory()+ File.separator+"Breakout/ImmaginiMappe");
+            File directory = new File(Environment.getExternalStorageDirectory() + "/Breakout/ImmaginiMappe");
 
             if(!directory.isDirectory())
                 directory.mkdirs();
@@ -62,7 +62,7 @@ public class DownloadFileFromURL extends AsyncTask<String, String, String> {
             output.close();
             input.close();
 
-            Log.e("url", "http://" + f_url[0] + ":" + PORT + "/images/" + f_url[1]);
+            Log.e("url", "http://" + f_url[0] + ":" + PORT + "/" + SERVER_ID + "/images/" + f_url[1]);
 
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());

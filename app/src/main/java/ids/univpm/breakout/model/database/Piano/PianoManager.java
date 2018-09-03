@@ -43,6 +43,8 @@ public class PianoManager {
         {
             // Gestione delle eccezioni
         }
+        db.close();
+
     }
 
     public boolean deleteByID(Integer id)

@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -151,7 +152,7 @@ public class Controller {
         Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
 
         UtenteManager u_manager= new UtenteManager(ctx);
-        Utente utente_log=u_manager.findByUser(user);
+        Utente utente_log = u_manager.findByUser(user);
 
         ArrayList<Utente> listaUtenti = u_manager.findAll();
 
@@ -161,20 +162,25 @@ public class Controller {
 
         boolean flag = false;
 
-        if(utente_log!=null && utente_log.getPassword().equals(pass)) {
-            flag = true;
+        if(utente_log!=null && utente_log.getPassword()!=null && utente_log.getPassword().equals(pass)) {
+
             try {
-                Server.autenticazioneUtente(user, pass);
+                if(Server.autenticazioneUtente(user, pass)){
+                    u_manager.updateIs_loggato(utente_log, true);
 
-                u_manager.updateIs_loggato(utente_log, true);
+                    aggiornamentoMappe();
 
-                aggiornamentoMappe();
+                    flag = true;
+                }else{
+                    flag = false;
+                }
+
+
 
             } catch (Exception e) {
-                //gestire eccezioni
+
                 e.printStackTrace();
-                //TODO comunicazione "dati errati"
-                u_manager.updateIs_loggato(utente_log, false);
+
                 flag = false;
             }
         }
@@ -204,29 +210,33 @@ public class Controller {
                 NodoManager nodoMng = new NodoManager(ctx);
                 PianoManager pianoMng = new PianoManager(ctx);
 
-                //TODO rivedere nomi tabelle
                 for (HashMap<String, String> modifica: listaModHash) {
                     switch (modifica.get("tabella")){
                         case "mappa":{
                             mappaMng.resetTable();
                             saveMappe(ctx);
                             downloadAllImgMappa(mappaMng.findAll());
+                            break;
                         }
                         case "beacon":{
                             beaconMng.resetTable();
                             saveBeacon(ctx);
+                            break;
                         }
                         case "tronco":{
                             troncoMng.resetTable();
                             saveTronchi(ctx);
+                            break;
                         }
                         case "nodo":{
                             nodoMng.resetTable();
                             saveNodi(ctx);
+                            break;
                         }
                         case "piano":{
                             pianoMng.resetTable();
                             savePiani(ctx);
+                            break;
                         }
                     }
 
@@ -255,7 +265,7 @@ public class Controller {
         MappaManager mappaMng = new MappaManager(ctx);
 
         for (HashMap<String, String> record: Mappe) {
-            Integer ID = Integer.getInteger(record.get("ID"));
+            Integer ID = Integer.getInteger(record.get("ID_mappa"));
             Integer ID_piano = Integer.getInteger(record.get("ID_piano"));
             String img = record.get("immagine");
             String nome = record.get("nome");
@@ -272,17 +282,17 @@ public class Controller {
         BeaconManager beaconMng = new BeaconManager(ctx);
 
         for (HashMap<String, String> record: Beacon) {
-            Integer ID = Integer.getInteger(record.get("ID"));
+            Integer ID = Integer.getInteger(record.get("ID_beacon"));
             Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
             Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
             String address = record.get("address");
-            Integer ID_PDI = Integer.getInteger(record.get("ID_PDI"));
-            Float coordx = Float.valueOf(record.get("coordX"));
-            Float coordy = Float.valueOf(record.get("coordY"));
-            Float fire = Float.valueOf(record.get("fire"));
-            Float smoke = Float.valueOf(record.get("smoke"));
-            Float ncd = Float.valueOf(record.get("NCD"));
-            Float risk = Float.valueOf(record.get("risk"));
+            Integer ID_PDI = Integer.getInteger(record.get("ID_pdi"));
+            Float coordx = Float.parseFloat(record.get("coord_X"));
+            Float coordy = Float.parseFloat(record.get("coord_Y"));
+            Float fire = Float.parseFloat(record.get("ind_fuoco"));
+            Float smoke = Float.parseFloat(record.get("ind_fumi"));
+            Float ncd = Float.parseFloat(record.get("ind_NCD"));
+            Float risk = Float.parseFloat(record.get("ind_rischio"));
 
             beaconMng.save(ID, IDMap, IDPiano, address, ID_PDI, coordx, coordy, fire, smoke, ncd, risk);
         }
@@ -297,10 +307,10 @@ public class Controller {
             Integer ID = Integer.getInteger(record.get("ID"));
             Integer IDMap = Integer.getInteger(record.get("ID_mappa"));
             Integer IDPiano = Integer.getInteger(record.get("ID_piano"));
-            Integer node1 = Integer.getInteger(record.get("nodo1"));
-            Integer node2 = Integer.getInteger(record.get("nodo2"));
-            Integer beacon = Integer.getInteger(record.get("beacon"));
-            Float length = Float.valueOf(record.get("lunghezza"));
+            Integer node1 = Integer.getInteger(record.get("ID_nodo1"));
+            Integer node2 = Integer.getInteger(record.get("ID_nodo2"));
+            Integer beacon = Integer.getInteger(record.get("ID_beacon"));
+            Float length = Float.parseFloat(record.get("lunghezza"));
 
             troncoMng.save(ID,IDMap, IDPiano, node1,node2,beacon,length);
         }
@@ -314,12 +324,12 @@ public class Controller {
         for (HashMap<String, String> record: Nodi) {
             Integer ID = Integer.getInteger(record.get("ID"));
             Integer ID_mappa = Integer.getInteger(record.get("ID_mappa"));
-            Float coordx = Float.valueOf(record.get("coordX"));
-            Float coordy = Float.valueOf(record.get("coordY"));
+            Float coordx = Float.parseFloat(record.get("coord_X"));
+            Float coordy = Float.parseFloat(record.get("coord_Y"));
             String code = record.get("codice");
-            Float width = Float.valueOf(record.get("larghezza"));
-            Float length = Float.valueOf(record.get("lunghezza"));
-            Boolean is_pdi = Boolean.parseBoolean(record.get("is_pdi"));
+            Float width = Float.parseFloat(record.get("larghezza"));
+            Float length = Float.parseFloat(record.get("lunghezza"));
+            Boolean is_pdi = Boolean.parseBoolean(record.get("isPdi"));
             String type = record.get("tipo");
 
             nodoMng.save(ID,ID_mappa,coordx,coordy,code,width,length,is_pdi,type);
@@ -332,8 +342,8 @@ public class Controller {
         PianoManager pianoMng = new PianoManager(ctx);
 
         for (HashMap<String, String> record: Piani) {
-            Integer ID = Integer.getInteger(record.get("ID"));
-            String name = record.get("nome");
+            Integer ID = Integer.getInteger(record.get("ID_piano"));
+            String name = record.get("quota");
 
             pianoMng.save(ID, name);
         }
@@ -374,36 +384,38 @@ public class Controller {
 
     public static Pdi findNearestExit(Context ctx){
         BeaconManager beaconManager = new BeaconManager(ctx);
-        Beacon beaconPosizione = beaconManager.findById(Controller.getPosizioneCorrente(ctx));
-        Integer idMap = beaconPosizione.getID_map();
-        NodoManager nodoManager = new NodoManager(ctx);
-        ArrayList<Pdi> listaPdi = nodoManager.findAllPdi();
+        Pdi uscitaVicina = new Pdi();
 
-        ArrayList<Pdi> listaUsciteVicine = new ArrayList<>();
-        for (Pdi pdi: listaPdi) {
-            if(pdi.getTipo().contains("emergen") && pdi.getID_mappa()==idMap){
-                listaUsciteVicine.add(pdi);
+        if(Controller.getPosizioneCorrente(ctx) != null) {
+            Beacon beaconPosizione = beaconManager.findById(Controller.getPosizioneCorrente(ctx));
+            Integer idMap = beaconPosizione.getID_map();
+            NodoManager nodoManager = new NodoManager(ctx);
+            ArrayList<Pdi> listaPdi = nodoManager.findAllPdi();
+
+            ArrayList<Pdi> listaUsciteVicine = new ArrayList<>();
+            for (Pdi pdi : listaPdi) {
+                if (pdi.getTipo().contains("emergen") && pdi.getID_mappa() == idMap) {
+                    listaUsciteVicine.add(pdi);
+                }
             }
-        }
 
-        Pdi uscitaVicina = null;
 
-        for (Pdi uscita: listaUsciteVicine) {
-            if(uscitaVicina != null){
-                Double distUscita;
-                Double distUscitaVicina;
-                distUscita = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscita.getCoord_X()), (double) 2) +
-                        Math.pow((double) (beaconPosizione.getCoord_Y() - uscita.getCoord_Y()), (double) 2));
-                distUscitaVicina = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscitaVicina.getCoord_X()), (double) 2) +
-                        Math.pow((double) (beaconPosizione.getCoord_Y() - uscitaVicina.getCoord_Y()), (double) 2));
-                if(distUscita < distUscitaVicina){
+            for (Pdi uscita : listaUsciteVicine) {
+                if (uscitaVicina != null) {
+                    Double distUscita;
+                    Double distUscitaVicina;
+                    distUscita = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscita.getCoord_X()), (double) 2) +
+                            Math.pow((double) (beaconPosizione.getCoord_Y() - uscita.getCoord_Y()), (double) 2));
+                    distUscitaVicina = Math.sqrt(Math.pow((double) (beaconPosizione.getCoord_X() - uscitaVicina.getCoord_X()), (double) 2) +
+                            Math.pow((double) (beaconPosizione.getCoord_Y() - uscitaVicina.getCoord_Y()), (double) 2));
+                    if (distUscita < distUscitaVicina) {
+                        uscitaVicina = uscita;
+                    }
+                } else {
                     uscitaVicina = uscita;
                 }
-            }else{
-                uscitaVicina = uscita;
             }
         }
-
         return uscitaVicina;
     }
 

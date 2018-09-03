@@ -56,6 +56,8 @@ public class TroncoManager {
         {
             // Gestione delle eccezioni
         }
+        db.close();
+
     }
 
     public boolean deleteByID(Integer id)
@@ -133,23 +135,23 @@ public class TroncoManager {
             return null;
         }
 
-        crs.moveToFirst();
-        arc.setID(arcId);
-        arc.setBeacon(getBeacon(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_BEACON))));
-        arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
-        arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
+        if(crs.moveToFirst()) {
+            arc.setID(arcId);
+            arc.setBeacon(getBeacon(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_BEACON))));
+            arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
+            arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
 
-        arc.setLarghezza_media(context);
+            arc.setLarghezza_media(context);
 
-        arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
+            arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
 
-        arc.setCosto_totale_normalizzato();
+            arc.setCosto_totale_normalizzato();
 
-        Integer[] nodes = new Integer[2];
-        nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
-        nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
-        arc.setNodi_Integer(nodes);
-
+            Integer[] nodes = new Integer[2];
+            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+            arc.setNodi_Integer(nodes);
+        }
         crs.close();
 
         return arc;
@@ -191,23 +193,23 @@ public class TroncoManager {
             return null;
         }
 
-        crs.moveToFirst();
-        arc.setID(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID)));
-        arc.setBeacon(getBeacon(id_beacon));
-        arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
-        arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
+        if(crs.moveToFirst()) {
+            arc.setID(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID)));
+            arc.setBeacon(getBeacon(id_beacon));
+            arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
+            arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
 
-        arc.setLarghezza_media(context);
+            arc.setLarghezza_media(context);
 
-        arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
+            arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
 
-        arc.setCosto_totale_normalizzato();
+            arc.setCosto_totale_normalizzato();
 
-        Integer[] nodes = new Integer[2];
-        nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
-        nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
-        arc.setNodi_Integer(nodes);
-
+            Integer[] nodes = new Integer[2];
+            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+            arc.setNodi_Integer(nodes);
+        }
         crs.close();
 
         return arc;

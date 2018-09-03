@@ -120,6 +120,7 @@ public class Navigation1 extends AppCompatActivity {
                         Integer idMappa = Integer.valueOf(idMappaString);
                         bitmap = disegnoMappa(idMappa);
                     }
+                    break;
                     //get id mappa from intent
 
                 }
@@ -130,32 +131,32 @@ public class Navigation1 extends AppCompatActivity {
                     Integer idMappa = intent.getExtras().getInt("ID_Mappa");
 
                     bitmap = disegnoMappa(idMappa);
-
+                    break;
                 }
-                case "From_RicercaPDI":{
+                case "From_RicercaPDI": {
                     Integer idMappa = intent.getExtras().getInt("ID_Mappa");
                     Integer idPDISelezionato = intent.getExtras().getInt("ID_PDI");
 
                     idSelectedPdi = idPDISelezionato;
 
-                    if(Controller.getPosizioneCorrente(Navigation1.this) != null){
+                    if (Controller.getPosizioneCorrente(Navigation1.this) != null) {
                         BeaconManager beaconManager = new BeaconManager(Navigation1.this);
                         Beacon beacon = beaconManager.findById(Controller.getPosizioneCorrente(Navigation1.this));
 
-                        if (beacon.getID_pdi() == null){
+                        if (beacon.getID_pdi() == null) {
                             TroncoManager troncoManager = new TroncoManager(Navigation1.this);
                             Scala tronco = troncoManager.findByIdBeacon(beacon.getID_beacon());
 
                             CamminoMinimo camminoMinimo = new CamminoMinimo(Navigation1.this);
-                            ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(idPDISelezionato,tronco.getID());
+                            ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(idPDISelezionato, tronco.getID());
 
                             Percorso.setGestionePercorso(true);
                             Percorso.cammino = percorso;
 
                             bitmap = disegnoMappa(idMappa);
-                        }else{
+                        } else {
                             CamminoMinimo camminoMinimo = new CamminoMinimo(Navigation1.this);
-                            ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(idPDISelezionato,beacon.getID_pdi());
+                            ArrayList<Integer> percorso = camminoMinimo.Dijkstra_Tronco(idPDISelezionato, beacon.getID_pdi());
 
                             Percorso.setGestionePercorso(true);
                             Percorso.cammino = percorso;
@@ -163,10 +164,11 @@ public class Navigation1 extends AppCompatActivity {
                             bitmap = disegnoMappa(idMappa);
                         }
 
-                    }else{
+                    } else {
 
                         bitmap = disegnoMappa(idMappa);
                     }
+                    break;
                 }
             }
 
@@ -262,8 +264,10 @@ public class Navigation1 extends AppCompatActivity {
         }
 
         Integer idBeaconPosizione = Controller.getPosizioneCorrente(ctx);
-        Beacon beaconPosizione = beaconManager.findById(idBeaconPosizione);
-
+        Beacon beaconPosizione = new Beacon();
+        if(idBeaconPosizione!=null) {
+            beaconPosizione = beaconManager.findById(idBeaconPosizione);
+        }
         //In base a quale beacon sono collegato, faccio apparire il simbolo gps
         if(Controller.getPosizioneCorrente(ctx) != null && listaBeacon.contains(beaconPosizione)) {
 
@@ -380,6 +384,7 @@ public class Navigation1 extends AppCompatActivity {
 
             if (backpress>1) {
                 MainApplication.getScanner().suspendScan();
+                MainApplication.getCurrentActivity().moveTaskToBack(true);
             }
         }
         else {

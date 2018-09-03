@@ -48,6 +48,8 @@ public class MappaManager {
             {
                 // Gestione delle eccezioni
             }
+            db.close();
+
         }
 
         public boolean deleteByID(Integer id)
@@ -95,12 +97,12 @@ public class MappaManager {
                 return null;
             }
 
-            crs.moveToFirst();
-            mappa.setID_mappa(id);
-            mappa.setID_piano(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID_PIANO)));
-            mappa.setNome(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_NAME)));
-            mappa.setImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
-
+            if(crs.moveToFirst()) {
+                mappa.setID_mappa(id);
+                mappa.setID_piano(crs.getInt(crs.getColumnIndex(MappaStrings.FIELD_ID_PIANO)));
+                mappa.setNome(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_NAME)));
+                mappa.setImmagine(crs.getString(crs.getColumnIndex(MappaStrings.FIELD_IMG)));
+            }
             crs.close();
 
             return mappa;
