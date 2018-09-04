@@ -15,7 +15,7 @@ public class Scala {
     private Integer ID;
     private double larghezza_media;
     private double lunghezza;
-    private ArrayList<Nodo> nodi;
+    private ArrayList<Nodo> nodi = new ArrayList<>();
     private Integer[] nodi_Integer;
     private Beacon beacon;
     private float costo_totale_normalizzato;
@@ -103,7 +103,7 @@ public class Scala {
 
     public void setCosto_totale_normalizzato() { //TODO da rivedere
 
-        if (MainApplication.getScanner().getSetup().getState().equals("EMERGENCY")) {
+        if (MainApplication.getScanner() != null && MainApplication.getScanner().getSetup().getState().equals("EMERGENCY")) {
             double LOS = beacon.getInd_NCD() / larghezza_media * lunghezza;
             costo_totale_normalizzato = (float) ((LOS * 0.7) + beacon.getInd_rischio() + beacon.getInd_fumi() + beacon.getInd_fuoco());
         }else{

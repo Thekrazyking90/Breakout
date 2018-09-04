@@ -141,16 +141,18 @@ public class TroncoManager {
             arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
             arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
 
+            Integer[] nodes = new Integer[2];
+            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+            arc.setNodi_Integer(nodes);
+
             arc.setLarghezza_media(context);
 
             arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
 
             arc.setCosto_totale_normalizzato();
 
-            Integer[] nodes = new Integer[2];
-            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
-            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
-            arc.setNodi_Integer(nodes);
+
         }
         crs.close();
 
@@ -186,7 +188,7 @@ public class TroncoManager {
         try
         {
             SQLiteDatabase db= dbHelper.getReadableDatabase();
-            crs=db.query(TroncoStrings.TBL_NAME, null, TroncoStrings.FIELD_ID_BEACON + " = ?", args, null, null, null, null);
+            crs=db.query(TroncoStrings.TBL_NAME, null, TroncoStrings.FIELD_ID_BEACON + " = ? ", args, null, null, null, null);
         }
         catch(SQLiteException sqle)
         {
@@ -199,16 +201,18 @@ public class TroncoManager {
             arc.setID_mappa(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_MAP)));
             arc.setID_Piano(crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_FLOOR)));
 
+            Integer[] nodes = new Integer[2];
+            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
+            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
+            arc.setNodi_Integer(nodes);
+
             arc.setLarghezza_media(context);
 
             arc.setLunghezza(crs.getFloat(crs.getColumnIndex(TroncoStrings.FIELD_LENGTH)));
 
             arc.setCosto_totale_normalizzato();
 
-            Integer[] nodes = new Integer[2];
-            nodes[0] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE1));
-            nodes[1] = crs.getInt(crs.getColumnIndex(TroncoStrings.FIELD_ID_NODE2));
-            arc.setNodi_Integer(nodes);
+
         }
         crs.close();
 

@@ -267,11 +267,12 @@ public class Navigation1 extends AppCompatActivity {
 
         BeaconManager beaconManager = new BeaconManager(ctx);
         ArrayList<Beacon> listaBeacon = beaconManager.findAllByIdMap(idMap);
-
+        ArrayList<Integer> listaIDBeacon = new ArrayList<>();
         int coordx;
         int coordy;
 
         for (Beacon beacon: listaBeacon) {
+            listaIDBeacon.add(beacon.getID_beacon());
             coordx = (int) beacon.getCoord_X() * 115/18;
             coordy = (int) beacon.getCoord_Y() * 115/18;
 
@@ -318,15 +319,15 @@ public class Navigation1 extends AppCompatActivity {
             beaconPosizione = beaconManager.findById(idBeaconPosizione);
         }
         //In base a quale beacon sono collegato, faccio apparire il simbolo gps
-        if(Controller.getPosizioneCorrente(ctx) != null && listaBeacon.contains(beaconPosizione)) {
+        if(Controller.getPosizioneCorrente(ctx) != null && listaIDBeacon.contains(beaconPosizione.getID_beacon())) {
 
             Bitmap gps_pic = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.gps, opt);
-            Bitmap gps = Bitmap.createScaledBitmap(gps_pic, gps_pic.getWidth() / 20, gps_pic.getHeight() / 20, true);
+            Bitmap gps = Bitmap.createScaledBitmap(gps_pic, gps_pic.getWidth() / 26, gps_pic.getHeight() / 26, true);
 
             int gps_x = (int) beaconPosizione.getCoord_X() * 115/18;
             int gps_y = (int) beaconPosizione.getCoord_Y() * 115/18;
 
-            canvas.drawBitmap(gps, gps_x - (gps.getWidth() / 2), gps_y - (gps.getHeight()), null);
+            canvas.drawBitmap(gps, gps_x - (gps.getWidth() / 2), gps_y - (gps.getHeight()*2), null);
         }
 
         if(idSelectedPdi != null) {
@@ -412,7 +413,9 @@ public class Navigation1 extends AppCompatActivity {
                     utenteManager.updateIs_loggato(user ,false);
 
                     Server.logoutUtente(user.getUsername());
-
+                    idSelectedPdi = null;
+                    Percorso.setGestionePercorso(false);
+                    Percorso.cammino = new ArrayList<>();
                     returnBtn = new Intent(getApplicationContext(), Welcome.class);
 
                 }else{

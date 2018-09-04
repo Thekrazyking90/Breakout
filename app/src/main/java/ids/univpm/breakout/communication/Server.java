@@ -299,7 +299,7 @@ public class Server {
     }
 
     public static void sendPosition(String mex) throws ExecutionException, InterruptedException {
-        new PutRequest().execute(ip,"resources/utility/setposition",mex).get();
+        new PostRequest().execute(ip,"resources/utility/setposition",mex).get();
     }
 
     public static void sendValue(String mex) throws ExecutionException, InterruptedException {

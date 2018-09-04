@@ -24,6 +24,7 @@ import ids.univpm.breakout.model.Pdi;
 import ids.univpm.breakout.model.Utente;
 import ids.univpm.breakout.model.database.Nodi.NodoManager;
 import ids.univpm.breakout.model.database.Utente.UtenteManager;
+import ids.univpm.breakout.utility.Percorso;
 
 public class RicercaPDI extends AppCompatActivity {
 
@@ -166,7 +167,9 @@ public class RicercaPDI extends AppCompatActivity {
                     Server.logoutUtente(user.getUsername());
                     MainApplication.getScanner().suspendScan();
                     MainApplication.getEmergencyScanner().suspendScan();
-
+                    Navigation1.idSelectedPdi = null;
+                    Percorso.setGestionePercorso(false);
+                    Percorso.cammino = new ArrayList<>();
                     returnBtn = new Intent(getApplicationContext(), Welcome.class);
 
                 }else{
