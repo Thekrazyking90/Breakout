@@ -437,8 +437,8 @@ public class Navigation1 extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
 
             if (backpress>1) {
-                MainApplication.getScanner().suspendScan();
-                MainApplication.getEmergencyScanner().suspendScan();
+                MainApplication.setScanner(null);
+                MainApplication.setEmergencyScanner(null);
 
                 UtenteManager utenteManager = new UtenteManager(Navigation1.this);
                 if(utenteManager.AnyIsLoggato()) {

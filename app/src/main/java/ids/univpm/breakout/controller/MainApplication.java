@@ -112,6 +112,10 @@ public class MainApplication {
         onlineMode = b;
     }
 
+    public static void setScanner(BeaconScanner scanner) {
+        MainApplication.scanner = scanner;
+    }
+
     /**
      * Metodo che indica se il funzionamento dell'applicazione è in modalità online oppure offline
      * @return true se modalità online, false se offline
@@ -209,7 +213,11 @@ public class MainApplication {
     public static void setEmergency(boolean e) {
         emergency = e;
         Log.i("emergency","emergency: " + emergency);
-        scanner.suspendScan();
+        scanner = null;
+    }
+
+    public static void setEmergencyScanner(EmergenzaScanner emergencyScanner) {
+        MainApplication.emergencyScanner = emergencyScanner;
     }
 
     /**

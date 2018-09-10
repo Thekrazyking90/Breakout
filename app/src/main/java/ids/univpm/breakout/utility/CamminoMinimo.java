@@ -129,11 +129,14 @@ public class CamminoMinimo {
             Integer otherNodeId;
             otherNodeId = i.otherNode(nodoId);
             if (!dijkstraTemp.containsKey(otherNodeId) && !dijkstraDef.containsKey(otherNodeId)) {
-                ArrayList<Integer> cammino;
+                ArrayList<Integer> cammino = new ArrayList<>();
                 Costo_e_Cammino cost_camm = new Costo_e_Cammino();
                 Float costo;
 
-                cammino = dijkstraDef.get(nodoId).getCammino();
+                for (Integer j: dijkstraDef.get(nodoId).getCammino()) {
+                    cammino.add(j);
+                }
+
 
                 cammino.add(i.getID());
 

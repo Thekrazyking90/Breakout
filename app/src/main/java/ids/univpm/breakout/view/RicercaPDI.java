@@ -165,8 +165,8 @@ public class RicercaPDI extends AppCompatActivity {
                     utenteManager.updateIs_loggato(user ,false);
 
                     Server.logoutUtente(user.getUsername());
-                    MainApplication.getScanner().suspendScan();
-                    MainApplication.getEmergencyScanner().suspendScan();
+                    MainApplication.setScanner(null);
+                    MainApplication.setEmergencyScanner(null);
                     Navigation1.idSelectedPdi = null;
                     Percorso.setGestionePercorso(false);
                     Percorso.cammino = new ArrayList<>();

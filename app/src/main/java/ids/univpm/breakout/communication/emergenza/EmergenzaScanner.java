@@ -37,6 +37,7 @@ public class EmergenzaScanner extends StateMachine {
             executeState();
         }
     };
+    private static boolean emergencyServer;
 
     public EmergenzaScanner(Activity a) {
         this.setup = new SetupE();
@@ -102,6 +103,7 @@ public class EmergenzaScanner extends StateMachine {
         MainApplication.setEmergency(emergency);
         if(emergency){
             Context ctx = MainApplication.getCurrentActivity().getApplicationContext();
+            MainApplication.setScanner(null);
             MainApplication.initializeScanner(MainApplication.getCurrentActivity(), "EMERGENCY");
 
             Pdi uscita = Controller.findNearestExit(ctx);
@@ -134,6 +136,7 @@ public class EmergenzaScanner extends StateMachine {
 
             }
         } else {
+            MainApplication.setScanner(null);
             MainApplication.initializeScanner(MainApplication.getCurrentActivity());
         }
 
@@ -143,7 +146,22 @@ public class EmergenzaScanner extends StateMachine {
     }
 
     private void checkEmergenze() {
-        emergency = Server.checkEmergenze();
+
+      emergencyServer = Server.checkEmergenze();
+
+        if(emergency && !emergencyServer){
+            emergency = false;
+            Percorso.cammino.clear();
+            Controller.gestisciPercorso();
+            Percorso.setGestionePercorso(false);
+        }else{
+            if(emergency){
+
+            }else{
+                emergency = emergencyServer;
+            }
+
+        }
 
         int next = nextState();
         changeState(next);

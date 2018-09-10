@@ -17,7 +17,7 @@ import ids.univpm.breakout.communication.message.MessageParser;
 
 public class Server {
 
-    private static String ip = "192.168.1.9"; //ip del server
+    private static String ip = "172.23.172.187"; //ip del server
     private static String hostMaster = "Breakout_server"; //= hostname;
 
     public static boolean handShake() {

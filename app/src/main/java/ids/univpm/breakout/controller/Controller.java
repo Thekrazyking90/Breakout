@@ -467,14 +467,16 @@ public class Controller {
 
             if(Percorso.cammino.contains(arcPosizione.getID())){
                 if(arcPosizione.getID() != Percorso.cammino.get(Percorso.cammino.size() - 1)){
-                    Percorso.cammino = (ArrayList<Integer>) Percorso.cammino.subList(0, Percorso.cammino.indexOf(arcPosizione.getID()) + 1);
+                    // Percorso.cammino = (ArrayList<Integer>) Percorso.cammino.subList(0, Percorso.cammino.indexOf(arcPosizione.getID()) + 1);
+                    Percorso.cammino.remove(arcPosizione.getID());
 
                     Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
                     Navigation1.aggiornaMappa(beaconPosizione.getID_map());
                 }
             }else{
-                Percorso.cammino = camminoMinimo.Dijkstra_Tronco(Percorso.cammino.get(0), arcPosizione.getID());
-
+                if(!Percorso.cammino.isEmpty()) {
+                    Percorso.cammino = camminoMinimo.Dijkstra_Tronco(Percorso.cammino.get(0), arcPosizione.getID());
+                }
                 Navigation1.bitmap = Navigation1.disegnoMappa(beaconPosizione.getID_map());
                 Navigation1.aggiornaMappa(beaconPosizione.getID_map());
             }
